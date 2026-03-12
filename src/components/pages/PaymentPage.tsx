@@ -24,7 +24,7 @@ import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import VerifiedRoundedIcon from "@mui/icons-material/VerifiedRounded";
 
-import { CARS, type Car, type Badge } from "@/src/constants/cars";
+import { CARS, type Car, } from "@/src/constants/cars";
 import { formatTHB } from "@/src/constants/money";
 
 type Method = "promptpay" | "card" | "transfer";
@@ -48,12 +48,6 @@ const ADDONS: Addon[] = [
   },
   { key: "returnOtherBranch", title: "คืนรถต่างสาขา", pricing: "perTrip", price: 500 },
 ];
-
-function badgeStyle(b: Badge) {
-  if (b === "Popular") return "!bg-amber-50 !text-amber-700 !border-amber-200";
-  if (b === "New") return "!bg-emerald-50 !text-emerald-700 !border-emerald-200";
-  return "!bg-slate-50 !text-slate-700 !border-slate-200";
-}
 
 function safeParseAddons(raw: string | null): AddonKey[] {
   if (!raw) return [];
@@ -344,15 +338,6 @@ export default function PaymentPage() {
                       {car.type} • {car.seats} ที่นั่ง • {car.transmission} • {car.fuel}
                     </Typography>
                   </Box>
-
-                  {car.badge ? (
-                    <Chip
-                      size="small"
-                      label={car.badge}
-                      variant="outlined"
-                      className={`border! ${badgeStyle(car.badge)}`}
-                    />
-                  ) : null}
                 </Box>
 
                 <Divider className="my-4! border-slate-200!" />
