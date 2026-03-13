@@ -1,11 +1,11 @@
-"use client";
-
-import dynamic from "next/dynamic";
-
-const Login = dynamic(() => import("@/src/auth/Login"), {
-  ssr: false,
-});
+import { Suspense } from "react";
+import Login from "@/src/auth/Login";
+import AuthCardSkeleton from "@/src/components/auth/AuthCardSkeleton";
 
 export default function Page() {
-  return <Login />;
+  return (
+    <Suspense fallback={<AuthCardSkeleton />}>
+      <Login />
+    </Suspense>
+  );
 }
