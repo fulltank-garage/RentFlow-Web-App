@@ -1,158 +1,282 @@
 "use client";
 
 import * as React from "react";
-import { Box, Container, Skeleton } from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    Chip,
+    Container,
+    Skeleton,
+    TextField,
+    Typography,
+} from "@mui/material";
 
-function CarCardSkeleton() {
+function HeaderSkeleton() {
     return (
-        <Box className="rounded-2xl border border-slate-200 bg-white p-0">
-            <Skeleton
-                variant="rectangular"
-                animation="wave"
-                sx={{
-                    height: 208,
-                    borderTopLeftRadius: "16px",
-                    borderTopRightRadius: "16px",
-                }}
-            />
-
-            <Box className="p-6">
-                <Skeleton
-                    variant="text"
-                    animation="wave"
-                    sx={{
-                        height: 38,
-                        width: "62%",
-                        borderRadius: "8px",
-                    }}
-                />
-
-                <Skeleton
-                    variant="text"
-                    animation="wave"
-                    sx={{
-                        mt: 0.5,
-                        height: 30,
-                        width: "78%",
-                        borderRadius: "8px",
-                    }}
-                />
-
-                <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Box className="flex flex-col gap-2">
+                <Typography variant="h5" className="text-2xl font-bold text-slate-900">
                     <Skeleton
                         variant="text"
                         animation="wave"
                         sx={{
-                            height: 34,
-                            width: "70%",
+                            width: 120,
+                            height: 40,
                             borderRadius: "8px",
+                            transform: "none",
                         }}
                     />
-                </Box>
+                </Typography>
 
-                <Box className="mt-5 grid grid-cols-2 gap-3">
+                <Typography className="text-sm text-slate-600">
                     <Skeleton
-                        variant="rounded"
+                        variant="text"
                         animation="wave"
                         sx={{
-                            height: 50,
-                            borderRadius: "14px",
+                            width: { xs: "100%", sm: 520 },
+                            maxWidth: "100%",
+                            height: 22,
+                            borderRadius: "8px",
+                            transform: "none",
                         }}
                     />
+                </Typography>
+            </Box>
+
+            <Chip
+                size="small"
+                variant="outlined"
+                label={
                     <Skeleton
-                        variant="rounded"
+                        variant="text"
                         animation="wave"
                         sx={{
-                            height: 50,
-                            borderRadius: "14px",
+                            width: 44,
+                            height: 18,
+                            borderRadius: "6px",
+                            transform: "none",
                         }}
                     />
-                </Box>
+                }
+                className="w-min border! border-slate-200! bg-slate-900/5!"
+                sx={{
+                    "& .MuiChip-label": {
+                        px: 1,
+                        display: "flex",
+                        alignItems: "center",
+                    },
+                }}
+            />
+        </Box>
+    );
+}
+
+function FilterInputSkeleton() {
+    return (
+        <Box>
+            <TextField
+                fullWidth
+                size="small"
+                label=" "
+                disabled
+                value=""
+                sx={{
+                    "& .MuiOutlinedInput-root": {
+                        borderRadius: "10px",
+                        position: "relative",
+                        overflow: "hidden",
+                        bgcolor: "transparent",
+                    },
+                    "& .MuiInputBase-input.Mui-disabled": {
+                        WebkitTextFillColor: "transparent",
+                    },
+                }}
+                InputProps={{
+                    endAdornment: (
+                        <Skeleton
+                            variant="rounded"
+                            animation="wave"
+                            sx={{
+                                width: "100%",
+                                height: 24,
+                                borderRadius: "6px",
+                            }}
+                        />
+                    ),
+                }}
+            />
+        </Box>
+    );
+}
+
+function CarsFilterBarSkeleton() {
+    return (
+        <Box className="mt-4 rounded-2xl! border border-slate-200 bg-white p-4">
+            <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+                <FilterInputSkeleton />
+                <FilterInputSkeleton />
+                <FilterInputSkeleton />
+                <FilterInputSkeleton />
+                <FilterInputSkeleton />
+            </Box>
+
+            <Box className="mt-4 grid gap-4 md:grid-cols-2">
+                <FilterInputSkeleton />
+
+                <Button
+                    variant="outlined"
+                    disabled
+                    className="rounded-xl!"
+                    sx={{
+                        height: 40,
+                        textTransform: "none",
+                        borderColor: "rgb(226 232 240)",
+                        color: "transparent",
+                    }}
+                >
+                    <Skeleton
+                        variant="text"
+                        animation="wave"
+                        sx={{
+                            width: 100,
+                            height: 20,
+                            borderRadius: "6px",
+                            transform: "none",
+                        }}
+                    />
+                </Button>
             </Box>
         </Box>
+    );
+}
+
+function PriceBoxSkeleton() {
+    return (
+        <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <Box className="flex items-end gap-2">
+                <Skeleton
+                    variant="text"
+                    animation="wave"
+                    sx={{
+                        width: 72,
+                        height: 20,
+                        borderRadius: "6px",
+                        transform: "none",
+                    }}
+                />
+
+                <Skeleton
+                    variant="text"
+                    animation="wave"
+                    sx={{
+                        width: 96,
+                        height: 22,
+                        borderRadius: "8px",
+                        transform: "none",
+                    }}
+                />
+
+                <Skeleton
+                    variant="text"
+                    animation="wave"
+                    sx={{
+                        width: 28,
+                        height: 20,
+                        borderRadius: "6px",
+                        transform: "none",
+                    }}
+                />
+            </Box>
+        </Box>
+    );
+}
+
+function CarCardSkeleton() {
+    return (
+        <Card
+            elevation={0}
+            sx={{ boxShadow: "none" }}
+            className="rounded-2xl! border border-slate-200 bg-white"
+        >
+            <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
+                <Skeleton
+                    variant="rectangular"
+                    animation="wave"
+                    sx={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: 0,
+                    }}
+                />
+            </Box>
+
+            <CardContent className="p-4!">
+                <Box className="flex items-start justify-between gap-3">
+                    <Box className="min-w-0 w-full">
+                        <Typography className="truncate text-lg font-semibold text-slate-900">
+                            <Skeleton
+                                variant="text"
+                                animation="wave"
+                                sx={{
+                                    width: "68%",
+                                    height: 28,
+                                    borderRadius: "8px",
+                                    transform: "none",
+                                }}
+                            />
+                        </Typography>
+
+                        <Typography className="text-sm text-slate-600">
+                            <Skeleton
+                                variant="text"
+                                animation="wave"
+                                sx={{
+                                    mt: 0.5,
+                                    width: "88%",
+                                    height: 22,
+                                    borderRadius: "8px",
+                                    transform: "none",
+                                }}
+                            />
+                        </Typography>
+                    </Box>
+                </Box>
+
+                <PriceBoxSkeleton />
+            </CardContent>
+
+            <CardActions sx={{ p: "0px 16px 16px" }} className="gap-2">
+                <Skeleton
+                    variant="rounded"
+                    animation="wave"
+                    sx={{
+                        flex: 1,
+                        height: 36.5,
+                        borderRadius: "12px",
+                    }}
+                />
+                <Skeleton
+                    variant="rounded"
+                    animation="wave"
+                    sx={{
+                        flex: 1,
+                        height: 36.5,
+                        borderRadius: "12px",
+                    }}
+                />
+            </CardActions>
+        </Card>
     );
 }
 
 export default function CarsPageSkeleton() {
     return (
         <Container maxWidth="lg" className="py-12">
-            <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <Box className="flex flex-col gap-2">
-                    <Skeleton
-                        variant="text"
-                        animation="wave"
-                        sx={{
-                            height: 46,
-                            width: 180,
-                            borderRadius: "8px",
-                        }}
-                    />
-                    <Skeleton
-                        variant="text"
-                        animation="wave"
-                        sx={{
-                            height: 30,
-                            width: 620,
-                            maxWidth: "100%",
-                            borderRadius: "8px",
-                        }}
-                    />
-                </Box>
-
-                <Skeleton
-                    variant="rounded"
-                    animation="wave"
-                    sx={{
-                        width: 84,
-                        height: 34,
-                        borderRadius: "999px",
-                        alignSelf: { xs: "flex-start", sm: "center" },
-                    }}
-                />
-            </Box>
-
-            <Box className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                </Box>
-
-                <Box className="mt-4 grid gap-4 md:grid-cols-2">
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                    <Skeleton
-                        variant="rounded"
-                        animation="wave"
-                        sx={{ height: 56, borderRadius: "12px" }}
-                    />
-                </Box>
-            </Box>
+            <HeaderSkeleton />
+            <CarsFilterBarSkeleton />
 
             <Box className="mt-6 grid gap-4 md:grid-cols-3">
                 {Array.from({ length: 6 }).map((_, index) => (
