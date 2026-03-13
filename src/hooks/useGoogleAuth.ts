@@ -1,0 +1,126 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { fetchGoogleUserInfo } from "@/src/services/google";
+import { authWithGoogle, saveAuthToken } from "@/src/services/auth";
+
+declare global {
+    interface Window {
+        google?: any;
+    }
+}
+
+export type SnackbarSeverity = "success" | "error" | "info" | "warning";
+
+type UseGoogleAuthOptions = {
+    successMessage: string;
+    authErrorMessage: string;
+    submitErrorMessage: string;
+    redirectTo?: string;
+};
+
+type ShowSnackbar = (
+    message: string,
+    severity?: SnackbarSeverity
+) => void;
+
+export function useGoogleAuth({
+    successMessage,
+    authErrorMessage,
+    submitErrorMessage,
+    redirectTo = "/",
+}: UseGoogleAuthOptions) {
+    const router = useRouter();
+
+    const [loading, setLoading] = React.useState(false);
+    const [googleReady, setGoogleReady] = React.useState(false);
+
+    const tokenClientRef = React.useRef<any>(null);
+    const initializedRef = React.useRef(false);
+
+    const initGoogle = React.useCallback(
+        (showSnackbar: ShowSnackbar) => {
+            if (initializedRef.current) return;
+
+            const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
+            if (!window.google?.accounts?.oauth2) return;
+
+            if (!clientId) {
+                showSnackbar("ยังไม่ได้ตั้งค่า NEXT_PUBLIC_GOOGLE_CLIENT_ID", "error");
+                return;
+            }
+
+            tokenClientRef.current = window.google.accounts.oauth2.initTokenClient({
+                client_id: clientId,
+                scope: "openid email profile",
+                callback: async (tokenResponse: {
+                    access_token?: string;
+                    error?: string;
+                }) => {
+                    try {
+                        if (tokenResponse?.error) {
+                            throw new Error(authErrorMessage);
+                        }
+
+                        const accessToken = tokenResponse?.access_token;
+                        if (!accessToken) {
+                            throw new Error("ไม่ได้รับ access token จาก Google");
+                        }
+
+                        const googleUser = await fetchGoogleUserInfo(accessToken);
+
+                        const data = await authWithGoogle(
+                            {
+                                accessToken,
+                                user: googleUser,
+                            },
+                            submitErrorMessage
+                        );
+
+                        saveAuthToken(data?.token);
+
+                        showSnackbar(successMessage, "success");
+
+                        setTimeout(() => {
+                            router.push(redirectTo);
+                        }, 700);
+                    } catch (err: any) {
+                        showSnackbar(err?.message || submitErrorMessage, "error");
+                    } finally {
+                        setLoading(false);
+                    }
+                },
+            });
+
+            initializedRef.current = true;
+            setGoogleReady(true);
+        },
+        [authErrorMessage, redirectTo, router, submitErrorMessage, successMessage]
+    );
+
+    const handleGoogleAuth = React.useCallback((showSnackbar: ShowSnackbar) => {
+        try {
+            if (!window.google?.accounts?.oauth2 || !tokenClientRef.current) {
+                throw new Error("Google Sign-In ยังไม่พร้อม");
+            }
+
+            setLoading(true);
+            tokenClientRef.current.requestAccessToken();
+        } catch (err: any) {
+            setLoading(false);
+            showSnackbar(
+                err?.message || "ไม่สามารถเริ่ม Google Sign-In ได้",
+                "error"
+            );
+        }
+    }, []);
+
+    return {
+        loading,
+        googleReady,
+        initGoogle,
+        handleGoogleAuth,
+    };
+}
