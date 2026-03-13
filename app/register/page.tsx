@@ -1,11 +1,11 @@
-"use client";
-
-import dynamic from "next/dynamic";
-
-const Register = dynamic(() => import("@/src/auth/Register"), {
-  ssr: false,
-});
+import { Suspense } from "react";
+import Register from "@/src/auth/Register";
+import AuthCardSkeleton from "@/src/components/auth/AuthCardSkeleton";
 
 export default function Page() {
-  return <Register />;
+  return (
+    <Suspense fallback={<AuthCardSkeleton />}>
+      <Register />
+    </Suspense>
+  );
 }
