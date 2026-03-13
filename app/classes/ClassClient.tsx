@@ -86,15 +86,6 @@ export default function ClassClient({
                       {c.type} • {c.seats} ที่นั่ง • {c.transmission} • {c.fuel}
                     </Typography>
                   </Box>
-
-                  {c.badge ? (
-                    <Chip
-                      label={c.badge}
-                      size="small"
-                      variant="outlined"
-                      className={`border! ${badgeStyle(c.badge)}`}
-                    />
-                  ) : null}
                 </Box>
 
                 <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
