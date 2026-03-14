@@ -24,7 +24,7 @@ function HeaderSkeleton() {
                         animation="wave"
                         sx={{
                             width: 120,
-                            height: 40,
+                            height: 35,
                             borderRadius: "8px",
                             transform: "none",
                         }}
@@ -54,9 +54,9 @@ function HeaderSkeleton() {
                         variant="text"
                         animation="wave"
                         sx={{
-                            width: 44,
-                            height: 18,
-                            borderRadius: "6px",
+                            width: 42,
+                            height: 16,
+                            borderRadius: "50px",
                             transform: "none",
                         }}
                     />
