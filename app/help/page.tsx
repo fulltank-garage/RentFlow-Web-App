@@ -1,11 +1,11 @@
-"use client";
-
-import dynamic from "next/dynamic";
-
-const HelpPage = dynamic(() => import("@/src/components/pages/HelpPage"), {
-  ssr: false,
-});
+import { Suspense } from "react";
+import HelpPage from "@/src/components/pages/HelpPage";
+import HelpPageSkeleton from "@/src/components/help/HelpPageSkeleton";
 
 export default function Page() {
-  return <HelpPage />;
+  return (
+    <Suspense fallback={<HelpPageSkeleton />}>
+      <HelpPage />
+    </Suspense>
+  );
 }
