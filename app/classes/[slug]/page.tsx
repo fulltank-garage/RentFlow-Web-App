@@ -1,19 +1,16 @@
+import { Suspense } from "react";
 import { Box, Typography } from "@mui/material";
 import { getClassBySlug } from "@/src/constants/classesCar";
 import { CARS } from "@/src/constants/cars";
-import ClassClient from "../ClassClient";
+import ClassPage from "@/src/components/pages/ClassPage";
+import ClassPageSkeleton from "@/src/components/classes/ClassPageSkeleton";
 
-export default async function ClassPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
+async function ClassPageContent({ slug }: { slug: string }) {
   const meta = getClassBySlug(slug);
 
   if (!meta) {
     return (
-      <Box className="min-h-screen bg-white text-slate-900 flex items-center justify-center">
+      <Box className="flex min-h-screen items-center justify-center bg-white text-slate-900">
         <Typography>ไม่พบคลาสนี้</Typography>
       </Box>
     );
@@ -21,5 +18,19 @@ export default async function ClassPage({
 
   const list = CARS.filter((c) => c.grade === meta.grade);
 
-  return <ClassClient meta={meta} cars={list} />;
+  return <ClassPage meta={meta} cars={list} />;
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  return (
+    <Suspense fallback={<ClassPageSkeleton />}>
+      <ClassPageContent slug={slug} />
+    </Suspense>
+  );
 }
