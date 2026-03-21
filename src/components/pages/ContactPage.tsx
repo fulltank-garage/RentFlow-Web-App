@@ -13,28 +13,15 @@ import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import ContactInfoCard from "@/src/components/contact/ContactInfoCard";
 import ContactFormCard from "@/src/components/contact/ContactFormCard";
 import ContactPageSkeleton from "@/src/components/contact/ContactPageSkeleton";
+import usePageReady from "@/src/hooks/usePageReady";
 
 export default function ContactPage() {
-  const [ready, setReady] = React.useState(false);
-
-  React.useEffect(() => {
-    const start = Date.now();
-
-    const timer = setTimeout(() => {
-      const elapsed = Date.now() - start;
-      const delay = Math.max(2000 - elapsed, 0);
-
-      setTimeout(() => {
-        setReady(true);
-      }, delay);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const ready = usePageReady({ minDelay: 2000 });
 
   if (!ready) {
     return <ContactPageSkeleton />;
   }
+
   return (
     <Container maxWidth="lg" className="py-12">
       <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
