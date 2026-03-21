@@ -40,7 +40,11 @@ export default function Navbar() {
   const toggleDrawer = (v: boolean) => () => setOpen(v);
   const isCompact = useMediaQuery("(max-width: 800px)");
 
-  const [user, setUser] = React.useState<User | null>(null);
+  // mock login ไว้ก่อนเพื่อดู UX/UI profile
+  const [user, setUser] = React.useState<User | null>({
+    name: "Pachara",
+    email: "pachara@example.com",
+  });
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
@@ -64,15 +68,14 @@ export default function Navbar() {
     >
       <Container maxWidth="lg">
         <Toolbar className="px-0! flex justify-between gap-4">
-          {/* Logo */}
           <Box
             component={Link}
             href="/"
-            className="flex items-center gap-2 no-underline"
+            className="flex items-center no-underline"
           >
-            <Box className="relative h-9 w-9 shrink-0">
+            <Box className="relative h-15 w-15 shrink-0">
               <Image
-                src="/RentFlow.svg"
+                src="/RentFlow.png"
                 alt="RentFlow Logo"
                 fill
                 className="object-contain"
@@ -84,7 +87,6 @@ export default function Navbar() {
             </Typography>
           </Box>
 
-          {/* Desktop nav */}
           <Box className="hidden md:flex items-center gap-1">
             {!isCompact && (
               <Box className="flex items-center gap-1">
@@ -95,7 +97,6 @@ export default function Navbar() {
             )}
           </Box>
 
-          {/* Right side (desktop only) */}
           {!isCompact && (
             <Box className="flex items-center gap-2">
               {!user ? (
@@ -174,7 +175,6 @@ export default function Navbar() {
             </Box>
           )}
 
-          {/* Mobile hamburger */}
           {isCompact && (
             <IconButton
               onClick={toggleDrawer(true)}
@@ -187,7 +187,6 @@ export default function Navbar() {
         </Toolbar>
       </Container>
 
-      {/* Mobile Drawer */}
       <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
         <Box className="w-80 bg-white text-slate-900 h-full flex flex-col">
           <Box className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">

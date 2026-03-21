@@ -181,10 +181,10 @@ export default function AuthCard({
         >
           <CardContent className="p-8!">
             <Stack className="mb-6 items-center text-center">
-              <Box className="mb-4 flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-4">
-                <Box className="relative h-12 w-12">
+              <Box className="mb-4 flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-1 py-1">
+                <Box className="relative h-20 w-20">
                   <Image
-                    src="/RentFlow.svg"
+                    src="/RentFlow.png"
                     alt="RentFlow Logo"
                     fill
                     className="object-contain"
