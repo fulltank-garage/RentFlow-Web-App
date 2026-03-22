@@ -37,7 +37,7 @@ export default function Footer() {
         <Box className="grid gap-10 md:grid-cols-3">
           {/* Brand */}
           <Stack direction="row" spacing={1} alignItems="center">
-            <Box className="relative h-4 w-4 shrink-0">
+            <Box className="relative h-6 w-6 shrink-0">
               <Image
                 src="/RentFlow.png"
                 alt="RentFlow Logo"
