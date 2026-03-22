@@ -73,7 +73,7 @@ export default function Navbar() {
             href="/"
             className="flex items-center no-underline"
           >
-            <Box className="relative h-15 w-15 shrink-0">
+            <Box className="relative h-8 w-8 shrink-0">
               <Image
                 src="/RentFlow.png"
                 alt="RentFlow Logo"
