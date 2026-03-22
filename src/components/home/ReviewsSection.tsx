@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 
 import { SEED_REVIEWS, TAGS, Review } from "@/src/constants/review";
-import { ReviewsStat } from "@/src/ui/reviews/ReviewsStat";
-import { ReviewCard } from "@/src/ui/reviews/ReviewCard";
-import { ReviewfieldSX } from "@/src/ui/reviews/ReviewfieldSX";
+import { ReviewsStat } from "@/src/components/reviews/ReviewsStat";
+import { ReviewCard } from "@/src/components/reviews/ReviewCard";
+import { ReviewfieldSX } from "@/src/components/reviews/ReviewfieldSX";
 
 function formatNowTH() {
   return "วันนี้";

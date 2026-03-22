@@ -17,7 +17,7 @@ import {
 
 import type { Car } from "@/src/constants/cars";
 import { LOCATIONS, type LocationValue } from "@/src/constants/locations";
-import { Herotextfield } from "@/src/ui/hero/Herotextfield";
+import { Herotextfield } from "@/src/components/hero/Herotextfield";
 
 type Props = {
   heroImages: readonly string[];
