@@ -39,3 +39,20 @@ export type CarsQuery = {
   startDate?: string;
   endDate?: string;
 };
+
+export type CarImageUploadItem = {
+  id: string;
+  carId: string;
+  imageUrl: string;
+  sortOrder: number;
+  fileName?: string;
+  mimeType: string;
+  size: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CarImagesUploadResponse = {
+  items: CarImageUploadItem[];
+  total: number;
+};

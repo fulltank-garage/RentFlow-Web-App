@@ -121,7 +121,7 @@ export function buildCarClasses(cars: Car[]): CatalogCarClass[] {
 
       return {
         ...CLASS_META[grade],
-        image: lead?.image || lead?.imageUrl || "/cars/placeholder.jpg",
+        image: lead?.image || lead?.imageUrl || "/RentFlow.png",
         count: items.length,
       };
     });

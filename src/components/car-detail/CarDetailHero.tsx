@@ -15,7 +15,7 @@ export default function CarDetailHero({ image, name }: Props) {
       <Box className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
         <Box className="relative aspect-16/10">
           <Image
-            src={image || "/cars/placeholder.jpg"}
+            src={image || "/RentFlow.png"}
             alt={name}
             fill
             className="object-cover"

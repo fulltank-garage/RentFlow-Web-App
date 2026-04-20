@@ -27,7 +27,7 @@ export default function CarCard({ car }: Props) {
         >
             <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
                 <Image
-                    src={car.image || "/cars/placeholder.jpg"}
+                    src={car.image || "/RentFlow.png"}
                     alt={car.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"

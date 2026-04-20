@@ -79,7 +79,7 @@ export default function BookingSummaryCard({
           <Box className="rounded-xl! border border-slate-200 bg-white p-4!">
             <Box className="relative aspect-4/3 overflow-hidden rounded-xl bg-slate-50">
               <Image
-                src={car.image || "/cars/placeholder.jpg"}
+                src={car.image || "/RentFlow.png"}
                 alt={car.name}
                 fill
                 className="object-cover"

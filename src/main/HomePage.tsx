@@ -12,15 +12,6 @@ import { formatTHB } from "@/src/constants/money";
 import { useCatalogDirectory } from "@/src/hooks/catalog/useCatalogDirectory";
 import type { CarType } from "@/src/services/cars/cars.types";
 
-const HERO_IMAGES = [
-  "/cosySec.webp",
-  "/cosySec1.webp",
-  "/cosySec2.webp",
-  "/cosySec3.webp",
-  "/cosySec4.webp",
-  "/cosySec5.webp",
-] as const;
-
 export default function HomePage() {
   const [location, setLocation] = React.useState("");
   const [type, setType] = React.useState<CarType | "All">("All");
@@ -33,11 +24,16 @@ export default function HomePage() {
   const recommendedCars = React.useMemo(() => {
     return cars.slice(0, 6);
   }, [cars]);
+  const heroImages = React.useMemo(() => {
+    return cars
+      .flatMap((car) => car.images?.length ? car.images : car.image ? [car.image] : [])
+      .slice(0, 6);
+  }, [cars]);
 
   return (
     <Box className="min-h-screen bg-white text-slate-900">
       <HeroSection
-        heroImages={HERO_IMAGES}
+        heroImages={heroImages}
         location={location}
         setLocation={setLocation}
         type={type}

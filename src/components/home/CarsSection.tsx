@@ -52,7 +52,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
             >
               <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
                 <Image
-                  src={c.image || "/placeholder-car.png"}
+                  src={c.image || "/RentFlow.png"}
                   alt={c.name}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105"

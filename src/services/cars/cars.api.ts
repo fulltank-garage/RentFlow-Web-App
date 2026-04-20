@@ -1,5 +1,10 @@
 import api from "@/src/lib/axios";
-import type { Car } from "./cars.types";
+import type { ApiResponse } from "../types/types";
+import type {
+  Car,
+  CarImageUploadItem,
+  CarImagesUploadResponse,
+} from "./cars.types";
 
 export type SortKey = "price_asc" | "price_desc";
 
@@ -22,8 +27,31 @@ type CarsApiResponse = {
   total: number;
 };
 
+type RawCarImageUploadItem = Omit<CarImageUploadItem, "imageUrl"> & {
+  imageUrl?: string;
+};
+
+function resolveApiAssetUrl(value?: string) {
+  const rawValue = value?.trim() || "";
+  if (!rawValue || rawValue.startsWith("data:") || rawValue.startsWith("blob:")) {
+    return rawValue;
+  }
+
+  if (/^https?:\/\//i.test(rawValue)) {
+    return rawValue;
+  }
+
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (apiBaseUrl && rawValue.startsWith("/")) {
+    return new URL(rawValue, apiBaseUrl).toString();
+  }
+
+  return rawValue;
+}
+
 function normalizeCar(raw: Partial<Car> & { id: string; name: string }): Car {
-  const imageUrl = raw.imageUrl || raw.image || "";
+  const imageUrl = resolveApiAssetUrl(raw.imageUrl || raw.image || "");
+  const images = raw.images?.map(resolveApiAssetUrl).filter(Boolean);
 
   return {
     id: raw.id,
@@ -39,12 +67,21 @@ function normalizeCar(raw: Partial<Car> & { id: string; name: string }): Car {
     image: imageUrl || undefined,
     imageUrl,
     grade: raw.grade,
-    images: raw.images || (imageUrl ? [imageUrl] : undefined),
+    images: images?.length ? images : imageUrl ? [imageUrl] : undefined,
     description: raw.description,
     locationId: raw.locationId,
     isAvailable: raw.isAvailable ?? true,
     createdAt: raw.createdAt || "",
     updatedAt: raw.updatedAt || "",
+  };
+}
+
+function normalizeUploadedCarImage(
+  raw: RawCarImageUploadItem
+): CarImageUploadItem {
+  return {
+    ...raw,
+    imageUrl: resolveApiAssetUrl(raw.imageUrl),
   };
 }
 
@@ -71,4 +108,34 @@ export async function getCars(
 export async function getCarById(carId: string): Promise<Car | null> {
   const { items } = await getCars();
   return items.find((car) => car.id === carId) ?? null;
+}
+
+export async function uploadCarImages(
+  carId: string,
+  files: File[],
+  options?: { replace?: boolean }
+): Promise<ApiResponse<CarImagesUploadResponse>> {
+  const formData = new FormData();
+  files.forEach((file) => formData.append("images", file));
+
+  const res = await api.post<ApiResponse<CarImagesUploadResponse>>(
+    `/cars/${encodeURIComponent(carId)}/images`,
+    formData,
+    {
+      params: {
+        replace: options?.replace ? "true" : undefined,
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return {
+    ...res.data,
+    data: {
+      items: (res.data.data?.items ?? []).map(normalizeUploadedCarImage),
+      total: res.data.data?.total ?? 0,
+    },
+  };
 }
