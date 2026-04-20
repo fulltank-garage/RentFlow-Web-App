@@ -1,7 +1,6 @@
 import api from "@/src/lib/axios";
 import type { ApiResponse } from "../types/types";
 import type {
-  Notification,
   NotificationListResponse,
 } from "./notification.types";
 

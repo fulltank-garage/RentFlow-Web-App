@@ -2,21 +2,23 @@
 
 import * as React from "react";
 import { Box, TextField, MenuItem, Button } from "@mui/material";
-import { CAR_TYPES, type CarType } from "@/src/constants/cars";
-import { LOCATIONS, type LocationValue } from "@/src/constants/locations";
-import type { SortKey } from "@/src/utils/cars/cars";
+import type { LocationOption } from "@/src/lib/rentflow-catalog";
+import type { SortKey } from "@/src/services/cars/cars.api";
+import type { CarType } from "@/src/services/cars/cars.types";
 
 type Props = {
   q: string;
   type: CarType | "all";
   sort: SortKey;
-  location: LocationValue | "";
+  location: string;
   pickupDate: string;
   returnDate: string;
+  carTypes: readonly CarType[];
+  locations: readonly LocationOption[];
   onQChange: (value: string) => void;
   onTypeChange: (value: CarType | "all") => void;
   onSortChange: (value: SortKey) => void;
-  onLocationChange: (value: LocationValue | "") => void;
+  onLocationChange: (value: string) => void;
   onPickupDateChange: (value: string) => void;
   onReturnDateChange: (value: string) => void;
   onReset: () => void;
@@ -29,6 +31,8 @@ export default function CarsFilterBar({
   location,
   pickupDate,
   returnDate,
+  carTypes,
+  locations,
   onQChange,
   onTypeChange,
   onSortChange,
@@ -69,7 +73,7 @@ export default function CarsFilterBar({
           }}
         >
           <MenuItem value="all">ทั้งหมด</MenuItem>
-          {CAR_TYPES.map((carType) => (
+          {carTypes.map((carType) => (
             <MenuItem key={carType} value={carType}>
               {carType}
             </MenuItem>
@@ -80,9 +84,7 @@ export default function CarsFilterBar({
           select
           label="สาขารับรถ"
           value={location}
-          onChange={(e) =>
-            onLocationChange(e.target.value as LocationValue | "")
-          }
+          onChange={(e) => onLocationChange(e.target.value)}
           size="small"
           fullWidth
           variant="outlined"
@@ -93,7 +95,7 @@ export default function CarsFilterBar({
           }}
         >
           <MenuItem value="">ทั้งหมด</MenuItem>
-          {LOCATIONS.map((loc) => (
+          {locations.map((loc) => (
             <MenuItem key={loc.value} value={loc.value}>
               {loc.label}
             </MenuItem>

@@ -79,7 +79,6 @@ export default function MyBookingsList({ data, onReset }: Props) {
                 variant="outlined"
                 className="rounded-xl!"
                 sx={{ textTransform: "none" }}
-                disabled={b.status !== "confirmed"}
               >
                 ดูรายละเอียด
               </Button>

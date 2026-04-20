@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import {
+  Alert,
   Box,
   Container,
   Typography,
@@ -13,12 +13,13 @@ import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import ContactInfoCard from "@/src/components/contact/ContactInfoCard";
 import ContactFormCard from "@/src/components/contact/ContactFormCard";
 import ContactPageSkeleton from "@/src/components/contact/ContactPageSkeleton";
-import usePageReady from "@/src/hooks/usePageReady";
+import { useBranchDirectory } from "@/src/hooks/branches/useBranchDirectory";
 
 export default function ContactPage() {
-  const ready = usePageReady({ minDelay: 2000 });
+  const { branches, loading, error } = useBranchDirectory();
+  const phoneReadyCount = branches.filter((branch) => branch.phone).length;
 
-  if (!ready) {
+  if (loading) {
     return <ContactPageSkeleton />;
   }
 
@@ -33,7 +34,7 @@ export default function ContactPage() {
             ติดต่อเรา
           </Typography>
           <Typography className="text-sm text-slate-600">
-            ส่งข้อความถึงทีมงานเพื่อขอความช่วยเหลือ เราจะตอบกลับในเวลาทำการ
+            เลือกช่องทางที่สะดวกสำหรับติดต่อทีมงาน
           </Typography>
         </Box>
       </Box>
@@ -46,7 +47,7 @@ export default function ContactPage() {
               className="text-emerald-500! ml-2!"
             />
           }
-          label="ซัพพอร์ต"
+          label={`${branches.length} สาขาในระบบ`}
           variant="outlined"
           className="bg-slate-900/5! text-slate-700!"
         />
@@ -57,7 +58,7 @@ export default function ContactPage() {
               className="text-emerald-500! ml-2!"
             />
           }
-          label="ตอบกลับในเวลาทำการ"
+          label={`${phoneReadyCount} เบอร์โทรจากฐานข้อมูล`}
           variant="outlined"
           className="bg-slate-900/5! text-slate-700!"
         />
@@ -68,15 +69,21 @@ export default function ContactPage() {
               className="text-emerald-500! ml-2!"
             />
           }
-          label="แนบรหัสการจอง (ถ้ามี) จะช่วยได้เร็วขึ้น"
+          label="แนบรหัสการจองจะช่วยให้ตรวจสอบได้เร็วขึ้น"
           variant="outlined"
           className="bg-slate-900/5! text-slate-700!"
         />
       </Box>
 
+      {error ? (
+        <Alert severity="warning" className="mt-6 rounded-2xl!">
+          {error}
+        </Alert>
+      ) : null}
+
       <Box className="mt-6 grid gap-4 lg:grid-cols-12">
         <Box className="lg:col-span-5">
-          <ContactInfoCard />
+          <ContactInfoCard branches={branches} />
         </Box>
 
         <Box className="lg:col-span-7">

@@ -14,6 +14,8 @@ type Props = {
 
   fullName: string;
   setFullName: (value: string) => void;
+  email: string;
+  setEmail: (value: string) => void;
   phone: string;
   setPhone: (value: string) => void;
 
@@ -41,7 +43,6 @@ type Props = {
   setReturnTime: (value: string) => void;
 
   addons: Record<AddonKey, boolean>;
-  days: number;
   addonsTotal: number;
   handleAddonChange: (key: AddonKey, checked: boolean) => void;
 
@@ -63,6 +64,8 @@ export default function BookingForm({
   onSubmit,
   fullName,
   setFullName,
+  email,
+  setEmail,
   phone,
   setPhone,
   merchantBranchesEnabled,
@@ -87,7 +90,6 @@ export default function BookingForm({
   returnTime,
   setReturnTime,
   addons,
-  days,
   addonsTotal,
   handleAddonChange,
   startDT,
@@ -101,11 +103,19 @@ export default function BookingForm({
 }: Props) {
   return (
     <Box component="form" onSubmit={onSubmit} className="grid gap-4">
-      <Box className="grid gap-4 sm:grid-cols-2">
+      <Box className="grid gap-4 lg:grid-cols-3">
         <TextField
           label="ชื่อ-นามสกุล"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
+          fullWidth
+          size="small"
+          sx={fieldSX}
+        />
+        <TextField
+          label="อีเมล"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           fullWidth
           size="small"
           sx={fieldSX}
@@ -154,7 +164,6 @@ export default function BookingForm({
 
       <BookingAddons
         addons={addons}
-        days={days}
         addonsTotal={addonsTotal}
         onChange={handleAddonChange}
       />

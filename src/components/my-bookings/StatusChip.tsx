@@ -14,6 +14,14 @@ export default function StatusChip({ s }: { s: BookingStatus }) {
       label: "ยืนยันแล้ว",
       className: "!bg-emerald-50 !text-emerald-700 !border-emerald-200",
     },
+    paid: {
+      label: "ชำระแล้ว",
+      className: "!bg-sky-50 !text-sky-700 !border-sky-200",
+    },
+    completed: {
+      label: "เสร็จสิ้น",
+      className: "!bg-slate-100 !text-slate-700 !border-slate-200",
+    },
     cancelled: {
       label: "ยกเลิก",
       className: "!bg-rose-50 !text-rose-700 !border-rose-200",

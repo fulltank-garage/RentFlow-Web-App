@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Box, Typography } from "@mui/material";
-import type { Car } from "@/src/constants/cars";
+import type { Car } from "@/src/services/cars/cars.types";
 import CarCard from "./CarCard";
 
 type Props = {

@@ -2,8 +2,12 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CARS, type Car } from "@/src/constants/cars";
 import usePageReady from "@/src/hooks/usePageReady";
+import { getErrorMessage } from "@/src/lib/api-error";
+import { getCarById } from "@/src/services/cars/cars.api";
+import type { Car } from "@/src/services/cars/cars.types";
+import { paymentsApi } from "@/src/services/payments/payments.api";
+import { usersApi } from "@/src/services/users/users.api";
 import {
   type Method,
   safeParseAddons,
@@ -14,9 +18,10 @@ import {
 export default function usePaymentPage() {
   const params = useSearchParams();
   const router = useRouter();
-  const ready = usePageReady({ minDelay: 2000 });
+  const ready = usePageReady();
 
   const bookingId = params.get("bookingId") || "BK-XXXX";
+  const bookingRef = params.get("bookingRef") || "";
   const carId = params.get("carId") || "";
   const days = Number(params.get("days") || "0") || 0;
 
@@ -26,6 +31,12 @@ export default function usePaymentPage() {
   const returnPoint = params.get("returnPoint") || "";
   const pickupTime = params.get("pickupTime") || "";
   const returnTime = params.get("returnTime") || "";
+  const customerName = params.get("customerName") || "";
+  const customerEmail = params.get("customerEmail") || "";
+  const customerPhone = params.get("customerPhone") || "";
+  const subtotal = Number(params.get("subtotal") || "0") || 0;
+  const discount = Number(params.get("discount") || "0") || 0;
+  const extraCharge = Number(params.get("extraCharge") || "0") || 0;
   const amount = Number(params.get("amount") || "0") || 0;
 
   const addonsRaw = params.get("addons");
@@ -39,25 +50,22 @@ export default function usePaymentPage() {
     [addonKeys, days]
   );
 
-  const car: Car | undefined = React.useMemo(
-    () => CARS.find((c) => c.id === carId),
-    [carId]
-  );
+  const [car, setCar] = React.useState<Car | undefined>(undefined);
 
   const carSubTotal = React.useMemo(
-    () => getCarSubTotal(car, days),
-    [car, days]
+    () => subtotal || getCarSubTotal(car, days),
+    [car, days, subtotal]
   );
 
   const carNet = React.useMemo(
-    () => Math.max(0, amount - addonsTotal),
-    [amount, addonsTotal]
+    () => Math.max(0, carSubTotal - discount),
+    [carSubTotal, discount]
   );
 
   const carDiscount = React.useMemo(() => {
-    if (!car || carSubTotal <= 0) return 0;
-    return Math.max(0, carSubTotal - carNet);
-  }, [car, carSubTotal, carNet]);
+    if (carSubTotal <= 0) return 0;
+    return discount;
+  }, [carSubTotal, discount]);
 
   const discountPct = React.useMemo(() => {
     if (carSubTotal <= 0) return 0;
@@ -65,12 +73,13 @@ export default function usePaymentPage() {
   }, [carSubTotal, carDiscount]);
 
   const [method, setMethod] = React.useState<Method>("promptpay");
-  const [fullName, setFullName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
+  const [fullName, setFullName] = React.useState(customerName);
+  const [email, setEmail] = React.useState(customerEmail);
+  const [phone, setPhone] = React.useState(customerPhone);
   const [slipFile, setSlipFile] = React.useState<File | null>(null);
   const [done, setDone] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const needSlip = method === "transfer";
 
@@ -81,18 +90,56 @@ export default function usePaymentPage() {
     (!needSlip || !!slipFile) &&
     !loading;
 
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadData() {
+      const tasks = await Promise.allSettled([
+        carId ? getCarById(carId) : Promise.resolve(null),
+        usersApi.getMe(),
+      ]);
+
+      if (cancelled) return;
+
+      const [carResult, profileResult] = tasks;
+
+      if (carResult.status === "fulfilled" && carResult.value) {
+        setCar(carResult.value);
+      }
+
+      if (profileResult.status === "fulfilled") {
+        const user = profileResult.value.data;
+        setFullName((prev) => prev || user.name || "");
+        setEmail((prev) => prev || user.email || "");
+        setPhone((prev) => prev || user.phone || "");
+      }
+    }
+
+    loadData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [carId]);
+
   const handleConfirm = React.useCallback(async () => {
     if (!canPay) return;
 
     setLoading(true);
+    setError(null);
     try {
-      await new Promise((r) => setTimeout(r, 500));
+      await paymentsApi.createPayment({
+        bookingId: bookingRef || bookingId,
+        method: method === "transfer" ? "bank_transfer" : method,
+      });
       setDone(true);
       setTimeout(() => router.push("/my-bookings"), 800);
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "ไม่สามารถยืนยันการชำระเงินได้"));
     } finally {
       setLoading(false);
     }
-  }, [canPay, router]);
+  }, [bookingId, bookingRef, canPay, method, router]);
 
   const roundedFieldSX = React.useMemo(
     () => ({
@@ -104,6 +151,7 @@ export default function usePaymentPage() {
   return {
     ready,
     bookingId,
+    bookingRef,
     carId,
     days,
     pickupDate,
@@ -120,6 +168,7 @@ export default function usePaymentPage() {
     carNet,
     carDiscount,
     discountPct,
+    extraCharge,
     method,
     setMethod,
     fullName,
@@ -132,6 +181,7 @@ export default function usePaymentPage() {
     setSlipFile,
     done,
     loading,
+    error,
     canPay,
     handleConfirm,
     roundedFieldSX,

@@ -1,6 +1,7 @@
 export type CarType = "Economy" | "Sedan" | "SUV" | "Van";
 export type Transmission = "Auto" | "Manual";
 export type Fuel = "Gasoline" | "Hybrid" | "EV";
+export type Grade = 1 | 2 | 3 | 4;
 
 export type Car = {
   id: string;
@@ -13,7 +14,9 @@ export type Car = {
   transmission: Transmission;
   fuel: Fuel;
   pricePerDay: number;
+  image?: string;
   imageUrl: string;
+  grade?: Grade;
   images?: string[];
   description?: string;
   locationId?: string;

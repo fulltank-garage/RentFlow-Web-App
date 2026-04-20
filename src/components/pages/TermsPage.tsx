@@ -42,7 +42,7 @@ export default function TermsPage() {
               <Stack direction="row" className="items-center gap-2">
                 <Chip size="small" label={`อัปเดตล่าสุด: ${updatedAt}`} />
                 <Typography className="text-xs text-slate-500">
-                  เอกสารนี้เป็นตัวอย่างสำหรับเว็บจองรถ สามารถปรับแก้ให้ตรงกับธุรกิจจริงได้
+                  ข้อกำหนดสำหรับการใช้บริการ RentFlow
                 </Typography>
               </Stack>
             </Stack>

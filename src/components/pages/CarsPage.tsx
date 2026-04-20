@@ -5,12 +5,11 @@ import { Box, Container, Typography, Chip, Alert } from "@mui/material";
 import CarsFilterBar from "@/src/components/cars/CarsFilterBar";
 import CarGrid from "@/src/components/cars/CarGrid";
 import CarsPageSkeleton from "@/src/components/cars/CarsPageSkeleton";
+import { useCatalogDirectory } from "@/src/hooks/catalog/useCatalogDirectory";
 import { useCarsFilters } from "@/src/hooks/cars/useCarsFilters";
 import { useCarsCatalog } from "@/src/hooks/cars/useCarsCatalog";
 
-type Props = {};
-
-export default function CarsPage(_props: Props) {
+export default function CarsPage() {
   const {
     q,
     setQ,
@@ -36,6 +35,14 @@ export default function CarsPage(_props: Props) {
     pickupDate,
     returnDate,
   });
+  const {
+    carTypes,
+    locations,
+    loading: directoryLoading,
+    error: directoryError,
+  } = useCatalogDirectory();
+
+  const pageError = [error, directoryError].filter(Boolean).join(" • ");
 
   if (loading) {
     return <CarsPageSkeleton />;
@@ -72,6 +79,8 @@ export default function CarsPage(_props: Props) {
         location={location}
         pickupDate={pickupDate}
         returnDate={returnDate}
+        carTypes={carTypes}
+        locations={locations}
         onQChange={(value) => {
           setQ(value);
           updateUrl({ q: value });
@@ -96,10 +105,19 @@ export default function CarsPage(_props: Props) {
         onReset={resetFilters}
       />
 
-      {error ? (
+      {pageError ? (
         <Alert severity="error" className="mt-6 rounded-xl!">
-          {error}
+          {pageError}
         </Alert>
+      ) : null}
+
+      {directoryLoading && !carTypes.length && !locations.length ? (
+        <Chip
+          size="small"
+          label="กำลังโหลดตัวกรองจากฐานข้อมูล"
+          variant="outlined"
+          className="mt-6 border! border-slate-200! bg-slate-900/5! text-slate-700!"
+        />
       ) : null}
 
       <CarGrid cars={cars} />

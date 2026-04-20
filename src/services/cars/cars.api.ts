@@ -1,5 +1,5 @@
 import api from "@/src/lib/axios";
-import { CARS, type Car } from "@/src/constants/cars";
+import type { Car } from "./cars.types";
 
 export type SortKey = "price_asc" | "price_desc";
 
@@ -18,57 +18,57 @@ export type GetCarsResponse = {
 };
 
 type CarsApiResponse = {
-  items: Car[];
+  items: Array<Partial<Car> & { id: string; name: string }>;
   total: number;
 };
+
+function normalizeCar(raw: Partial<Car> & { id: string; name: string }): Car {
+  const imageUrl = raw.imageUrl || raw.image || "";
+
+  return {
+    id: raw.id,
+    name: raw.name,
+    brand: raw.brand || "",
+    model: raw.model || "",
+    year: raw.year || 0,
+    type: (raw.type || "Sedan") as Car["type"],
+    seats: raw.seats || 0,
+    transmission: (raw.transmission || "Auto") as Car["transmission"],
+    fuel: (raw.fuel || "Gasoline") as Car["fuel"],
+    pricePerDay: raw.pricePerDay || 0,
+    image: imageUrl || undefined,
+    imageUrl,
+    grade: raw.grade,
+    images: raw.images || (imageUrl ? [imageUrl] : undefined),
+    description: raw.description,
+    locationId: raw.locationId,
+    isAvailable: raw.isAvailable ?? true,
+    createdAt: raw.createdAt || "",
+    updatedAt: raw.updatedAt || "",
+  };
+}
 
 export async function getCars(
   params?: GetCarsParams
 ): Promise<GetCarsResponse> {
-  try {
-    const res = await api.get<CarsApiResponse>("/cars", {
-      params: {
-        q: params?.q || undefined,
-        type: params?.type && params.type !== "all" ? params.type : undefined,
-        location: params?.location || undefined,
-        pickupDate: params?.pickupDate || undefined,
-        returnDate: params?.returnDate || undefined,
-        sort: params?.sort || undefined,
-      },
-    });
-
-    return {
-      items: res.data.items ?? [],
-      total: res.data.total ?? 0,
-    };
-  } catch (err) {
-    console.error("carsAPI fallback:", err);
-  }
-
-  let items = [...CARS];
-
-  if (params?.q) {
-    const query = params.q.toLowerCase();
-
-    items = items.filter(
-      (c) =>
-        c.name.toLowerCase().includes(query) ||
-        c.type.toLowerCase().includes(query)
-    );
-  }
-
-  if (params?.type && params.type !== "all") {
-    items = items.filter((c) => c.type === params.type);
-  }
-
-  if (params?.sort === "price_asc") {
-    items.sort((a, b) => a.pricePerDay - b.pricePerDay);
-  } else if (params?.sort === "price_desc") {
-    items.sort((a, b) => b.pricePerDay - a.pricePerDay);
-  }
+  const res = await api.get<CarsApiResponse>("/cars", {
+    params: {
+      q: params?.q || undefined,
+      type: params?.type && params.type !== "all" ? params.type : undefined,
+      location: params?.location || undefined,
+      pickupDate: params?.pickupDate || undefined,
+      returnDate: params?.returnDate || undefined,
+      sort: params?.sort || undefined,
+    },
+  });
 
   return {
-    items,
-    total: items.length,
+    items: (res.data.items ?? []).map(normalizeCar),
+    total: res.data.total ?? 0,
   };
+}
+
+export async function getCarById(carId: string): Promise<Car | null> {
+  const { items } = await getCars();
+  return items.find((car) => car.id === carId) ?? null;
 }

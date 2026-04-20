@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -26,35 +26,90 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { NAV } from "@/src/constants/navigation";
+import {
+  getSessionUser,
+  logout as logoutRequest,
+} from "@/src/services/auth/auth.api";
 
 type User = {
   name: string;
-  email: string;
+  email?: string;
+  username?: string;
+  avatarUrl?: string;
 };
+
+function getDisplayName(user: {
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
+}) {
+  const fullName = [user.firstName, user.lastName].filter(Boolean).join(" ");
+  return user.name || fullName || user.username || "ผู้ใช้งาน";
+}
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (v: boolean) => () => setOpen(v);
   const isCompact = useMediaQuery("(max-width: 800px)");
 
-  const [user, setUser] = React.useState<User | null>({
-    name: "พชร",
-    email: "pachared.amr12@gmail.com",
-  });
+  const [user, setUser] = React.useState<User | null>(null);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function syncSession() {
+      try {
+        const currentUser = await getSessionUser();
+        if (!cancelled) {
+          setUser(
+            currentUser
+              ? {
+                  name: getDisplayName(currentUser),
+                  email: currentUser.email,
+                  username: currentUser.username,
+                  avatarUrl: currentUser.avatarUrl,
+                }
+              : null
+          );
+        }
+      } catch {
+        if (!cancelled) {
+          setUser(null);
+        }
+      }
+    }
+
+    syncSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
 
   const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(e.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
 
-  const handleLogout = () => {
+  const handleLogout = React.useCallback(async () => {
+    try {
+      await logoutRequest();
+    } catch {
+      // Ignore logout errors so the UI can still recover locally.
+    }
+
     setUser(null);
     handleCloseMenu();
-  };
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  }, [router]);
 
   const isActive = (href: string) => pathname === href;
 
@@ -183,7 +238,10 @@ export default function Navbar() {
                     }}
                   >
                     <Box className="flex items-center gap-2.5">
-                      <Avatar className="bg-slate-900! text-white! ring-2 ring-slate-200">
+                      <Avatar
+                        src={user.avatarUrl || undefined}
+                        className="bg-slate-900! text-white! ring-2 ring-slate-200"
+                      >
                         {user.name[0].toUpperCase()}
                       </Avatar>
 
@@ -192,7 +250,7 @@ export default function Navbar() {
                           {user.name}
                         </Typography>
                         <Typography className="text-[11px]! font-medium! text-slate-500! leading-none! mt-1!">
-                          บัญชีผู้ใช้
+                          {user.username || "บัญชีผู้ใช้"}
                         </Typography>
                       </Box>
                     </Box>
@@ -469,7 +527,10 @@ export default function Navbar() {
                     }}
                   >
                     <Box className="flex items-center gap-3">
-                      <Avatar className="bg-slate-900! text-white! h-11! w-11!">
+                      <Avatar
+                        src={user.avatarUrl || undefined}
+                        className="bg-slate-900! text-white! h-11! w-11!"
+                      >
                         {user.name[0].toUpperCase()}
                       </Avatar>
                       <Box className="min-w-0">
@@ -485,10 +546,7 @@ export default function Navbar() {
                 </Box>
 
                 <Button
-                  onClick={() => {
-                    handleLogout();
-                    setOpen(false);
-                  }}
+                  onClick={handleLogout}
                   variant="contained"
                   fullWidth
                   className="rounded-xl!"

@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { CarType } from "@/src/constants/cars";
-import type { LocationValue } from "@/src/constants/locations";
-import type { SortKey } from "@/src/utils/cars/cars";
+import type { SortKey } from "@/src/services/cars/cars.api";
+import type { CarType } from "@/src/services/cars/cars.types";
 
 export function useCarsFilters() {
   const searchParams = useSearchParams();
@@ -22,9 +21,7 @@ export function useCarsFilters() {
     initialType === "All" ? "all" : (initialType as CarType | "all")
   );
   const [sort, setSort] = React.useState<SortKey>("price_asc");
-  const [location, setLocation] = React.useState<LocationValue | "">(
-    initialLocation as LocationValue | ""
-  );
+  const [location, setLocation] = React.useState(initialLocation);
   const [pickupDate, setPickupDate] = React.useState(initialPickupDate);
   const [returnDate, setReturnDate] = React.useState(initialReturnDate);
 
@@ -37,7 +34,7 @@ export function useCarsFilters() {
 
     setQ(nextQ);
     setType(nextType === "All" ? "all" : (nextType as CarType | "all"));
-    setLocation(nextLocation as LocationValue | "");
+    setLocation(nextLocation);
     setPickupDate(nextPickupDate);
     setReturnDate(nextReturnDate);
   }, [searchParams]);
@@ -46,7 +43,7 @@ export function useCarsFilters() {
     (next: {
       q?: string;
       type?: CarType | "all";
-      location?: LocationValue | "";
+      location?: string;
       pickupDate?: string;
       returnDate?: string;
     }) => {

@@ -54,7 +54,7 @@ export default function CarDetailIncludedSection() {
         <IncludedCard
           positive
           title="บริการช่วยเหลือเบื้องต้น"
-          desc="ติดต่อทีมงานได้ในเวลาทำการ (ตัวอย่าง)"
+          desc="ติดต่อทีมงานได้ในเวลาทำการ"
         />
         <IncludedCard
           positive={false}

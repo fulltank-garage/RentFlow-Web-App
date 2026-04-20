@@ -6,14 +6,12 @@ import { formatTHB } from "@/src/constants/money";
 
 type Props = {
   addons: Record<AddonKey, boolean>;
-  days: number;
   addonsTotal: number;
   onChange: (key: AddonKey, checked: boolean) => void;
 };
 
 export default function BookingAddons({
   addons,
-  days,
   addonsTotal,
   onChange,
 }: Props) {
@@ -23,7 +21,7 @@ export default function BookingAddons({
         บริการเสริม
       </Typography>
       <Typography className="mt-1 text-xs text-slate-500">
-        เลือกได้ตามต้องการ (คิดราคา {days > 0 ? `อิง ${days} วัน` : "ตามจำนวนวัน"})
+        เลือกความต้องการเพิ่มเติมไว้ก่อนได้ ราคาส่วนนี้ยังไม่ถูกรวมในยอดชำระออนไลน์อัตโนมัติ
       </Typography>
 
       <Box className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -74,7 +72,7 @@ export default function BookingAddons({
 
         <Box className="flex items-center justify-between">
           <Typography className="text-sm text-slate-600">
-            รวมค่าบริการเสริม
+            มูลค่าบริการเสริมโดยประมาณ
           </Typography>
           <Typography className="text-sm font-bold text-slate-900">
             {addonsTotal > 0 ? formatTHB(addonsTotal) : "-"}

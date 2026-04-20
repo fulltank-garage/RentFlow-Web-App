@@ -15,18 +15,18 @@ import {
   Stack,
 } from "@mui/material";
 
-import type { Car } from "@/src/constants/cars";
-import { LOCATIONS, type LocationValue } from "@/src/constants/locations";
 import { Herotextfield } from "@/src/components/hero/Herotextfield";
+import type { LocationOption } from "@/src/lib/rentflow-catalog";
+import type { CarType } from "@/src/services/cars/cars.types";
 
 type Props = {
   heroImages: readonly string[];
 
-  location: LocationValue;
-  setLocation: (v: LocationValue) => void;
+  location: string;
+  setLocation: (v: string) => void;
 
-  type: Car["type"] | "All";
-  setType: (v: Car["type"] | "All") => void;
+  type: CarType | "All";
+  setType: (v: CarType | "All") => void;
 
   pickupDate: string;
   setPickupDate: (v: string) => void;
@@ -37,7 +37,8 @@ type Props = {
   q: string;
   setQ: (v: string) => void;
 
-  carTypes: readonly Car["type"][];
+  carTypes: readonly CarType[];
+  locations: readonly LocationOption[];
 };
 
 export default function HeroSection({
@@ -53,6 +54,7 @@ export default function HeroSection({
   q,
   setQ,
   carTypes,
+  locations,
 }: Props) {
   const router = useRouter();
   const [heroIndex, setHeroIndex] = React.useState(0);
@@ -217,13 +219,12 @@ export default function HeroSection({
                       select
                       label="สาขารับรถ"
                       value={location}
-                      onChange={(e) =>
-                        setLocation(e.target.value as LocationValue)
-                      }
+                      onChange={(e) => setLocation(e.target.value)}
                       fullWidth
                       sx={Herotextfield}
                     >
-                      {LOCATIONS.map((loc) => (
+                      <MenuItem value="">ทุกสาขา</MenuItem>
+                      {locations.map((loc) => (
                         <MenuItem key={loc.value} value={loc.value}>
                           {loc.label}
                         </MenuItem>
@@ -256,9 +257,7 @@ export default function HeroSection({
                         select
                         label="ประเภทรถ"
                         value={type}
-                        onChange={(e) =>
-                          setType(e.target.value as Car["type"] | "All")
-                        }
+                        onChange={(e) => setType(e.target.value as CarType | "All")}
                         fullWidth
                         sx={Herotextfield}
                       >

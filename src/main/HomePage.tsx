@@ -1,18 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Box } from "@mui/material";
-
-import { CARS, CAR_TYPES, type Car } from "@/src/constants/cars";
-import { type LocationValue } from "@/src/constants/locations";
+import { Alert, Box } from "@mui/material";
 
 import HeroSection from "@/src/components/home/HeroSection";
 import CarsSection from "@/src/components/home/CarsSection";
 import CarClassSection from "@/src/components/home/CarClassSection";
 import BenefitsCTASection from "@/src/components/home/BenefitsCTASection";
 import ReviewsSection from "@/src/components/home/ReviewsSection";
-
 import { formatTHB } from "@/src/constants/money";
+import { useCatalogDirectory } from "@/src/hooks/catalog/useCatalogDirectory";
+import type { CarType } from "@/src/services/cars/cars.types";
 
 const HERO_IMAGES = [
   "/cosySec.webp",
@@ -24,15 +22,17 @@ const HERO_IMAGES = [
 ] as const;
 
 export default function HomePage() {
-  const [location, setLocation] = React.useState<LocationValue>("bangkok");
-  const [type, setType] = React.useState<Car["type"] | "All">("All");
+  const [location, setLocation] = React.useState("");
+  const [type, setType] = React.useState<CarType | "All">("All");
   const [pickupDate, setPickupDate] = React.useState("");
   const [returnDate, setReturnDate] = React.useState("");
   const [q, setQ] = React.useState("");
+  const { cars, carTypes, locations, classes, loading, error } =
+    useCatalogDirectory();
 
   const recommendedCars = React.useMemo(() => {
-    return CARS.slice(0, 6);
-  }, []);
+    return cars.slice(0, 6);
+  }, [cars]);
 
   return (
     <Box className="min-h-screen bg-white text-slate-900">
@@ -48,12 +48,21 @@ export default function HomePage() {
         setReturnDate={setReturnDate}
         q={q}
         setQ={setQ}
-        carTypes={CAR_TYPES}
+        carTypes={carTypes}
+        locations={locations}
       />
+
+      {error ? (
+        <Box className="mx-auto w-full max-w-6xl px-6">
+          <Alert severity="warning" className="rounded-2xl!">
+            {error}
+          </Alert>
+        </Box>
+      ) : null}
 
       <CarsSection cars={recommendedCars} formatTHB={formatTHB} />
 
-      <CarClassSection />
+      <CarClassSection classes={classes} loading={loading} />
 
       <ReviewsSection />
 

@@ -14,7 +14,7 @@ import {
 import usePageReady from "@/src/hooks/usePageReady";
 
 export default function FeaturesPage() {
-  const ready = usePageReady({ minDelay: 2000 });
+  const ready = usePageReady();
 
   if (!ready) {
     return <FeaturesPageSkeleton />;
@@ -163,7 +163,7 @@ export default function FeaturesPage() {
           </Button>
           <Button
             component={Link}
-            href="/support"
+            href="/contact"
             variant="outlined"
             className="rounded-xl!"
             sx={{ textTransform: "none" }}

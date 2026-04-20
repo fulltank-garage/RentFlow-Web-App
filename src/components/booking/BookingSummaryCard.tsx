@@ -3,11 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Box, Button, Card, CardContent, Divider, Typography } from "@mui/material";
-import type { Car } from "@/src/constants/cars";
+import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
 
 type Props = {
-  car?: Car;
+  car?: Car | null;
   carId: string;
   finalPickupPoint: string;
   pickupDate: string;
@@ -137,7 +137,16 @@ export default function BookingSummaryCard({
               </Box>
 
               <Box className="flex items-center justify-between">
-                <Typography className="text-slate-600">ค่าบริการเสริม</Typography>
+                <Box>
+                  <Typography className="text-slate-600">
+                    บริการเสริมที่เลือก
+                  </Typography>
+                  {addonsTotal > 0 ? (
+                    <Typography className="text-[11px] text-slate-500">
+                      ยังไม่รวมในยอดชำระออนไลน์
+                    </Typography>
+                  ) : null}
+                </Box>
                 <Typography className="font-semibold text-slate-900">
                   {addonsTotal > 0 ? formatTHB(addonsTotal) : "-"}
                 </Typography>

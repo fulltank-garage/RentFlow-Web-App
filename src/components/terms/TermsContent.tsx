@@ -81,16 +81,14 @@ export default function TermsContent() {
           8) ติดต่อเรา
         </Typography>
         <Typography className="mt-1 text-sm leading-relaxed">
-          หากมีคำถามเกี่ยวกับเงื่อนไขการใช้งาน โปรดติดต่อผ่านหน้าช่วยเหลือหรืออีเมลของทีมงาน
-          (ใส่อีเมล/เบอร์/ที่อยู่จริงของคุณตรงนี้)
+          หากมีคำถามเกี่ยวกับเงื่อนไขการใช้งาน โปรดติดต่อผ่านหน้าช่วยเหลือ
         </Typography>
       </section>
 
       <Divider className="my-2! border-slate-200!" />
 
       <Typography className="text-xs text-slate-500">
-        หมายเหตุ: เนื้อหานี้เป็นตัวอย่างเชิงทั่วไป ไม่ใช่คำแนะนำทางกฎหมาย
-        หากใช้งานจริงในธุรกิจ แนะนำให้ให้ผู้เชี่ยวชาญตรวจทาน
+        RentFlow อาจปรับปรุงเงื่อนไขการใช้งานตามความเหมาะสม
       </Typography>
     </Stack>
   );

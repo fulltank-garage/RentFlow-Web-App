@@ -1,32 +1,34 @@
-import type { GoogleUserInfo } from "./google";
-
 export type Customer = {
   id: string;
-  name: string;
-  email: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  email?: string;
   phone?: string;
   avatarUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
-export type GoogleAuthPayload = {
-  accessToken: string;
-  user: GoogleUserInfo;
+export type LoginPayload = {
+  username: string;
+  password: string;
 };
 
-export type GoogleAuthResult = {
+export type RegisterPayload = {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
+
+export type AuthResult = {
   user: Customer;
 };
 
-export type GoogleAuthResponse = {
+export type AuthResponse = {
   success?: boolean;
   message?: string;
-  data?: GoogleAuthResult;
-};
-
-export type LegacyGoogleAuthResponse = {
-  success?: boolean;
-  message?: string;
-  user?: Customer;
+  data?: AuthResult;
 };

@@ -114,7 +114,7 @@ export default function MyBookingDetailPage() {
 
             <Button
               component={Link}
-              href="/support"
+              href="/contact"
               variant="contained"
               className="rounded-xl! bg-slate-900! hover:bg-slate-800!"
             >
@@ -222,27 +222,31 @@ export default function MyBookingDetailPage() {
                   ค่าเช่ารถ
                 </Typography>
                 <Typography className="text-sm text-slate-900">
-                  {formatTHB(p.base)}
+                  {formatTHB(p.subtotal)}
                 </Typography>
               </Box>
 
-              <Box className="flex items-center justify-between">
-                <Typography className="text-sm text-slate-600">
-                  ประกัน
-                </Typography>
-                <Typography className="text-sm text-slate-900">
-                  {formatTHB(p.insurance)}
-                </Typography>
-              </Box>
+              {p.extraCharge > 0 ? (
+                <Box className="flex items-center justify-between">
+                  <Typography className="text-sm text-slate-600">
+                    ค่าบริการเพิ่ม
+                  </Typography>
+                  <Typography className="text-sm text-slate-900">
+                    {formatTHB(p.extraCharge)}
+                  </Typography>
+                </Box>
+              ) : null}
 
-              <Box className="flex items-center justify-between">
-                <Typography className="text-sm text-slate-600">
-                  ค่าบริการ
-                </Typography>
-                <Typography className="text-sm text-slate-900">
-                  {formatTHB(p.service)}
-                </Typography>
-              </Box>
+              {p.discount > 0 ? (
+                <Box className="flex items-center justify-between">
+                  <Typography className="text-sm text-slate-600">
+                    ส่วนลด
+                  </Typography>
+                  <Typography className="text-sm text-emerald-700">
+                    -{formatTHB(p.discount)}
+                  </Typography>
+                </Box>
+              ) : null}
 
               <Divider className="my-3! border-slate-200!" />
 
@@ -267,7 +271,7 @@ export default function MyBookingDetailPage() {
                 fullWidth
                 variant="outlined"
                 className="rounded-xl!"
-                disabled={local.status !== "confirmed"}
+                disabled={local.status === "pending" || local.status === "cancelled"}
               >
                 ดาวน์โหลดใบยืนยัน
               </Button>
@@ -287,7 +291,7 @@ export default function MyBookingDetailPage() {
             <Box className="mt-3">
               <Button
                 component={Link}
-                href="/support"
+                href="/contact"
                 variant="contained"
                 className="rounded-xl! bg-slate-900! hover:bg-slate-800!"
                 fullWidth
@@ -318,7 +322,7 @@ export default function MyBookingDetailPage() {
 
           <Box className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
             <Typography className="text-xs text-rose-700">
-              เมื่อยกเลิกแล้ว จะไม่สามารถกู้คืนสถานะเดิมได้ (mock)
+              เมื่อยกเลิกแล้ว จะไม่สามารถกู้คืนสถานะเดิมได้
             </Typography>
           </Box>
         </DialogContent>
@@ -334,7 +338,7 @@ export default function MyBookingDetailPage() {
           <Button
             variant="contained"
             className="rounded-xl! bg-rose-600! hover:bg-rose-700!"
-            onClick={booking.doCancelMock}
+            onClick={booking.doCancel}
           >
             ยกเลิกการจอง
           </Button>

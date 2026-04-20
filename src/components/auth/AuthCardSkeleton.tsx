@@ -72,7 +72,6 @@ export default function AuthCardSkeleton() {
 
             <Divider className="my-5! border-slate-200!" />
 
-            {/* Google Button */}
             <Stack spacing={2} className="items-center">
               <Box
                 className="w-full rounded-xl border border-slate-200 bg-white"

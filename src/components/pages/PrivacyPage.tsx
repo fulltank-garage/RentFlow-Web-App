@@ -43,7 +43,7 @@ export default function PrivacyPage() {
               <Stack direction="row" className="items-center gap-2">
                 <Chip size="small" label={`อัปเดตล่าสุด: ${updatedAt}`} />
                 <Typography className="text-xs text-slate-500">
-                  ตัวอย่างเอกสาร Privacy สำหรับเว็บจองรถ — ปรับตามข้อมูลจริงและ PDPA ได้
+                  รายละเอียดการดูแลข้อมูลส่วนบุคคลของผู้ใช้งาน
                 </Typography>
               </Stack>
             </Stack>

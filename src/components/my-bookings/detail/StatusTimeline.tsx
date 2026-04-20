@@ -16,10 +16,20 @@ function StepDot({ active }: { active: boolean }) {
 }
 
 export default function StatusTimeline({ status }: { status: BookingStatus }) {
+  if (status === "cancelled") {
+    return (
+      <Box className="flex items-center gap-2">
+        <StepDot active />
+        <Typography className="text-xs text-rose-700">รายการถูกยกเลิก</Typography>
+      </Box>
+    );
+  }
+
   const steps = [
     { key: "pending" as const, label: "สร้างรายการ" },
     { key: "confirmed" as const, label: "ยืนยันการจอง" },
-    { key: "cancelled" as const, label: "ยกเลิก" },
+    { key: "paid" as const, label: "ชำระเงิน" },
+    { key: "completed" as const, label: "เสร็จสิ้น" },
   ];
 
   const activeIndex =
@@ -27,9 +37,11 @@ export default function StatusTimeline({ status }: { status: BookingStatus }) {
       ? 0
       : status === "confirmed"
       ? 1
-      : status === "cancelled"
+      : status === "paid"
       ? 2
-      : 0;
+      : status === "completed"
+      ? 3
+      : 2;
 
   return (
     <Box className="flex items-center gap-3">

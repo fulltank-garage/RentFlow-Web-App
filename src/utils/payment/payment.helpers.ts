@@ -1,5 +1,3 @@
-import type { Car } from "@/src/constants/cars";
-
 export type Method = "promptpay" | "card" | "transfer";
 
 export type AddonKey = "carSeat" | "mountainDrive" | "returnOtherBranch";
@@ -64,7 +62,10 @@ export function calcAddonsTotal(keys: AddonKey[], days: number) {
   return total;
 }
 
-export function getCarSubTotal(car: Car | undefined, days: number) {
+export function getCarSubTotal(
+  car: { pricePerDay: number } | undefined,
+  days: number
+) {
   if (!car || days <= 0) return 0;
   return car.pricePerDay * days;
 }

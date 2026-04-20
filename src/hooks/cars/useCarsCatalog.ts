@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import type { Car } from "@/src/constants/cars";
+import { getErrorMessage } from "@/src/lib/api-error";
 import { getCars } from "@/src/services/cars/cars.api";
+import type { Car } from "@/src/services/cars/cars.types";
 
 type Params = {
     q: string;
@@ -14,6 +15,7 @@ type Params = {
 };
 
 export function useCarsCatalog(params: Params) {
+    const { q, type, sort, location, pickupDate, returnDate } = params;
     const [cars, setCars] = React.useState<Car[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -24,22 +26,30 @@ export function useCarsCatalog(params: Params) {
         async function loadCars() {
             try {
                 setLoading(true);
+                setError(null);
 
                 const start = Date.now();
 
-                const res = await getCars(params);
+                const res = await getCars({
+                    q,
+                    type,
+                    sort,
+                    location,
+                    pickupDate,
+                    returnDate,
+                });
                 const elapsed = Date.now() - start;
-                const delay = Math.max(2000 - elapsed, 0);
+                const delay = Math.max(1000 - elapsed, 0);
 
                 await new Promise((r) => setTimeout(r, delay));
 
                 if (cancelled) return;
 
                 setCars(res.items);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 if (cancelled) return;
 
-                setError(err?.message ?? "โหลดข้อมูลไม่สำเร็จ");
+                setError(getErrorMessage(err, "โหลดข้อมูลไม่สำเร็จ"));
             } finally {
                 if (!cancelled) {
                     setLoading(false);
@@ -53,12 +63,12 @@ export function useCarsCatalog(params: Params) {
             cancelled = true;
         };
     }, [
-        params.q,
-        params.type,
-        params.sort,
-        params.location,
-        params.pickupDate,
-        params.returnDate,
+        location,
+        pickupDate,
+        q,
+        returnDate,
+        sort,
+        type,
     ]);
 
     return {

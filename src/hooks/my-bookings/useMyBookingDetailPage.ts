@@ -3,11 +3,21 @@
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
 import usePageReady from "@/src/hooks/usePageReady";
+import { getErrorStatus } from "@/src/lib/api-error";
+import { bookingApi } from "@/src/services/booking/booking.api";
+import { getCarById } from "@/src/services/cars/cars.api";
 
-export type BookingStatus = "pending" | "confirmed" | "cancelled";
+export type BookingStatus =
+  | "pending"
+  | "confirmed"
+  | "paid"
+  | "completed"
+  | "cancelled";
 
 export type Booking = {
   id: string;
+  bookingRef: string;
+  carId: string;
   carName: string;
   pickupDate: string;
   returnDate: string;
@@ -18,90 +28,10 @@ export type Booking = {
   customerName?: string;
   phone?: string;
   notes?: string;
+  subtotal: number;
+  extraCharge: number;
+  discount: number;
 };
-
-const SEED: Booking[] = [
-  {
-    id: "BK-1001",
-    carName: "BMW 320d M Sport",
-    pickupDate: "2026-03-01",
-    returnDate: "2026-03-03",
-    totalPrice: 1290 * 2,
-    status: "confirmed",
-    pickupLocation: "สนามบินสุวรรณภูมิ",
-    returnLocation: "สนามบินสุวรรณภูมิ",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-    notes: "รับรถช่วงเช้า",
-  },
-  {
-    id: "BK-1002",
-    carName: "BMW 330e M Sport",
-    pickupDate: "2026-03-02",
-    returnDate: "2026-03-04",
-    totalPrice: 1490 * 2,
-    status: "pending",
-    pickupLocation: "เซ็นทรัลลาดพร้าว",
-    returnLocation: "เซ็นทรัลลาดพร้าว",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-  },
-  {
-    id: "BK-1003",
-    carName: "BMW M3 CS",
-    pickupDate: "2026-03-03",
-    returnDate: "2026-03-05",
-    totalPrice: 1990 * 2,
-    status: "confirmed",
-    pickupLocation: "สนามบินดอนเมือง",
-    returnLocation: "สนามบินดอนเมือง",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-  },
-  {
-    id: "BK-1004",
-    carName: "BMW i5 eDrive40 M Sport",
-    pickupDate: "2026-03-04",
-    returnDate: "2026-03-06",
-    totalPrice: 1590 * 2,
-    status: "pending",
-    pickupLocation: "เซ็นทรัลเวิลด์",
-    returnLocation: "เซ็นทรัลเวิลด์",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-  },
-  {
-    id: "BK-1005",
-    carName: "BMW i5 M60 xDrive",
-    pickupDate: "2026-03-05",
-    returnDate: "2026-03-07",
-    totalPrice: 1790 * 2,
-    status: "confirmed",
-    pickupLocation: "สนามบินสุวรรณภูมิ",
-    returnLocation: "สนามบินสุวรรณภูมิ",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-  },
-  {
-    id: "BK-1006",
-    carName: "BMW i7 xDrive60 M Sport",
-    pickupDate: "2026-03-06",
-    returnDate: "2026-03-08",
-    totalPrice: 1890 * 2,
-    status: "pending",
-    pickupLocation: "เซ็นทรัลลาดพร้าว",
-    returnLocation: "เซ็นทรัลลาดพร้าว",
-    customerName: "Pachara",
-    phone: "09x-xxx-xxxx",
-  },
-];
-
-export function priceBreakdown(total: number) {
-  const base = Math.round(total * 0.85);
-  const insurance = Math.max(0, Math.round(total * 0.1));
-  const service = Math.max(0, total - base - insurance);
-  return { base, insurance, service, total };
-}
 
 export default function useMyBookingDetailPage() {
   const router = useRouter();
@@ -115,38 +45,99 @@ export default function useMyBookingDetailPage() {
   const [local, setLocal] = React.useState<Booking | null>(null);
 
   React.useEffect(() => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    let cancelled = false;
 
-    if (!token) {
-      router.replace(
-        `/login?redirect=${encodeURIComponent(`/my-bookings/${id}`)}`
-      );
-      return;
+    async function loadBooking() {
+      if (!id) {
+        setIsCheckingAuth(false);
+        return;
+      }
+
+      try {
+        const bookingRes = await bookingApi.getBookingById(id);
+        const booking = bookingRes.data;
+        const car = await getCarById(booking.carId);
+
+        if (cancelled) return;
+
+        setLocal({
+          id: booking.bookingCode,
+          bookingRef: booking.id,
+          carId: booking.carId,
+          carName: car?.name || booking.carId,
+          pickupDate: booking.pickupDate,
+          returnDate: booking.returnDate,
+          totalPrice: booking.totalAmount,
+          status: booking.status,
+          pickupLocation: booking.pickupLocation,
+          returnLocation: booking.returnLocation,
+          customerName: booking.customerName,
+          phone: booking.customerPhone,
+          notes: booking.note,
+          subtotal: booking.subtotal,
+          extraCharge: booking.extraCharge,
+          discount: booking.discount,
+        });
+        setIsAuthenticated(true);
+      } catch (err: unknown) {
+        if (cancelled) return;
+
+        if (getErrorStatus(err) === 401) {
+          router.replace(
+            `/login?redirect=${encodeURIComponent(`/my-bookings/${id}`)}`
+          );
+          return;
+        }
+
+        setLocal(null);
+        setIsAuthenticated(true);
+      } finally {
+        if (!cancelled) {
+          setIsCheckingAuth(false);
+        }
+      }
     }
 
-    setIsAuthenticated(true);
-    setIsCheckingAuth(false);
+    loadBooking();
+
+    return () => {
+      cancelled = true;
+    };
   }, [id, router]);
 
-  React.useEffect(() => {
-    if (!id) return;
-    const found = SEED.find((x) => x.id === id) ?? null;
-    setLocal(found);
-  }, [id]);
-
   const canCancel =
-    local?.status === "pending" || local?.status === "confirmed";
+    local?.status === "pending" ||
+    local?.status === "confirmed" ||
+    local?.status === "paid";
 
   const pricing = React.useMemo(
-    () => priceBreakdown(local?.totalPrice ?? 0),
-    [local?.totalPrice]
+    () => ({
+      subtotal: local?.subtotal ?? 0,
+      extraCharge: local?.extraCharge ?? 0,
+      discount: local?.discount ?? 0,
+      total: local?.totalPrice ?? 0,
+    }),
+    [local?.discount, local?.extraCharge, local?.subtotal, local?.totalPrice]
   );
 
-  const doCancelMock = React.useCallback(() => {
-    setLocal((prev) => (prev ? { ...prev, status: "cancelled" } : prev));
-    setOpenCancel(false);
-  }, []);
+  const doCancel = React.useCallback(async () => {
+    if (!local) return;
+
+    try {
+      const res = await bookingApi.cancelBooking(local.bookingRef);
+      setLocal((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: res.data.status,
+            }
+          : prev
+      );
+      setOpenCancel(false);
+    } catch {
+      setOpenCancel(false);
+    }
+  }, [local]);
 
   return {
     ready,
@@ -158,7 +149,7 @@ export default function useMyBookingDetailPage() {
     setOpenCancel,
     canCancel,
     pricing,
-    doCancelMock,
+    doCancel,
     router,
   };
 }

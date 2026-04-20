@@ -7,11 +7,11 @@ import AuthCard from "@/src/auth/AuthCard";
 export default function LoginPage() {
   return (
     <AuthCard
+      mode="login"
       title="เข้าสู่ระบบ"
-      subtitle="ดำเนินการต่อด้วยบัญชี Google ของคุณ"
+      subtitle="กรอก username และ password เพื่อเข้าสู่ระบบ"
       successMessage="เข้าสู่ระบบสำเร็จ กำลังพาไปหน้าหลัก..."
-      authErrorMessage="เข้าสู่ระบบด้วย Google ไม่สำเร็จ"
-      submitErrorMessage="เข้าสู่ระบบด้วย Google ไม่สำเร็จ"
+      submitErrorMessage="เข้าสู่ระบบไม่สำเร็จ"
       agreementText={
         <>
           การดำเนินการต่อถือว่าคุณยอมรับ{" "}

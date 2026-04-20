@@ -4,6 +4,7 @@ import * as React from "react";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+import RouteLoadingOverlay from "@/src/components/common/RouteLoadingOverlay";
 
 const theme = createTheme({
     palette: {
@@ -32,6 +33,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <AppRouterCacheProvider options={{ key: "mui" }}>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
+                <RouteLoadingOverlay />
                 {children}
             </ThemeProvider>
         </AppRouterCacheProvider>

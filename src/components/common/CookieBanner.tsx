@@ -8,9 +8,7 @@ import {
   Button,
   Stack,
   Typography,
-  IconButton,
 } from "@mui/material";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CookieRoundedIcon from "@mui/icons-material/CookieRounded";
 
 const KEY = "rf_cookie_consent_v1";
@@ -33,8 +31,6 @@ export default function CookieBanner() {
     window.localStorage.setItem(KEY, "rejected");
     setOpen(false);
   };
-
-  const close = () => setOpen(false);
 
   if (!open) return null;
 

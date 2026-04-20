@@ -1,29 +1,31 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
+  Alert,
   Box,
-  Container,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Stack,
-  Divider,
   CircularProgress,
-  Button,
+  Container,
+  Divider,
   Snackbar,
-  Alert,
   Slide,
+  Stack,
+  TextField,
+  Typography,
   type SlideProps,
 } from "@mui/material";
+import { getErrorMessage } from "@/src/lib/api-error";
 import {
-  useGoogleAuth,
-  type SnackbarSeverity,
-} from "@/src/hooks/useGoogleAuth";
-import AuthCardSkeleton from "@/src/components/auth/AuthCardSkeleton";
+  loginWithPassword,
+  registerWithPassword,
+} from "@/src/services/auth/auth.api";
+
+type SnackbarSeverity = "success" | "error" | "info" | "warning";
 
 type SnackbarState = {
   open: boolean;
@@ -32,13 +34,12 @@ type SnackbarState = {
 };
 
 type AuthCardProps = {
+  mode: "login" | "register";
   title: string;
   subtitle: string;
   successMessage: string;
-  authErrorMessage: string;
   submitErrorMessage: string;
   agreementText: React.ReactNode;
-  buttonText?: string;
   redirectTo?: string;
 };
 
@@ -46,39 +47,43 @@ function SlideDownTransition(props: SlideProps) {
   return <Slide {...props} direction="down" />;
 }
 
+const fieldSX = {
+  "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+};
+
 export default function AuthCard({
+  mode,
   title,
   subtitle,
   successMessage,
-  authErrorMessage,
   submitErrorMessage,
   agreementText,
-  buttonText = "ดำเนินการต่อด้วย Google",
   redirectTo = "/",
 }: AuthCardProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || redirectTo;
+
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const [snackbar, setSnackbar] = React.useState<SnackbarState>({
     open: false,
     message: "",
     severity: "info",
   });
 
-  const { loading, googleReady, initGoogle, handleGoogleAuth } = useGoogleAuth({
-    successMessage,
-    authErrorMessage,
-    submitErrorMessage,
-    redirectTo,
-  });
-
-  const showSnackbar = React.useCallback(
-    (message: string, severity: SnackbarSeverity = "info") => {
-      setSnackbar({
-        open: true,
-        message,
-        severity,
-      });
-    },
-    []
-  );
+  const isRegister = mode === "register";
+  const canSubmit = isRegister
+    ? firstName.trim().length >= 2 &&
+      lastName.trim().length >= 2 &&
+      username.trim().length >= 3 &&
+      password.length >= 8 &&
+      password === confirmPassword
+    : username.trim().length >= 3 && password.length >= 1;
 
   const closeSnackbar = React.useCallback(
     (_?: React.SyntheticEvent | Event, reason?: string) => {
@@ -88,60 +93,70 @@ export default function AuthCard({
     []
   );
 
-  React.useEffect(() => {
-    if (window.google?.accounts?.oauth2) {
-      initGoogle(showSnackbar);
-    }
-  }, [initGoogle, showSnackbar]);
+  const showSnackbar = React.useCallback(
+    (message: string, severity: SnackbarSeverity = "info") => {
+      setSnackbar({ open: true, message, severity });
+    },
+    []
+  );
 
-  if (!googleReady && !loading) {
-    return (
-      <>
-        <Script
-          src="https://accounts.google.com/gsi/client"
-          strategy="afterInteractive"
-          onLoad={() => initGoogle(showSnackbar)}
-        />
+  const handleSubmit = React.useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={3500}
-          onClose={closeSnackbar}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          TransitionComponent={SlideDownTransition}
-        >
-          <Alert
-            onClose={closeSnackbar}
-            severity={snackbar.severity}
-            variant="filled"
-            elevation={0}
-            sx={{
-              minWidth: { xs: "calc(100vw - 32px)", sm: 420 },
-              maxWidth: 520,
-              borderRadius: "14px",
-              fontWeight: 600,
-              boxShadow:
-                "0 10px 30px rgba(15, 23, 42, 0.10), 0 2px 10px rgba(15, 23, 42, 0.06)",
-              alignItems: "center",
-            }}
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
+      if (!canSubmit || loading) return;
 
-        <AuthCardSkeleton />
-      </>
-    );
-  }
+      setLoading(true);
+
+      try {
+        if (isRegister) {
+          await registerWithPassword(
+            {
+              username: username.trim(),
+              password,
+              firstName: firstName.trim(),
+              lastName: lastName.trim(),
+            },
+            submitErrorMessage
+          );
+        } else {
+          await loginWithPassword(
+            {
+              username: username.trim(),
+              password,
+            },
+            submitErrorMessage
+          );
+        }
+
+        showSnackbar(successMessage, "success");
+        window.setTimeout(() => {
+          router.push(redirect);
+          router.refresh();
+        }, 450);
+      } catch (err: unknown) {
+        showSnackbar(getErrorMessage(err, submitErrorMessage), "error");
+        setLoading(false);
+      }
+    },
+    [
+      canSubmit,
+      firstName,
+      isRegister,
+      lastName,
+      loading,
+      password,
+      redirect,
+      router,
+      showSnackbar,
+      submitErrorMessage,
+      successMessage,
+      username,
+    ]
+  );
 
   return (
     <Box className="relative bg-white">
-      <Script
-        src="https://accounts.google.com/gsi/client"
-        strategy="afterInteractive"
-        onLoad={() => initGoogle(showSnackbar)}
-      />
-
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3500}
@@ -168,16 +183,11 @@ export default function AuthCard({
         </Alert>
       </Snackbar>
 
-      <Box aria-hidden className="pointer-events-none fixed inset-0" />
-
       <Container maxWidth="sm" className="relative py-12">
         <Card
           elevation={0}
           className="w-full rounded-2xl! border border-slate-200 bg-white"
-          sx={{
-            boxShadow: "none",
-            backdropFilter: "blur(6px)",
-          }}
+          sx={{ boxShadow: "none", backdropFilter: "blur(6px)" }}
         >
           <CardContent className="p-8!">
             <Stack className="mb-6 items-center text-center">
@@ -209,77 +219,91 @@ export default function AuthCard({
 
             <Divider className="my-5! border-slate-200!" />
 
-            <Stack spacing={2} className="items-center">
-              <Button
+            <Box component="form" onSubmit={handleSubmit} className="grid gap-4">
+              {isRegister ? (
+                <Box className="grid gap-4 sm:grid-cols-2">
+                  <TextField
+                    label="ชื่อจริง"
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
+                    autoComplete="given-name"
+                    fullWidth
+                    sx={fieldSX}
+                  />
+                  <TextField
+                    label="นามสกุล"
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
+                    autoComplete="family-name"
+                    fullWidth
+                    sx={fieldSX}
+                  />
+                </Box>
+              ) : null}
+
+              <TextField
+                label="Username"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                autoComplete="username"
                 fullWidth
-                variant="outlined"
-                onClick={() => handleGoogleAuth(showSnackbar)}
-                disabled={!googleReady || loading}
-                className="rounded-xl!"
+                sx={fieldSX}
+              />
+
+              <TextField
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                autoComplete={isRegister ? "new-password" : "current-password"}
+                fullWidth
+                sx={fieldSX}
+                helperText={isRegister ? "อย่างน้อย 8 ตัวอักษร" : " "}
+              />
+
+              {isRegister ? (
+                <TextField
+                  label="ยืนยัน Password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  autoComplete="new-password"
+                  fullWidth
+                  error={!!confirmPassword && password !== confirmPassword}
+                  helperText={
+                    confirmPassword && password !== confirmPassword
+                      ? "Password ไม่ตรงกัน"
+                      : " "
+                  }
+                  sx={fieldSX}
+                />
+              ) : null}
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                disabled={!canSubmit || loading}
+                className="rounded-xl! font-semibold!"
                 sx={{
-                  minHeight: 54,
-                  borderRadius: "12px",
-                  px: 2.25,
-                  py: 1.5,
-                  gap: 1.25,
-                  justifyContent: "center",
-                  borderColor: "rgb(226 232 240)",
-                  color: "rgb(15 23 42)",
-                  backgroundColor: "#fff",
-                  fontWeight: 700,
-                  fontSize: "0.95rem",
+                  minHeight: 52,
                   textTransform: "none",
-                  boxShadow: "none",
-                  transition:
-                    "background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease",
-                  "&:hover": {
-                    borderColor: "rgb(203 213 225)",
-                    backgroundColor: "rgb(248 250 252)",
-                    boxShadow: "none",
-                  },
-                  "&:active": {
-                    transform: "scale(0.995)",
-                  },
-                  "&.Mui-disabled": {
-                    borderColor: "rgb(226 232 240)",
-                    backgroundColor: "rgb(248 250 252)",
-                    color: "rgb(148 163 184)",
-                  },
+                  backgroundColor: "rgb(15 23 42)",
+                  "&:hover": { backgroundColor: "rgb(2 6 23)" },
                 }}
               >
                 {loading ? (
-                  <>
-                    <CircularProgress
-                      size={18}
-                      thickness={5}
-                      sx={{ color: "rgb(71 85 105)" }}
-                    />
+                  <Box className="flex items-center gap-2">
+                    <CircularProgress size={18} thickness={5} color="inherit" />
                     <span>กำลังดำเนินการ...</span>
-                  </>
+                  </Box>
+                ) : isRegister ? (
+                  "สมัครสมาชิก"
                 ) : (
-                  <>
-                    <Box
-                      component="img"
-                      src="/google.svg"
-                      alt="Google"
-                      sx={{
-                        width: 20,
-                        height: 20,
-                        display: "block",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <span>{buttonText}</span>
-                  </>
+                  "เข้าสู่ระบบ"
                 )}
               </Button>
-
-              {!googleReady && !loading ? (
-                <Typography className="text-xs text-slate-500">
-                  กำลังโหลด Google Sign-In...
-                </Typography>
-              ) : null}
-            </Stack>
+            </Box>
 
             <Box className="p-4">
               <Typography className="text-center text-xs! leading-5 text-slate-600">

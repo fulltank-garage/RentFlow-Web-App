@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CARS } from "@/src/constants/cars";
+import { getErrorMessage } from "@/src/lib/api-error";
 import {
   BRANCH_POINTS,
   CHAT_CHANNEL_URL,
@@ -13,7 +13,11 @@ import {
 import { DEFAULT_ADDONS, type AddonKey } from "@/src/constants/booking.addons";
 import { parseDateTime, diffDaysCeil } from "@/src/utils/booking/booking.date";
 import { buildChatHref, buildChatMessage } from "@/src/utils/booking/booking.format";
-import useBookingPricing from "./useBookingPricing";
+import { getSelectedAddonTitles } from "@/src/utils/booking/booking.pricing";
+import { bookingApi } from "@/src/services/booking/booking.api";
+import { getCarById } from "@/src/services/cars/cars.api";
+import type { Car } from "@/src/services/cars/cars.types";
+import { usersApi } from "@/src/services/users/users.api";
 import useBookingValidation from "./useBookingValidation";
 
 export default function useBooking() {
@@ -21,9 +25,10 @@ export default function useBooking() {
   const router = useRouter();
 
   const carId = params.get("carId") || "";
-  const car = React.useMemo(() => CARS.find((c) => c.id === carId), [carId]);
+  const [car, setCar] = React.useState<Car | null>(null);
 
   const [fullName, setFullName] = React.useState("");
+  const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
 
   const [pickupBranch, setPickupBranch] = React.useState<string>(BRANCH_POINTS[0]);
@@ -44,6 +49,13 @@ export default function useBooking() {
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [ready, setReady] = React.useState(false);
+  const [pricing, setPricing] = React.useState<{
+    discountPct: number;
+    subTotal: number;
+    discount: number;
+    total: number;
+    extraCharge: number;
+  } | null>(null);
 
   const fieldSX = React.useMemo(
     () => ({
@@ -93,15 +105,29 @@ export default function useBooking() {
     return returnBranch;
   }, [returnBranch, returnOther, returnFreeText]);
 
-  const { pricing, addonsTotal, amount } = useBookingPricing({
-    car,
-    days,
-    addons,
-  });
+  const addonsTotal = React.useMemo(() => {
+    return Object.entries(addons).reduce((total, [key, checked]) => {
+      if (!checked) return total;
+
+      if (key === "carSeat") {
+        return total + 150 * Math.max(days, 1);
+      }
+      if (key === "mountainDrive") {
+        return total + 300;
+      }
+      if (key === "returnOtherBranch") {
+        return total + 500;
+      }
+      return total;
+    }, 0);
+  }, [addons, days]);
+
+  const amount = pricing?.total ?? 0;
 
   const { locationOk, canSubmit } = useBookingValidation({
     carExists: !!car,
     fullName,
+    email,
     phone,
     pickupDate,
     returnDate,
@@ -116,7 +142,97 @@ export default function useBooking() {
     timeInvalid,
   });
 
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadInitialData() {
+      const tasks = await Promise.allSettled([
+        carId ? getCarById(carId) : Promise.resolve(null),
+        usersApi.getMe(),
+      ]);
+
+      if (cancelled) return;
+
+      const [carResult, profileResult] = tasks;
+
+      if (carResult.status === "fulfilled") {
+        setCar(carResult.value);
+      }
+
+      if (profileResult.status === "fulfilled") {
+        const user = profileResult.value.data;
+        setFullName((prev) => prev || user.name || "");
+        setEmail((prev) => prev || user.email || "");
+        setPhone((prev) => prev || user.phone || "");
+      }
+    }
+
+    loadInitialData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [carId]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function previewPrice() {
+      if (!car || !pickupDate || !returnDate || timeInvalid) {
+        setPricing(null);
+        return;
+      }
+
+      try {
+        const res = await bookingApi.previewPrice({
+          carId: car.id,
+          pickupDate,
+          returnDate,
+          pickupLocation: finalPickupPoint || undefined,
+          returnLocation: finalReturnPoint || undefined,
+        });
+
+        if (cancelled) return;
+
+        const data = res.data;
+        const discountPct =
+          data.subtotal > 0
+            ? Math.round((data.discount / data.subtotal) * 100)
+            : 0;
+
+        setPricing({
+          discountPct,
+          subTotal: data.subtotal,
+          discount: data.discount,
+          total: data.totalAmount,
+          extraCharge: data.extraCharge,
+        });
+      } catch {
+        if (!cancelled) {
+          setPricing(null);
+        }
+      }
+    }
+
+    previewPrice();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    car,
+    pickupDate,
+    returnDate,
+    finalPickupPoint,
+    finalReturnPoint,
+    timeInvalid,
+  ]);
+
   const showChatBooking = amount >= CHAT_THRESHOLD_THB;
+  const selectedAddonTitles = React.useMemo(
+    () => getSelectedAddonTitles(addons),
+    [addons]
+  );
 
   const chatMessage = React.useMemo(() => {
     return buildChatMessage({
@@ -171,6 +287,11 @@ export default function useBooking() {
         return;
       }
 
+      if (!email.trim().includes("@")) {
+        setError("กรุณากรอกอีเมลให้ถูกต้อง");
+        return;
+      }
+
       if (!startDT || !endDT) {
         setError("กรุณาเลือกวันและเวลาให้ครบ");
         return;
@@ -189,30 +310,62 @@ export default function useBooking() {
       if (!canSubmit) return;
 
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      setLoading(false);
+      try {
+        const res = await bookingApi.createBooking({
+          carId: car.id,
+          pickupDate,
+          returnDate,
+          pickupLocation: finalPickupPoint,
+          returnLocation: finalReturnPoint,
+          pickupMethod:
+            merchantBranchesEnabled && pickupBranch !== OTHER_OPTION
+              ? "branch"
+              : "custom",
+          returnMethod:
+            merchantBranchesEnabled && returnBranch !== OTHER_OPTION
+              ? "branch"
+              : "custom",
+          customerName: fullName.trim(),
+          customerEmail: email.trim(),
+          customerPhone: phone.trim(),
+          note: selectedAddonTitles.length
+            ? `บริการเสริมที่เลือก: ${selectedAddonTitles.join(", ")}`
+            : undefined,
+        });
 
-      const mockBookingId = `BK-${Math.floor(1000 + Math.random() * 9000)}`;
+        const booking = res.data;
 
-      router.push(
-        `/payment?bookingId=${encodeURIComponent(mockBookingId)}` +
-          `&amount=${encodeURIComponent(String(amount))}` +
-          `&carId=${encodeURIComponent(car.id)}` +
-          `&days=${encodeURIComponent(String(days))}` +
-          `&pickupDate=${encodeURIComponent(pickupDate)}` +
-          `&returnDate=${encodeURIComponent(returnDate)}` +
-          `&pickupTime=${encodeURIComponent(pickupTime)}` +
-          `&returnTime=${encodeURIComponent(returnTime)}` +
-          `&pickupPoint=${encodeURIComponent(finalPickupPoint)}` +
-          `&returnPoint=${encodeURIComponent(finalReturnPoint)}` +
-          `&addons=${encodeURIComponent(
-            JSON.stringify(
-              Object.entries(addons)
-                .filter(([, v]) => v)
-                .map(([k]) => k)
-            )
-          )}`
-      );
+        router.push(
+          `/payment?bookingId=${encodeURIComponent(booking.bookingCode)}` +
+            `&bookingRef=${encodeURIComponent(booking.id)}` +
+            `&amount=${encodeURIComponent(String(booking.totalAmount))}` +
+            `&carId=${encodeURIComponent(booking.carId)}` +
+            `&days=${encodeURIComponent(String(booking.totalDays))}` +
+            `&pickupDate=${encodeURIComponent(pickupDate)}` +
+            `&returnDate=${encodeURIComponent(returnDate)}` +
+            `&pickupTime=${encodeURIComponent(pickupTime)}` +
+            `&returnTime=${encodeURIComponent(returnTime)}` +
+            `&pickupPoint=${encodeURIComponent(finalPickupPoint)}` +
+            `&returnPoint=${encodeURIComponent(finalReturnPoint)}` +
+            `&customerName=${encodeURIComponent(fullName.trim())}` +
+            `&customerEmail=${encodeURIComponent(email.trim())}` +
+            `&customerPhone=${encodeURIComponent(phone.trim())}` +
+            `&subtotal=${encodeURIComponent(String(booking.subtotal))}` +
+            `&discount=${encodeURIComponent(String(booking.discount))}` +
+            `&extraCharge=${encodeURIComponent(String(booking.extraCharge))}` +
+            `&addons=${encodeURIComponent(
+              JSON.stringify(
+                Object.entries(addons)
+                  .filter(([, v]) => v)
+                  .map(([key]) => key)
+              )
+            )}`
+        );
+      } catch (err: unknown) {
+        setError(getErrorMessage(err, "ไม่สามารถสร้างรายการจองได้"));
+      } finally {
+        setLoading(false);
+      }
     },
     [
       car,
@@ -220,8 +373,7 @@ export default function useBooking() {
       endDT,
       locationOk,
       canSubmit,
-      amount,
-      days,
+      email,
       pickupDate,
       returnDate,
       pickupTime,
@@ -229,21 +381,19 @@ export default function useBooking() {
       finalPickupPoint,
       finalReturnPoint,
       addons,
+      fullName,
+      phone,
+      pickupBranch,
+      returnBranch,
+      selectedAddonTitles,
       router,
     ]
   );
 
   React.useEffect(() => {
-    const start = Date.now();
-
     const timer = setTimeout(() => {
-      const elapsed = Date.now() - start;
-      const delay = Math.max(2000 - elapsed, 0);
-
-      setTimeout(() => {
-        setReady(true);
-      }, delay);
-    }, 0);
+      setReady(true);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -254,6 +404,8 @@ export default function useBooking() {
     car,
     fullName,
     setFullName,
+    email,
+    setEmail,
     phone,
     setPhone,
     pickupBranch,

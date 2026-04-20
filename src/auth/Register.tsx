@@ -7,11 +7,11 @@ import AuthCard from "@/src/auth/AuthCard";
 export default function RegisterPage() {
   return (
     <AuthCard
+      mode="register"
       title="สมัครสมาชิก"
-      subtitle="ดำเนินการต่อด้วยบัญชี Google ของคุณ"
+      subtitle="สร้างบัญชีด้วย username, password, ชื่อจริง และนามสกุล"
       successMessage="สมัครสมาชิกสำเร็จ กำลังพาไปหน้าหลัก..."
-      authErrorMessage="สมัครหรือเข้าสู่ระบบด้วย Google ไม่สำเร็จ"
-      submitErrorMessage="สมัครหรือเข้าสู่ระบบด้วย Google ไม่สำเร็จ"
+      submitErrorMessage="สมัครสมาชิกไม่สำเร็จ"
       agreementText={
         <>
           เมื่อดำเนินการต่อ ถือว่าคุณยอมรับ{" "}

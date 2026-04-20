@@ -112,16 +112,14 @@ export default function PrivacyContent() {
         </Typography>
         <Typography className="mt-1 text-sm leading-relaxed">
           หากมีคำถามเกี่ยวกับนโยบายความเป็นส่วนตัว
-          โปรดติดต่อผ่านหน้าช่วยเหลือหรืออีเมลของทีมงาน
-          (ใส่อีเมล/เบอร์/ที่อยู่จริงของคุณตรงนี้)
+          โปรดติดต่อผ่านหน้าช่วยเหลือ
         </Typography>
       </section>
 
       <Divider className="my-2! border-slate-200!" />
 
       <Typography className="text-xs text-slate-500">
-        หมายเหตุ: เนื้อหานี้เป็นตัวอย่างเชิงทั่วไป ไม่ใช่คำแนะนำทางกฎหมาย
-        หากใช้งานจริงในธุรกิจ แนะนำให้ให้ผู้เชี่ยวชาญตรวจทานให้สอดคล้องกับ PDPA
+        RentFlow ให้ความสำคัญกับความเป็นส่วนตัวและความปลอดภัยของข้อมูลผู้ใช้งาน
       </Typography>
     </Stack>
   );

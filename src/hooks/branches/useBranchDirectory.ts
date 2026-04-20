@@ -1,0 +1,49 @@
+"use client";
+
+import * as React from "react";
+import { getErrorMessage } from "@/src/lib/api-error";
+import { branchesApi } from "@/src/services/branches/branches.api";
+import type { Branch } from "@/src/services/branches/branches.types";
+
+export function useBranchDirectory() {
+  const [branches, setBranches] = React.useState<Branch[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    async function loadBranches() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await branchesApi.getBranches();
+        if (!cancelled) {
+          setBranches(res.data);
+        }
+      } catch (err: unknown) {
+        if (!cancelled) {
+          setBranches([]);
+          setError(getErrorMessage(err, "โหลดข้อมูลสาขาไม่สำเร็จ"));
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadBranches();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return {
+    branches,
+    loading,
+    error,
+  };
+}

@@ -3,11 +3,20 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import usePageReady from "@/src/hooks/usePageReady";
+import { getErrorStatus } from "@/src/lib/api-error";
+import { bookingApi } from "@/src/services/booking/booking.api";
+import { getCars } from "@/src/services/cars/cars.api";
 
-export type BookingStatus = "pending" | "confirmed" | "cancelled";
+export type BookingStatus =
+  | "pending"
+  | "confirmed"
+  | "paid"
+  | "completed"
+  | "cancelled";
 
 export type Booking = {
   id: string;
+  carId: string;
   carName: string;
   pickupDate: string;
   returnDate: string;
@@ -15,82 +24,69 @@ export type Booking = {
   status: BookingStatus;
 };
 
-const SEED: Booking[] = [
-  {
-    id: "BK-1001",
-    carName: "BMW 320d M Sport",
-    pickupDate: "2026-03-01",
-    returnDate: "2026-03-03",
-    totalPrice: 1290 * 2,
-    status: "confirmed",
-  },
-  {
-    id: "BK-1002",
-    carName: "BMW 330e M Sport",
-    pickupDate: "2026-03-02",
-    returnDate: "2026-03-04",
-    totalPrice: 1490 * 2,
-    status: "pending",
-  },
-  {
-    id: "BK-1003",
-    carName: "BMW M3 CS",
-    pickupDate: "2026-03-03",
-    returnDate: "2026-03-05",
-    totalPrice: 1990 * 2,
-    status: "confirmed",
-  },
-  {
-    id: "BK-1004",
-    carName: "BMW i5 eDrive40 M Sport",
-    pickupDate: "2026-03-04",
-    returnDate: "2026-03-06",
-    totalPrice: 1590 * 2,
-    status: "pending",
-  },
-  {
-    id: "BK-1005",
-    carName: "BMW i5 M60 xDrive",
-    pickupDate: "2026-03-05",
-    returnDate: "2026-03-07",
-    totalPrice: 1790 * 2,
-    status: "confirmed",
-  },
-  {
-    id: "BK-1006",
-    carName: "BMW i7 xDrive60 M Sport",
-    pickupDate: "2026-03-06",
-    returnDate: "2026-03-08",
-    totalPrice: 1890 * 2,
-    status: "pending",
-  },
-];
-
 export default function useMyBookingsPage() {
   const router = useRouter();
-  const ready = usePageReady({ minDelay: 1200 });
+  const ready = usePageReady();
 
   const [isCheckingAuth, setIsCheckingAuth] = React.useState(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   const [q, setQ] = React.useState("");
   const [status, setStatus] = React.useState<BookingStatus | "all">("all");
+  const [rows, setRows] = React.useState<Booking[]>([]);
 
   React.useEffect(() => {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    let cancelled = false;
 
-    if (!token) {
-      router.replace("/login?redirect=/my-bookings");
-      return;
+    async function loadBookings() {
+      try {
+        const [bookingsRes, carsRes] = await Promise.all([
+          bookingApi.getMyBookings(),
+          getCars(),
+        ]);
+
+        if (cancelled) return;
+
+        const carMap = new Map(carsRes.items.map((car) => [car.id, car]));
+
+        setRows(
+          bookingsRes.data.map((booking) => ({
+            id: booking.bookingCode,
+            carId: booking.carId,
+            carName: carMap.get(booking.carId)?.name || booking.carId,
+            pickupDate: booking.pickupDate,
+            returnDate: booking.returnDate,
+            totalPrice: booking.totalAmount,
+            status: booking.status,
+          }))
+        );
+        setIsAuthenticated(true);
+      } catch (err: unknown) {
+        if (cancelled) return;
+
+        if (getErrorStatus(err) === 401) {
+          router.replace("/login?redirect=/my-bookings");
+          return;
+        }
+
+        setRows([]);
+        setIsAuthenticated(true);
+      } finally {
+        if (!cancelled) {
+          setIsCheckingAuth(false);
+        }
+      }
     }
 
-    setIsAuthenticated(true);
-    setIsCheckingAuth(false);
+    loadBookings();
+
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   const data = React.useMemo(() => {
-    return SEED.filter((b) => {
+    return rows.filter((b) => {
       const s = q.trim().toLowerCase();
 
       const matchQ =
@@ -102,7 +98,7 @@ export default function useMyBookingsPage() {
 
       return matchQ && matchS;
     });
-  }, [q, status]);
+  }, [q, rows, status]);
 
   const handleReset = React.useCallback(() => {
     setQ("");

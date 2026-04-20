@@ -71,6 +71,8 @@ export default function BookingPage() {
               onSubmit={booking.onSubmit}
               fullName={booking.fullName}
               setFullName={booking.setFullName}
+              email={booking.email}
+              setEmail={booking.setEmail}
               phone={booking.phone}
               setPhone={booking.setPhone}
               merchantBranchesEnabled={booking.merchantBranchesEnabled}
@@ -95,7 +97,6 @@ export default function BookingPage() {
               returnTime={booking.returnTime}
               setReturnTime={booking.setReturnTime}
               addons={booking.addons}
-              days={booking.days}
               addonsTotal={booking.addonsTotal}
               handleAddonChange={booking.handleAddonChange}
               startDT={booking.startDT}

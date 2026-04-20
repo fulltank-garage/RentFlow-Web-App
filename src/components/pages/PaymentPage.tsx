@@ -59,6 +59,7 @@ export default function PaymentPage() {
           carNet={payment.carNet}
           carDiscount={payment.carDiscount}
           discountPct={payment.discountPct}
+          extraCharge={payment.extraCharge}
         />
 
         <Card
@@ -73,7 +74,13 @@ export default function PaymentPage() {
                 severity="success"
                 className="mb-4"
               >
-                รับข้อมูลการชำระเงินแล้ว (mock) — กำลังพาไปหน้า “การจองของฉัน”
+                ยืนยันการชำระเงินสำเร็จ กำลังพาไปหน้า “การจองของฉัน”
+              </Alert>
+            ) : null}
+
+            {payment.error ? (
+              <Alert severity="error" className="mb-4">
+                {payment.error}
               </Alert>
             ) : null}
 

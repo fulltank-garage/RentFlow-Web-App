@@ -11,7 +11,7 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import type { Car } from "@/src/constants/cars";
+import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
 import { ADDONS, type AddonKey } from "@/src/utils/payment/payment.helpers";
 
@@ -33,6 +33,7 @@ type Props = {
   carNet: number;
   carDiscount: number;
   discountPct: number;
+  extraCharge: number;
 };
 
 export default function PaymentBookingSummaryCard({
@@ -53,6 +54,7 @@ export default function PaymentBookingSummaryCard({
   carNet,
   carDiscount,
   discountPct,
+  extraCharge,
 }: Props) {
   return (
     <Card
@@ -178,12 +180,16 @@ export default function PaymentBookingSummaryCard({
 
                   <Box className="flex items-center justify-between">
                     <Typography className="text-sm font-semibold text-slate-800">
-                      บริการเสริม
+                      บริการเสริมที่เลือก
                     </Typography>
                     <Typography className="text-sm font-bold text-slate-900">
                       {formatTHB(addonsTotal)}
                     </Typography>
                   </Box>
+
+                  <Typography className="text-xs text-slate-500">
+                    ราคาส่วนนี้ยังไม่ถูกรวมในยอดชำระออนไลน์อัตโนมัติ
+                  </Typography>
 
                   <Box className="space-y-1">
                     {addonKeys.map((key) => {
@@ -210,6 +216,17 @@ export default function PaymentBookingSummaryCard({
                       );
                     })}
                   </Box>
+                </Box>
+              ) : null}
+
+              {extraCharge > 0 ? (
+                <Box className="mt-3 flex items-center justify-between">
+                  <Typography className="text-sm text-slate-600">
+                    ค่าบริการเพิ่ม
+                  </Typography>
+                  <Typography className="text-sm font-semibold text-slate-900">
+                    {formatTHB(extraCharge)}
+                  </Typography>
                 </Box>
               ) : null}
 

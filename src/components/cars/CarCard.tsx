@@ -11,7 +11,7 @@ import {
     Typography,
     Button,
 } from "@mui/material";
-import type { Car } from "@/src/constants/cars";
+import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
 
 type Props = {

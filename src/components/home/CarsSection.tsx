@@ -15,7 +15,7 @@ import {
   Divider,
 } from "@mui/material";
 
-import type { Car } from "@/src/constants/cars";
+import type { Car } from "@/src/services/cars/cars.types";
 
 type Props = {
   cars: Car[];
@@ -42,77 +42,82 @@ export default function CarsSection({ cars, formatTHB }: Props) {
       </Box>
 
       <Box className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {cars.map((c) => (
-          <Card
-            key={c.id}
-            elevation={0}
-            sx={{ boxShadow: "none" }}
-            className="group bg-white border border-slate-200 rounded-2xl! transition hover:border-slate-400!"
-          >
-            {/* IMAGE */}
-            <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
-              <Image
-                src={c.image || "/placeholder-car.png"}
-                alt={c.name}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </Box>
-
-            <CardContent className="p-6">
-              <Box className="flex items-start justify-between gap-3">
-                <Box>
-                  <Typography className="text-lg font-semibold text-slate-900">
-                    {c.name}
-                  </Typography>
-                  <Typography className="text-sm text-slate-600">
-                    {c.type} • {c.seats} ที่นั่ง • {c.transmission} • {c.fuel}
-                  </Typography>
-                </Box>
+        {cars.length ? (
+          cars.map((c) => (
+            <Card
+              key={c.id}
+              elevation={0}
+              sx={{ boxShadow: "none" }}
+              className="group bg-white border border-slate-200 rounded-2xl! transition hover:border-slate-400!"
+            >
+              <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
+                <Image
+                  src={c.image || "/placeholder-car.png"}
+                  alt={c.name}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
               </Box>
 
-              <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <Box className="flex items-end gap-2">
-                  <Typography className="text-sm text-slate-600">
-                    ราคาเริ่มต้น
-                  </Typography>
-
-                  <Typography className="text-2xl font-extrabold text-slate-900">
-                    {formatTHB(c.pricePerDay)}
-                  </Typography>
-
-                  <Typography className="text-sm text-slate-600">
-                    /วัน
-                  </Typography>
+              <CardContent className="p-6">
+                <Box className="flex items-start justify-between gap-3">
+                  <Box>
+                    <Typography className="text-lg font-semibold text-slate-900">
+                      {c.name}
+                    </Typography>
+                    <Typography className="text-sm text-slate-600">
+                      {c.type} • {c.seats} ที่นั่ง • {c.transmission} • {c.fuel}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            </CardContent>
 
-            <CardActions sx={{ p: "0px 16px 16px" }} className="gap-2">
-              <Button
-                component={Link}
-                href={`/cars/${c.id}`}
-                variant="outlined"
-                fullWidth
-                className="rounded-xl! border-slate-300! text-slate-900!"
-                sx={{ textTransform: "none" }}
-              >
-                ดูรายละเอียด
-              </Button>
+                <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <Box className="flex items-end gap-2">
+                    <Typography className="text-sm text-slate-600">
+                      ราคาเริ่มต้น
+                    </Typography>
 
-              <Button
-                component={Link}
-                href={`/booking?carId=${c.id}`}
-                variant="contained"
-                fullWidth
-                className="rounded-xl! font-semibold!"
-                sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
-              >
-                จองเลย
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
+                    <Typography className="text-2xl font-extrabold text-slate-900">
+                      {formatTHB(c.pricePerDay)}
+                    </Typography>
+
+                    <Typography className="text-sm text-slate-600">
+                      /วัน
+                    </Typography>
+                  </Box>
+                </Box>
+              </CardContent>
+
+              <CardActions sx={{ p: "0px 16px 16px" }} className="gap-2">
+                <Button
+                  component={Link}
+                  href={`/cars/${c.id}`}
+                  variant="outlined"
+                  fullWidth
+                  className="rounded-xl! border-slate-300! text-slate-900!"
+                  sx={{ textTransform: "none" }}
+                >
+                  ดูรายละเอียด
+                </Button>
+
+                <Button
+                  component={Link}
+                  href={`/booking?carId=${c.id}`}
+                  variant="contained"
+                  fullWidth
+                  className="rounded-xl! font-semibold!"
+                  sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
+                >
+                  จองเลย
+                </Button>
+              </CardActions>
+            </Card>
+          ))
+        ) : (
+          <Box className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-600 md:col-span-2 lg:col-span-3">
+            ยังไม่มีรถแนะนำจากฐานข้อมูลในตอนนี้
+          </Box>
+        )}
       </Box>
       <Divider className="my-6! border-slate-200!" />
     </Container>

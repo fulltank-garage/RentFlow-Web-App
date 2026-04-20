@@ -1,28 +1,45 @@
 import api from "@/src/lib/axios";
+import { getErrorMessage } from "@/src/lib/api-error";
 import type {
-  GoogleAuthPayload,
-  GoogleAuthResponse,
-  LegacyGoogleAuthResponse,
+  AuthResponse,
+  Customer,
+  LoginPayload,
+  RegisterPayload,
 } from "./auth.types";
 
-function normalizeGoogleAuthResponse(
-  raw: GoogleAuthResponse | LegacyGoogleAuthResponse | null
-): GoogleAuthResponse {
-  if (!raw) {
-    return {};
+type LegacyAuthResponse = {
+  success?: boolean;
+  message?: string;
+  user?: Customer;
+  data?: Customer | { user?: Customer };
+};
+
+function normalizeAuthResponse(raw: AuthResponse | LegacyAuthResponse | null): AuthResponse {
+  if (!raw) return {};
+
+  const data = raw.data;
+
+  if (data && "user" in data) {
+    return {
+      success: raw.success,
+      message: raw.message,
+      data: data.user ? { user: data.user } : undefined,
+    };
   }
 
-  if ("data" in raw) {
-    return raw as GoogleAuthResponse;
+  if (data && "id" in data) {
+    return {
+      success: raw.success,
+      message: raw.message,
+      data: { user: data },
+    };
   }
 
   if ("user" in raw && raw.user) {
     return {
       success: raw.success,
       message: raw.message,
-      data: {
-        user: raw.user,
-      },
+      data: { user: raw.user },
     };
   }
 
@@ -32,30 +49,40 @@ function normalizeGoogleAuthResponse(
   };
 }
 
-export async function authWithGoogle(
-  payload: GoogleAuthPayload,
-  fallbackMessage = "สมัครหรือเข้าสู่ระบบด้วย Google ไม่สำเร็จ"
-): Promise<GoogleAuthResponse> {
+export async function loginWithPassword(
+  payload: LoginPayload,
+  fallbackMessage = "เข้าสู่ระบบไม่สำเร็จ"
+): Promise<AuthResponse> {
   try {
-    const res = await api.post<GoogleAuthResponse | LegacyGoogleAuthResponse>(
-      "/auth/google",
+    const res = await api.post<AuthResponse | LegacyAuthResponse>(
+      "/auth/login",
       payload
     );
 
-    return normalizeGoogleAuthResponse(res.data);
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || error?.message || fallbackMessage;
-
-    throw new Error(message);
+    return normalizeAuthResponse(res.data);
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, fallbackMessage));
   }
 }
 
-export async function signInWithGoogle(
-  payload: GoogleAuthPayload,
-  fallbackMessage = "สมัครหรือเข้าสู่ระบบด้วย Google ไม่สำเร็จ"
-): Promise<GoogleAuthResponse> {
-  return authWithGoogle(payload, fallbackMessage);
+export async function registerWithPassword(
+  payload: RegisterPayload,
+  fallbackMessage = "สมัครสมาชิกไม่สำเร็จ"
+): Promise<AuthResponse> {
+  try {
+    const name = `${payload.firstName} ${payload.lastName}`.trim();
+    const res = await api.post<AuthResponse | LegacyAuthResponse>(
+      "/auth/register",
+      {
+        ...payload,
+        name,
+      }
+    );
+
+    return normalizeAuthResponse(res.data);
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, fallbackMessage));
+  }
 }
 
 export async function logout(
@@ -64,24 +91,25 @@ export async function logout(
   try {
     const res = await api.post("/auth/logout");
     return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || error?.message || fallbackMessage;
-
-    throw new Error(message);
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, fallbackMessage));
   }
 }
 
 export async function getMe(
   fallbackMessage = "ดึงข้อมูลผู้ใช้ไม่สำเร็จ"
-): Promise<GoogleAuthResponse> {
+): Promise<AuthResponse> {
   try {
-    const res = await api.get<GoogleAuthResponse>("/auth/me");
-    return res.data;
-  } catch (error: any) {
-    const message =
-      error?.response?.data?.message || error?.message || fallbackMessage;
-
-    throw new Error(message);
+    const res = await api.get<AuthResponse | LegacyAuthResponse>("/auth/me");
+    return normalizeAuthResponse(res.data);
+  } catch (error: unknown) {
+    throw new Error(getErrorMessage(error, fallbackMessage));
   }
+}
+
+export async function getSessionUser(
+  fallbackMessage = "ดึงข้อมูลผู้ใช้ไม่สำเร็จ"
+): Promise<Customer | null> {
+  const response = await getMe(fallbackMessage);
+  return response.data?.user ?? null;
 }

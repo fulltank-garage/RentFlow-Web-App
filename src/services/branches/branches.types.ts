@@ -4,6 +4,7 @@ export type Branch = {
   name: string;
   address: string;
   phone?: string;
+  locationId?: string;
   lat?: number;
   lng?: number;
   openTime?: string;
