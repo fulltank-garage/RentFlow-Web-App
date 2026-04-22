@@ -33,7 +33,7 @@ function HeaderSkeleton() {
 
 function SummaryCardSkeleton() {
   return (
-    <Box className="order-2 rounded-2xl border border-slate-200 bg-white p-6 lg:order-1 lg:col-span-5">
+    <Box className="apple-card apple-card-no-hover order-2 p-6 lg:order-1 lg:col-span-5">
       <Skeleton
         variant="text"
         animation="wave"
@@ -45,7 +45,7 @@ function SummaryCardSkeleton() {
         }}
       />
 
-      <Box className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Box className="flex items-center justify-between">
           <Skeleton
             variant="text"
@@ -69,7 +69,7 @@ function SummaryCardSkeleton() {
           />
         </Box>
 
-        <Box className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+        <Box className="mt-3 rounded-[18px] bg-white p-3">
           <Box className="grid gap-3">
             <Box className="flex items-start justify-between gap-3">
               <Skeleton
@@ -106,7 +106,7 @@ function SummaryCardSkeleton() {
               </Box>
             </Box>
 
-            <Box className="h-px bg-slate-200" />
+            <Box className="h-px bg-black/10" />
 
             <Box className="flex items-start justify-between gap-3">
               <Skeleton
@@ -214,7 +214,7 @@ function SummaryCardSkeleton() {
           />
         </Box>
 
-        <Box className="mt-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3">
+        <Box className="mt-3 rounded-[18px] bg-emerald-50 px-4 py-3">
           <Box className="flex items-center justify-between">
             <Skeleton
               variant="text"
@@ -240,7 +240,7 @@ function SummaryCardSkeleton() {
         </Box>
 
         <Box className="mt-3 space-y-2">
-          <Box className="h-px bg-slate-200" />
+          <Box className="h-px bg-black/10" />
           <Box className="flex items-center justify-between">
             <Skeleton
               variant="text"
@@ -316,9 +316,9 @@ function SummaryCardSkeleton() {
         </Box>
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
-      <Box className="rounded-xl border border-slate-200 bg-white p-4">
+      <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Skeleton
           variant="rectangular"
           animation="wave"
@@ -352,7 +352,7 @@ function SummaryCardSkeleton() {
           />
         </Box>
 
-        <Box className="my-4 h-px bg-slate-200" />
+        <Box className="my-4 h-px bg-black/10" />
 
         <Box className="flex items-center justify-between">
           <Skeleton
@@ -389,7 +389,7 @@ function SummaryCardSkeleton() {
         />
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
       <Skeleton
         variant="text"
@@ -407,7 +407,7 @@ function SummaryCardSkeleton() {
 
 function PaymentFormSkeleton() {
   return (
-    <Box className="order-1 rounded-2xl border border-slate-200 bg-white p-6 lg:order-2 lg:col-span-7">
+    <Box className="apple-card apple-card-no-hover order-1 p-6 lg:order-2 lg:col-span-7">
       <Skeleton
         variant="rounded"
         animation="wave"
@@ -435,12 +435,12 @@ function PaymentFormSkeleton() {
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ height: 56, borderRadius: "12px" }}
+          sx={{ height: 56, borderRadius: "18px" }}
         />
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ height: 56, borderRadius: "12px" }}
+          sx={{ height: 56, borderRadius: "18px" }}
         />
       </Box>
 
@@ -448,11 +448,11 @@ function PaymentFormSkeleton() {
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ height: 56, borderRadius: "12px" }}
+          sx={{ height: 56, borderRadius: "18px" }}
         />
       </Box>
 
-      <Box className="my-6 h-px bg-slate-200" />
+      <Box className="my-6 h-px bg-black/10" />
 
       <Skeleton
         variant="text"
@@ -464,11 +464,11 @@ function PaymentFormSkeleton() {
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ height: 56, borderRadius: "12px" }}
+          sx={{ height: 56, borderRadius: "18px" }}
         />
       </Box>
 
-      <Box className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Box className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Box className="flex flex-1 flex-col gap-1.5">
             <Skeleton
@@ -499,7 +499,7 @@ function PaymentFormSkeleton() {
             sx={{
               width: 144,
               height: 144,
-              borderRadius: "12px",
+              borderRadius: "18px",
             }}
           />
         </Box>
@@ -512,7 +512,7 @@ function PaymentFormSkeleton() {
           sx={{
             width: 170,
             height: 42,
-            borderRadius: "12px",
+            borderRadius: "999px",
           }}
         />
       </Box>
@@ -522,8 +522,8 @@ function PaymentFormSkeleton() {
 
 export default function PaymentPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
 
         <Box className="mt-6 grid gap-6 lg:grid-cols-12">

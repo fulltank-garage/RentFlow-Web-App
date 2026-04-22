@@ -33,15 +33,15 @@ export default function CarDetailSummaryCard({ detail }: Props) {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="lg:col-span-5 rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card lg:col-span-5"
     >
       <CardContent className="p-4!">
         <Box className="flex items-start justify-between gap-3">
           <Box className="min-w-0">
-            <Typography className="truncate text-xl font-bold text-slate-900">
+            <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
               {detail.name}
             </Typography>
-            <Typography className="mt-2 text-sm text-slate-600">
+            <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
               {detail.type} • {detail.seats} ที่นั่ง • {detail.transmission} •{" "}
               {detail.fuel}
             </Typography>
@@ -54,22 +54,22 @@ export default function CarDetailSummaryCard({ detail }: Props) {
             icon={<VerifiedRoundedIcon fontSize="small" />}
             label="ตรวจเช็คก่อนส่งมอบ"
             variant="outlined"
-            className="border! border-slate-200! bg-white! text-slate-700!"
+            className="apple-pill text-[var(--rf-apple-muted)]!"
             sx={{ ml: 1 }}
           />
         </Box>
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
-        <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <Typography className="text-sm text-slate-600">
+        <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-5">
+          <Typography className="text-sm text-[var(--rf-apple-muted)]">
             ราคาเริ่มต้น
           </Typography>
           <Box className="mt-1 flex items-end gap-2">
-            <Typography className="text-3xl font-extrabold text-slate-900">
+            <Typography className="text-3xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
               {toTHBText(detail.pricePerDay)}
             </Typography>
-            <Typography className="text-sm font-medium text-slate-600">
+            <Typography className="text-sm font-medium text-[var(--rf-apple-muted)]">
               / วัน
             </Typography>
           </Box>
@@ -79,8 +79,7 @@ export default function CarDetailSummaryCard({ detail }: Props) {
           <Button
             fullWidth
             variant="contained"
-            className="rounded-xl! py-2.5! font-semibold!"
-            sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
+            className="rounded-full! py-2.5! font-semibold!"
             onClick={() =>
               router.push(`/booking?carId=${encodeURIComponent(detail.id)}`)
             }
@@ -91,8 +90,7 @@ export default function CarDetailSummaryCard({ detail }: Props) {
           <Button
             fullWidth
             variant="outlined"
-            className="rounded-xl! py-2.5!"
-            sx={{ textTransform: "none" }}
+            className="rounded-full! py-2.5!"
             onClick={() => router.push("/cars")}
           >
             ดูรถคันอื่น

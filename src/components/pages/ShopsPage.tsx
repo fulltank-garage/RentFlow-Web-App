@@ -26,7 +26,7 @@ export default function ShopsPage() {
   }
 
   return (
-    <Box className="min-h-screen bg-white text-slate-900">
+    <Box className="apple-page">
       {error ? (
         <Box className="mx-auto mb-6 w-full max-w-6xl px-6">
           <Alert severity="warning" className="rounded-2xl!">

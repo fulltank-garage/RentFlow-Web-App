@@ -13,14 +13,14 @@ export default function ProfileSectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4!">
+    <Box className="apple-card p-5!">
       <Box className="mb-4 flex items-center gap-2">
         {icon ? (
-          <Box className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700">
+          <Box className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-blue)]">
             {icon}
           </Box>
         ) : null}
-        <Typography className="text-base font-bold text-slate-900">
+        <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
           {title}
         </Typography>
       </Box>

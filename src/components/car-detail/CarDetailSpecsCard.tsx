@@ -23,7 +23,7 @@ function SpecRow({ label, value }: { label: string; value: React.ReactNode }) {
 
 export default function CarDetailSpecsCard({ detail }: Props) {
   return (
-    <Box className="rounded-2xl border border-slate-200! bg-slate-50! p-4!">
+    <Box className="apple-card p-5!">
       <Typography className="text-sm font-semibold text-slate-900">
         สรุปสเปค
       </Typography>

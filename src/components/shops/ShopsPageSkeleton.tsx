@@ -13,30 +13,30 @@ import {
 
 function HeaderSkeleton() {
   return (
-    <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <Box className="flex flex-col gap-2">
-        <Typography variant="h5" className="text-2xl font-bold text-slate-900">
+    <Box className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+      <Box className="flex flex-col items-center gap-3">
+        <Typography className="apple-heading">
           <Skeleton
             variant="text"
             animation="wave"
             sx={{
-              width: 140,
-              height: 35,
-              borderRadius: "8px",
+              width: { xs: 190, md: 280 },
+              height: { xs: 54, md: 74 },
+              borderRadius: "16px",
               transform: "none",
             }}
           />
         </Typography>
 
-        <Typography className="text-sm text-slate-600">
+        <Typography className="apple-subtitle">
           <Skeleton
             variant="text"
             animation="wave"
             sx={{
-              width: { xs: "100%", sm: 460 },
+              width: { xs: 300, sm: 560 },
               maxWidth: "100%",
-              height: 22,
-              borderRadius: "8px",
+              height: 28,
+              borderRadius: "12px",
               transform: "none",
             }}
           />
@@ -58,7 +58,7 @@ function HeaderSkeleton() {
             }}
           />
         }
-        className="w-min border! border-slate-200! bg-slate-900/5!"
+        className="apple-pill w-min!"
         sx={{
           "& .MuiChip-label": {
             px: 1,
@@ -76,9 +76,9 @@ function ShopCardSkeleton() {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card apple-card-no-hover"
     >
-      <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl bg-slate-100">
+      <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
         <Skeleton
           variant="rectangular"
           animation="wave"
@@ -90,7 +90,7 @@ function ShopCardSkeleton() {
         />
       </Box>
 
-      <CardContent className="p-4!">
+      <CardContent className="p-6!">
         <Box className="flex flex-wrap gap-2">
           {Array.from({ length: 3 }).map((_, index) => (
             <Skeleton
@@ -106,7 +106,7 @@ function ShopCardSkeleton() {
           ))}
         </Box>
 
-        <Box className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
           <Box className="flex items-end justify-between gap-3">
             <Box className="grid gap-1">
               <Skeleton
@@ -161,8 +161,8 @@ function ShopCardSkeleton() {
             animation="wave"
             sx={{
               width: "100%",
-              height: 36.5,
-              borderRadius: "12px",
+              height: 44,
+              borderRadius: "999px",
             }}
           />
         </Box>
@@ -173,14 +173,16 @@ function ShopCardSkeleton() {
 
 export default function ShopsPageSkeleton() {
   return (
-    <Container maxWidth="lg" className="py-12">
-      <HeaderSkeleton />
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
+        <HeaderSkeleton />
 
-      <Box className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <ShopCardSkeleton key={`shop-page-skeleton-${index}`} />
-        ))}
-      </Box>
-    </Container>
+        <Box className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <ShopCardSkeleton key={`shop-page-skeleton-${index}`} />
+          ))}
+        </Box>
+      </Container>
+    </Box>
   );
 }

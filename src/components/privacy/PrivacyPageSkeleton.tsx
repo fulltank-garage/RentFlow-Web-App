@@ -54,7 +54,7 @@ function HeaderSkeleton() {
           sx={{
             width: 110,
             height: 36,
-            borderRadius: "12px",
+            borderRadius: "999px",
             flexShrink: 0,
           }}
         />
@@ -86,7 +86,7 @@ function TocSkeleton() {
             sx={{
               width: "100%",
               height: 40,
-              borderRadius: "12px",
+              borderRadius: "999px",
             }}
           />
         ))}
@@ -136,19 +136,18 @@ function ContentSectionSkeleton({
 
 export default function PrivacyPageSkeleton() {
   return (
-    <Box className="min-h-screen bg-slate-50">
-      <Container maxWidth="md" className="relative py-10">
+    <Box className="apple-page">
+      <Container maxWidth="md" className="apple-section relative">
         <HeaderSkeleton />
 
         <Card
           elevation={0}
-          className="rounded-2xl! border border-slate-200 bg-white"
-          sx={{ boxShadow: "0 20px 60px rgba(15,23,42,0.10)" }}
+          className="apple-card apple-card-no-hover"
         >
           <CardContent className="p-7">
             <TocSkeleton />
 
-            <Divider className="my-6! border-slate-200!" />
+            <Divider className="my-6! border-black/10!" />
 
             <Stack spacing={3}>
               <ContentSectionSkeleton titleWidth={90} lines={2} />
@@ -161,7 +160,7 @@ export default function PrivacyPageSkeleton() {
               <ContentSectionSkeleton titleWidth={150} lines={2} />
               <ContentSectionSkeleton titleWidth={95} lines={2} />
 
-              <Divider className="my-2! border-slate-200!" />
+              <Divider className="my-2! border-black/10!" />
 
               <Skeleton
                 variant="text"

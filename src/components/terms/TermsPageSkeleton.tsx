@@ -1,95 +1,187 @@
-import { Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Skeleton,
+  Stack,
+} from "@mui/material";
 
-export default function TermsContent() {
+function HeaderSkeleton() {
   return (
-    <Stack spacing={3} className="text-slate-700">
-      <section id="intro">
-        <Typography className="text-base font-bold text-slate-900">
-          1) ข้อตกลงเบื้องต้น
-        </Typography>
-        <Typography className="mt-1 text-sm leading-relaxed">
-          การใช้งานเว็บไซต์/แอปนี้หมายความว่าคุณยอมรับเงื่อนไขการใช้งานทั้งหมด
-          หากคุณไม่เห็นด้วย โปรดหยุดใช้งานบริการ
-        </Typography>
-      </section>
+    <Stack spacing={1} className="mb-6">
+      <Stack direction="row" className="items-center justify-between gap-3">
+        <Stack className="min-w-0 flex-1">
+          <Skeleton
+            variant="text"
+            animation="wave"
+            sx={{
+              width: { xs: "100%", sm: 360 },
+              maxWidth: "100%",
+              height: 38,
+              borderRadius: "8px",
+              transform: "none",
+            }}
+          />
+          <Box className="mt-1 flex flex-wrap items-center gap-2">
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              sx={{
+                width: 150,
+                height: 28,
+                borderRadius: "999px",
+              }}
+            />
+            <Skeleton
+              variant="text"
+              animation="wave"
+              sx={{
+                width: { xs: "100%", sm: 300 },
+                maxWidth: "100%",
+                height: 16,
+                borderRadius: "8px",
+                transform: "none",
+              }}
+            />
+          </Box>
+        </Stack>
 
-      <section id="account">
-        <Typography className="text-base font-bold text-slate-900">
-          2) บัญชีผู้ใช้
-        </Typography>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-          <li>คุณต้องให้ข้อมูลที่ถูกต้องและเป็นปัจจุบันในการสมัครสมาชิก</li>
-          <li>คุณรับผิดชอบต่อความปลอดภัยของบัญชีและรหัสผ่านของคุณ</li>
-          <li>หากสงสัยว่าบัญชีถูกใช้งานโดยไม่ได้รับอนุญาต โปรดติดต่อเรา</li>
-        </ul>
-      </section>
-
-      <section id="booking">
-        <Typography className="text-base font-bold text-slate-900">
-          3) การจองและการชำระเงิน
-        </Typography>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-          <li>รายละเอียดรถ ราคา และช่วงเวลาที่แสดง อาจเปลี่ยนแปลงตามเงื่อนไขผู้ให้บริการ</li>
-          <li>การยืนยันการจองอาจขึ้นอยู่กับการตรวจสอบความพร้อมของรถ</li>
-          <li>กรณีมีการชำระเงิน ระบบอาจใช้ผู้ให้บริการชำระเงินภายนอก</li>
-        </ul>
-      </section>
-
-      <section id="cancel">
-        <Typography className="text-base font-bold text-slate-900">
-          4) การยกเลิก / คืนเงิน
-        </Typography>
-        <Typography className="mt-1 text-sm leading-relaxed">
-          เงื่อนไขการยกเลิกและคืนเงินขึ้นกับนโยบายของผู้ให้บริการรถและช่องทางชำระเงิน
-          โปรดตรวจสอบรายละเอียดก่อนยืนยันการจอง
-        </Typography>
-      </section>
-
-      <section id="use">
-        <Typography className="text-base font-bold text-slate-900">
-          5) การใช้งานที่เหมาะสม
-        </Typography>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-          <li>ห้ามใช้บริการในทางที่ผิดกฎหมาย หรือละเมิดสิทธิผู้อื่น</li>
-          <li>ห้ามพยายามเจาะระบบ รบกวนระบบ หรือดึงข้อมูลโดยไม่ได้รับอนุญาต</li>
-          <li>เราสามารถระงับ/ยุติการให้บริการ หากตรวจพบการใช้งานที่ผิดเงื่อนไข</li>
-        </ul>
-      </section>
-
-      <section id="liability">
-        <Typography className="text-base font-bold text-slate-900">
-          6) ข้อจำกัดความรับผิด
-        </Typography>
-        <Typography className="mt-1 text-sm leading-relaxed">
-          บริการนี้จัดให้ “ตามสภาพ” เราไม่รับประกันว่าจะไม่มีข้อผิดพลาดหรือหยุดชะงัก
-          และไม่รับผิดชอบความเสียหายทางอ้อมที่อาจเกิดขึ้นจากการใช้งาน
-        </Typography>
-      </section>
-
-      <section id="changes">
-        <Typography className="text-base font-bold text-slate-900">
-          7) การเปลี่ยนแปลงเงื่อนไข
-        </Typography>
-        <Typography className="mt-1 text-sm leading-relaxed">
-          เราอาจปรับปรุงเงื่อนไขเป็นครั้งคราว โดยจะแสดง “วันที่อัปเดตล่าสุด” ไว้ด้านบน
-          การใช้งานต่อหลังมีการเปลี่ยนแปลงถือว่าคุณยอมรับเงื่อนไขใหม่
-        </Typography>
-      </section>
-
-      <section id="contact">
-        <Typography className="text-base font-bold text-slate-900">
-          8) ติดต่อเรา
-        </Typography>
-        <Typography className="mt-1 text-sm leading-relaxed">
-          หากมีคำถามเกี่ยวกับเงื่อนไขการใช้งาน โปรดติดต่อผ่านหน้าช่วยเหลือ
-        </Typography>
-      </section>
-
-      <Divider className="my-2! border-slate-200!" />
-
-      <Typography className="text-xs text-slate-500">
-        RentFlow อาจปรับปรุงเงื่อนไขการใช้งานตามความเหมาะสม
-      </Typography>
+        <Skeleton
+          variant="rounded"
+          animation="wave"
+          sx={{
+            width: 110,
+            height: 36,
+            borderRadius: "999px",
+            flexShrink: 0,
+          }}
+        />
+      </Stack>
     </Stack>
+  );
+}
+
+function TocSkeleton() {
+  return (
+    <>
+      <Skeleton
+        variant="text"
+        animation="wave"
+        sx={{
+          width: 55,
+          height: 20,
+          borderRadius: "8px",
+          transform: "none",
+        }}
+      />
+
+      <Box className="mt-3 grid gap-2 sm:grid-cols-2">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Skeleton
+            key={i}
+            variant="rounded"
+            animation="wave"
+            sx={{
+              width: "100%",
+              height: 40,
+              borderRadius: "999px",
+            }}
+          />
+        ))}
+      </Box>
+    </>
+  );
+}
+
+function ContentSectionSkeleton({
+  lines = 2,
+  titleWidth = 120,
+}: {
+  lines?: number;
+  titleWidth?: number;
+}) {
+  return (
+    <Box>
+      <Skeleton
+        variant="text"
+        animation="wave"
+        sx={{
+          width: titleWidth,
+          height: 22,
+          borderRadius: "8px",
+          transform: "none",
+        }}
+      />
+
+      <Box className="mt-2 flex flex-col gap-1.5">
+        {Array.from({ length: lines }).map((_, i) => (
+          <Skeleton
+            key={i}
+            variant="text"
+            animation="wave"
+            sx={{
+              width: i === lines - 1 ? "78%" : "100%",
+              height: 18,
+              borderRadius: "8px",
+              transform: "none",
+            }}
+          />
+        ))}
+      </Box>
+    </Box>
+  );
+}
+
+export default function TermsPageSkeleton() {
+  return (
+    <Box className="apple-page">
+      <Container maxWidth="md" className="apple-section relative">
+        <HeaderSkeleton />
+
+        <Card elevation={0} className="apple-card apple-card-no-hover">
+          <CardContent className="p-7">
+            <TocSkeleton />
+
+            <Divider className="my-6! border-black/10!" />
+
+            <Stack spacing={3}>
+              <ContentSectionSkeleton titleWidth={90} lines={2} />
+              <ContentSectionSkeleton titleWidth={120} lines={3} />
+              <ContentSectionSkeleton titleWidth={150} lines={4} />
+              <ContentSectionSkeleton titleWidth={130} lines={2} />
+              <ContentSectionSkeleton titleWidth={155} lines={3} />
+              <ContentSectionSkeleton titleWidth={105} lines={2} />
+              <ContentSectionSkeleton titleWidth={145} lines={2} />
+              <ContentSectionSkeleton titleWidth={95} lines={2} />
+
+              <Divider className="my-2! border-black/10!" />
+
+              <Skeleton
+                variant="text"
+                animation="wave"
+                sx={{
+                  width: "100%",
+                  height: 16,
+                  borderRadius: "8px",
+                  transform: "none",
+                }}
+              />
+              <Skeleton
+                variant="text"
+                animation="wave"
+                sx={{
+                  width: "84%",
+                  height: 16,
+                  borderRadius: "8px",
+                  transform: "none",
+                }}
+              />
+            </Stack>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 }

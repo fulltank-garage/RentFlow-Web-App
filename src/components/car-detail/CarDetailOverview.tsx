@@ -15,25 +15,25 @@ type Props = {
 
 export default function CarDetailOverview({ detail }: Props) {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4!">
-      <Typography className="text-sm font-semibold text-slate-900">
+    <Box className="apple-card p-5!">
+      <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
         รายละเอียดรถ
       </Typography>
-      <Typography className="mt-2 text-sm leading-relaxed text-slate-600">
+      <Typography className="mt-2 text-sm leading-relaxed text-[var(--rf-apple-muted)]">
         รถรุ่น{" "}
-        <span className="font-semibold text-slate-900">{detail.name}</span>{" "}
+        <span className="font-semibold text-[var(--rf-apple-ink)]">{detail.name}</span>{" "}
         เหมาะสำหรับการใช้งานประเภท{" "}
-        <span className="font-semibold text-slate-900">{detail.type}</span>{" "}
+        <span className="font-semibold text-[var(--rf-apple-ink)]">{detail.type}</span>{" "}
         รองรับ{" "}
-        <span className="font-semibold text-slate-900">
+        <span className="font-semibold text-[var(--rf-apple-ink)]">
           {detail.seats} ที่นั่ง
         </span>{" "}
         พร้อมระบบ{" "}
-        <span className="font-semibold text-slate-900">
+        <span className="font-semibold text-[var(--rf-apple-ink)]">
           {detail.transmission}
         </span>{" "}
         และเชื้อเพลิง{" "}
-        <span className="font-semibold text-slate-900">{detail.fuel}</span>.
+        <span className="font-semibold text-[var(--rf-apple-ink)]">{detail.fuel}</span>.
       </Typography>
     </Box>
   );

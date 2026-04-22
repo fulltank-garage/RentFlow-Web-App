@@ -38,20 +38,23 @@ export default function PrivacyPage() {
   }
 
   return (
-    <Box className="min-h-screen">
+    <Box className="apple-page">
       <Box aria-hidden className="pointer-events-none fixed inset-0" />
 
       <Container maxWidth="md" className="relative py-10">
         <Stack spacing={1} className="mb-6">
           <Stack direction="row" className="items-center justify-between gap-3">
             <Stack>
-              <Typography className="text-2xl font-extrabold text-slate-900">
+              <Typography
+                className="apple-heading"
+                sx={{ fontSize: { xs: 34, md: 48 } }}
+              >
                 นโยบายความเป็นส่วนตัว (Privacy Policy)
               </Typography>
 
               <Stack direction="row" className="items-center gap-2">
                 <Chip size="small" label={`อัปเดตล่าสุด: ${updatedAt}`} />
-                <Typography className="text-xs text-slate-500">
+                <Typography className="text-xs text-[var(--rf-apple-muted)]">
                   รายละเอียดการดูแลข้อมูลส่วนบุคคลของผู้ใช้งาน
                 </Typography>
               </Stack>
@@ -60,13 +63,7 @@ export default function PrivacyPage() {
             <Link href="/" style={{ textDecoration: "none" }}>
               <Button
                 variant="outlined"
-                className="rounded-xl!"
-                sx={{
-                  borderColor: "rgba(203,213,225,0.9)",
-                  color: "rgb(15 23 42)",
-                  "&:hover": { borderColor: "rgb(148,163,184)" },
-                  textTransform: "none",
-                }}
+                className="rounded-full!"
               >
                 กลับหน้าแรก
               </Button>
@@ -76,13 +73,12 @@ export default function PrivacyPage() {
 
         <Card
           elevation={0}
-          className="rounded-2xl! border border-slate-200 bg-white"
-          sx={{ boxShadow: "0 20px 60px rgba(15,23,42,0.10)" }}
+          className="apple-card"
         >
           <CardContent className="p-7">
             <PrivacyTableOfContents sections={sections} />
 
-            <Divider className="my-6! border-slate-200!" />
+            <Divider className="my-6! border-black/10!" />
 
             <PrivacyContent />
           </CardContent>

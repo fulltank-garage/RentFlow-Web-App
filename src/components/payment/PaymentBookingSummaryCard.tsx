@@ -59,15 +59,14 @@ export default function PaymentBookingSummaryCard({
   return (
     <Card
       elevation={0}
-      sx={{ boxShadow: "none" }}
-      className="order-2 rounded-2xl! border border-slate-200 bg-white lg:order-1 lg:col-span-5"
+      className="apple-card order-2 lg:order-1 lg:col-span-5"
     >
       <CardContent className="p-6">
         <Typography className="text-sm font-semibold text-slate-900">
           สรุปการจอง
         </Typography>
 
-        <Box className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
           <Box className="flex items-center justify-between">
             <Typography className="text-sm text-slate-600">
               รหัสการจอง
@@ -78,7 +77,7 @@ export default function PaymentBookingSummaryCard({
           </Box>
 
           {(pickupPoint || returnPoint || pickupDate || returnDate) && (
-            <Box className="mt-3 rounded-xl border border-slate-200 bg-white p-3">
+            <Box className="mt-3 rounded-[18px] bg-white p-3">
               <Box className="grid gap-2">
                 <Box className="flex items-start justify-between gap-3">
                   <Typography className="text-xs font-semibold text-slate-600">
@@ -102,7 +101,7 @@ export default function PaymentBookingSummaryCard({
                   </Box>
                 </Box>
 
-                <Divider className="border-slate-200!" />
+                <Divider className="border-black/10!" />
 
                 <Box className="flex items-start justify-between gap-3">
                   <Typography className="text-xs font-semibold text-slate-600">
@@ -162,7 +161,7 @@ export default function PaymentBookingSummaryCard({
               </Box>
 
               {carDiscount > 0 ? (
-                <Box className="mt-3 rounded-xl border border-emerald-400 bg-emerald-100 px-4 py-3 shadow-sm">
+                <Box className="mt-3 rounded-[18px] bg-emerald-50 px-4 py-3">
                   <Box className="flex items-center justify-between">
                     <Typography className="text-sm font-bold text-emerald-900">
                       คุณประหยัดไป
@@ -176,7 +175,7 @@ export default function PaymentBookingSummaryCard({
 
               {addonKeys.length > 0 ? (
                 <Box className="mt-3 space-y-2">
-                  <Divider className="mb-2! border-slate-200!" />
+                  <Divider className="mb-2! border-black/10!" />
 
                   <Box className="flex items-center justify-between">
                     <Typography className="text-sm font-semibold text-slate-800">
@@ -251,11 +250,11 @@ export default function PaymentBookingSummaryCard({
           )}
         </Box>
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         {car ? (
-          <Box className="rounded-xl border border-slate-200 bg-white p-4">
-            <Box className="relative aspect-4/3 overflow-hidden rounded-xl bg-slate-50">
+          <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
+            <Box className="relative aspect-4/3 overflow-hidden rounded-[18px] bg-white">
               <Image
                 src={car.image || "/RentFlow.png"}
                 alt={car.name}
@@ -276,7 +275,7 @@ export default function PaymentBookingSummaryCard({
               </Box>
             </Box>
 
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
 
             <Box className="flex items-center justify-between">
               <Typography className="text-sm text-slate-600">
@@ -294,7 +293,7 @@ export default function PaymentBookingSummaryCard({
               <Button
                 fullWidth
                 variant="outlined"
-                className="rounded-xl!"
+                className="rounded-full!"
                 sx={{ textTransform: "none" }}
               >
                 ดูรายละเอียดรถ
@@ -302,7 +301,7 @@ export default function PaymentBookingSummaryCard({
             </Link>
           </Box>
         ) : (
-          <Box className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
             <Typography className="text-sm text-slate-600">
               ไม่พบข้อมูลรถ (carId:{" "}
               <span className="font-semibold">{carId || "-"}</span>)
@@ -311,7 +310,7 @@ export default function PaymentBookingSummaryCard({
             <Link href="/cars" className="mt-3 inline-block">
               <Button
                 variant="outlined"
-                className="rounded-xl!"
+                className="rounded-full!"
                 sx={{ textTransform: "none" }}
               >
                 กลับไปเลือกรถ
@@ -320,7 +319,7 @@ export default function PaymentBookingSummaryCard({
           </Box>
         )}
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         <Typography className="text-xs text-slate-500">
           แนะนำ: หากชำระแล้วไม่ขึ้นสถานะ ให้ติดต่อทีมงานพร้อมรหัสการจอง

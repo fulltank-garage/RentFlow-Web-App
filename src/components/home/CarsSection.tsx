@@ -24,33 +24,36 @@ type Props = {
 
 export default function CarsSection({ cars, formatTHB }: Props) {
   return (
-    <Container maxWidth="lg" className="py-2">
-      <Box className="flex items-end justify-between gap-4">
+    <Container maxWidth="lg" className="apple-section">
+      <Box className="flex flex-col gap-4 text-center sm:items-center">
         <Box>
-          <Typography variant="h4" className="font-bold text-slate-900">
+          <Typography
+            className="apple-heading"
+            sx={{ fontSize: { xs: 38, md: 56 } }}
+          >
             รถแนะนำ
           </Typography>
-          <Typography className="text-slate-600">
+          <Typography className="apple-subtitle mt-2 text-lg">
             เลือกคันที่ใช่ แล้วกดจองได้เลย
           </Typography>
         </Box>
 
         <Chip
           label={`${cars.length} คัน`}
-          className="bg-slate-900/5! text-slate-700! border border-slate-200!"
+          className="apple-pill w-min! text-[var(--rf-apple-muted)]!"
         />
       </Box>
 
-      <Box className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Box className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {cars.length ? (
           cars.map((c) => (
             <Card
               key={c.id}
               elevation={0}
               sx={{ boxShadow: "none" }}
-              className="group bg-white border border-slate-200 rounded-2xl! transition hover:border-slate-400!"
+              className="apple-card group"
             >
-              <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
+              <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
                 <Image
                   src={c.image || "/RentFlow.png"}
                   alt={c.name}
@@ -62,26 +65,26 @@ export default function CarsSection({ cars, formatTHB }: Props) {
               <CardContent className="p-6">
                 <Box className="flex items-start justify-between gap-3">
                   <Box>
-                    <Typography className="text-lg font-semibold text-slate-900">
+                    <Typography className="text-xl font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
                       {c.name}
                     </Typography>
-                    <Typography className="text-sm text-slate-600">
+                    <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
                       {c.type} • {c.seats} ที่นั่ง • {c.transmission} • {c.fuel}
                     </Typography>
                   </Box>
                 </Box>
 
-                <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
                   <Box className="flex items-end gap-2">
-                    <Typography className="text-sm text-slate-600">
+                    <Typography className="text-sm text-[var(--rf-apple-muted)]">
                       ราคาเริ่มต้น
                     </Typography>
 
-                    <Typography className="text-2xl font-extrabold text-slate-900">
+                    <Typography className="text-2xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                       {formatTHB(c.pricePerDay)}
                     </Typography>
 
-                    <Typography className="text-sm text-slate-600">
+                    <Typography className="text-sm text-[var(--rf-apple-muted)]">
                       /วัน
                     </Typography>
                   </Box>
@@ -94,8 +97,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
                   href={`/cars/${c.id}`}
                   variant="outlined"
                   fullWidth
-                  className="rounded-xl! border-slate-300! text-slate-900!"
-                  sx={{ textTransform: "none" }}
+                  className="rounded-full!"
                 >
                   ดูรายละเอียด
                 </Button>
@@ -105,8 +107,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
                   href={`/booking?carId=${c.id}`}
                   variant="contained"
                   fullWidth
-                  className="rounded-xl! font-semibold!"
-                  sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
+                  className="rounded-full! font-semibold!"
                 >
                   จองเลย
                 </Button>
@@ -114,14 +115,14 @@ export default function CarsSection({ cars, formatTHB }: Props) {
             </Card>
           ))
         ) : (
-          <Box className="flex min-h-40 items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-8 py-12 text-center md:col-span-2 md:min-h-48 md:px-12 lg:col-span-3">
-            <Typography className="text-base font-medium text-slate-600 md:text-lg">
+          <Box className="flex min-h-48 items-center justify-center rounded-[30px] border border-dashed border-black/10 bg-white px-8 py-12 text-center md:col-span-2 md:px-12 lg:col-span-3">
+            <Typography className="text-base font-semibold text-[var(--rf-apple-muted)] md:text-lg">
               ยังไม่มีรถแนะนำในตอนนี้
             </Typography>
           </Box>
         )}
       </Box>
-      <Divider className="my-6! border-slate-200!" />
+      <Divider className="mt-14! border-black/10!" />
     </Container>
   );
 }

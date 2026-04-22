@@ -162,27 +162,27 @@ export default function ReviewsSection() {
         key={key}
         elevation={0}
         sx={{ boxShadow: "none" }}
-        className="min-w-[320px] max-w-[320px] rounded-xl! border border-slate-200 bg-white sm:min-w-[420px] sm:max-w-[420px]"
+        className="min-w-[320px] max-w-[320px] rounded-[26px]! border border-black/10 bg-white sm:min-w-[420px] sm:max-w-[420px]"
       >
         <CardContent className="p-4!">
           <Box className="flex flex-wrap items-start justify-between gap-3">
             <Box>
-              <Typography className="text-sm font-semibold text-slate-900">
+              <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
                 {review.firstName} {review.lastName}
               </Typography>
-              <Typography className="text-xs text-slate-500">
+              <Typography className="text-xs text-[var(--rf-apple-muted)]">
                 {review.shopName ? (
                   <>
                     {shopHref ? (
                       <Box
                         component="a"
                         href={shopHref}
-                        className="font-semibold text-slate-700 underline-offset-4 transition hover:text-slate-950 hover:underline"
+                        className="font-semibold text-[var(--rf-apple-blue)] transition hover:text-[var(--rf-apple-blue-hover)]"
                       >
                         {review.shopName}
                       </Box>
                     ) : (
-                      <Box component="span" className="font-semibold text-slate-700">
+                      <Box component="span" className="font-semibold text-[var(--rf-apple-muted)]">
                         {review.shopName}
                       </Box>
                     )}
@@ -195,7 +195,7 @@ export default function ReviewsSection() {
             </Box>
             <Rating value={review.rating} readOnly size="small" />
           </Box>
-          <Typography className="mt-3 text-sm leading-6 text-slate-700">
+          <Typography className="mt-3 text-sm leading-6 text-[var(--rf-apple-muted)]">
             {review.comment || "ให้คะแนนการใช้งาน"}
           </Typography>
         </CardContent>
@@ -205,7 +205,7 @@ export default function ReviewsSection() {
 
   if (isMarketplace) {
     return (
-      <Container maxWidth="lg" className="py-4">
+      <Container maxWidth="lg" className="apple-section pt-0!">
         <AppSnackbar
           open={snackbar.open}
           message={snackbar.message}
@@ -213,23 +213,23 @@ export default function ReviewsSection() {
           onClose={closeSnackbar}
         />
 
-        <Box className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <Box className="mx-auto max-w-3xl text-center">
           <Box>
             <Typography
-              variant="h4"
-              className="text-base font-semibold text-slate-900"
+              className="apple-heading"
+              sx={{ fontSize: { xs: 38, md: 56 } }}
             >
               รีวิวจากผู้ใช้งาน
             </Typography>
-            <Typography className="mt-1 text-sm text-slate-600">
+            <Typography className="apple-subtitle mt-2 text-lg">
               เสียงจากลูกค้าที่ใช้บริการกับร้านต่าง ๆ
             </Typography>
           </Box>
         </Box>
 
-        <Box className="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-10 overflow-hidden rounded-[34px] bg-white p-4">
           {loadingReviews ? (
-            <Box className="flex min-h-72 items-center justify-center rounded-xl border border-slate-200 bg-white p-8 text-slate-600">
+            <Box className="flex min-h-72 items-center justify-center rounded-[26px] bg-[var(--rf-apple-surface-soft)] p-8 text-[var(--rf-apple-muted)]">
               <Box className="flex items-center gap-3 text-sm">
                 <CircularProgress size={18} />
                 <span>กำลังโหลดรีวิว...</span>
@@ -249,27 +249,27 @@ export default function ReviewsSection() {
               </Box>
             </Box>
           ) : (
-            <Box className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
-              <Box className="grid h-12 w-12 place-items-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
+            <Box className="flex min-h-72 flex-col items-center justify-center rounded-[26px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-8 text-center">
+              <Box className="grid h-12 w-12 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
                 <RateReviewRoundedIcon />
               </Box>
-              <Typography className="mt-4 text-sm font-semibold text-slate-900">
+              <Typography className="mt-4 text-sm font-semibold text-[var(--rf-apple-ink)]">
                 ยังไม่มีรีวิว
               </Typography>
-              <Typography className="mx-auto mt-1 max-w-md text-sm text-slate-600">
+              <Typography className="mx-auto mt-1 max-w-md text-sm text-[var(--rf-apple-muted)]">
                 เมื่อมีรีวิวจากผู้ใช้งาน รายการจะแสดงในส่วนนี้
               </Typography>
             </Box>
           )}
         </Box>
 
-        <Divider className="my-6! border-slate-200!" />
+        <Divider className="mt-14! border-black/10!" />
       </Container>
     );
   }
 
   return (
-    <Container maxWidth="lg" className="py-4">
+    <Container maxWidth="lg" className="apple-section pt-0!">
       <AppSnackbar
         open={snackbar.open}
         message={snackbar.message}
@@ -277,36 +277,36 @@ export default function ReviewsSection() {
         onClose={closeSnackbar}
       />
 
-      <Box className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Box className="mx-auto max-w-3xl text-center">
         <Box>
           <Typography
-            variant="h4"
-            className="text-base font-semibold text-slate-900"
+            className="apple-heading"
+            sx={{ fontSize: { xs: 38, md: 56 } }}
           >
             รีวิวจากผู้ใช้งาน
           </Typography>
-          <Typography className="mt-1 text-sm text-slate-600">
+          <Typography className="apple-subtitle mt-2 text-lg">
             แบ่งปันประสบการณ์ของคุณได้ทันที
           </Typography>
         </Box>
       </Box>
 
-      <Box className="mt-4 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+      <Box className="mt-10 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <Card
           elevation={0}
           sx={{ boxShadow: "none" }}
-          className="rounded-2xl! border border-slate-200 bg-white"
+          className="apple-card"
         >
           <CardContent className="p-5!">
             <Box className="flex items-center gap-3">
-              <Box className="grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700">
+              <Box className="grid h-11 w-11 place-items-center rounded-full bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-blue)]">
                 <RateReviewRoundedIcon />
               </Box>
               <Box>
-                <Typography className="text-sm font-semibold text-slate-900">
+                <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
                   เขียนรีวิว
                 </Typography>
-                <Typography className="text-xs text-slate-500">
+                <Typography className="text-xs text-[var(--rf-apple-muted)]">
                   ไม่ต้องเข้าสู่ระบบหรือมีรายการจอง
                 </Typography>
               </Box>
@@ -325,7 +325,7 @@ export default function ReviewsSection() {
                   fullWidth
                   size="small"
                   autoComplete="given-name"
-                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: "18px" } }}
                 />
                 <TextField
                   label="นามสกุล"
@@ -334,13 +334,13 @@ export default function ReviewsSection() {
                   fullWidth
                   size="small"
                   autoComplete="family-name"
-                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                  sx={{ "& .MuiOutlinedInput-root": { borderRadius: "18px" } }}
                 />
               </Box>
 
-              <Box className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-3">
                 <Box className="flex flex-wrap items-center gap-3">
-                  <Typography className="text-xs text-slate-600">
+                  <Typography className="text-xs text-[var(--rf-apple-muted)]">
                     คะแนน
                   </Typography>
                   <Rating
@@ -360,19 +360,16 @@ export default function ReviewsSection() {
                 multiline
                 minRows={4}
                 placeholder="เล่าประสบการณ์ที่อยากแบ่งปัน"
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "10px" } }}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "18px" } }}
               />
 
               <Button
                 type="submit"
                 variant="contained"
                 disabled={!canSubmit}
-                className="rounded-xl! font-semibold!"
+                className="rounded-full! font-semibold!"
                 sx={{
                   minHeight: 44,
-                  textTransform: "none",
-                  backgroundColor: "rgb(15 23 42)",
-                  "&:hover": { backgroundColor: "rgb(2 6 23)" },
                 }}
               >
                 {submitting ? (
@@ -388,9 +385,9 @@ export default function ReviewsSection() {
           </CardContent>
         </Card>
 
-        <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="rounded-[30px] bg-white p-4">
           {loadingReviews ? (
-            <Box className="flex min-h-72 items-center justify-center rounded-xl border border-slate-200 bg-white p-8 text-slate-600">
+            <Box className="flex min-h-72 items-center justify-center rounded-[26px] bg-[var(--rf-apple-surface-soft)] p-8 text-[var(--rf-apple-muted)]">
               <Box className="flex items-center gap-3 text-sm">
                 <CircularProgress size={18} />
                 <span>กำลังโหลดรีวิว...</span>
@@ -403,21 +400,21 @@ export default function ReviewsSection() {
                   key={review.id}
                   elevation={0}
                   sx={{ boxShadow: "none" }}
-                  className="rounded-xl! border border-slate-200 bg-white"
+                  className="rounded-[24px]! border border-black/10 bg-white"
                 >
                   <CardContent className="p-4!">
                     <Box className="flex flex-wrap items-start justify-between gap-3">
                       <Box>
-                        <Typography className="text-sm font-semibold text-slate-900">
+                        <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
                           {review.firstName} {review.lastName}
                         </Typography>
-                        <Typography className="text-xs text-slate-500">
+                        <Typography className="text-xs text-[var(--rf-apple-muted)]">
                           {formatReviewDate(review.createdAt)}
                         </Typography>
                       </Box>
                       <Rating value={review.rating} readOnly size="small" />
                     </Box>
-                    <Typography className="mt-3 text-sm leading-6 text-slate-700">
+                    <Typography className="mt-3 text-sm leading-6 text-[var(--rf-apple-muted)]">
                       {review.comment || "ให้คะแนนการใช้งาน"}
                     </Typography>
                   </CardContent>
@@ -425,14 +422,14 @@ export default function ReviewsSection() {
               ))}
             </Box>
           ) : (
-            <Box className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
-              <Box className="grid h-12 w-12 place-items-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-700">
+            <Box className="flex min-h-72 flex-col items-center justify-center rounded-[26px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-8 text-center">
+              <Box className="grid h-12 w-12 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
                 <RateReviewRoundedIcon />
               </Box>
-              <Typography className="mt-4 text-sm font-semibold text-slate-900">
+              <Typography className="mt-4 text-sm font-semibold text-[var(--rf-apple-ink)]">
                 ยังไม่มีรีวิว
               </Typography>
-              <Typography className="mx-auto mt-1 max-w-md text-sm text-slate-600">
+              <Typography className="mx-auto mt-1 max-w-md text-sm text-[var(--rf-apple-muted)]">
                 เมื่อมีรีวิวจากผู้ใช้งาน รายการจะแสดงในส่วนนี้
               </Typography>
             </Box>
@@ -440,7 +437,7 @@ export default function ReviewsSection() {
         </Box>
       </Box>
 
-      <Divider className="my-6! border-slate-200!" />
+      <Divider className="mt-14! border-black/10!" />
     </Container>
   );
 }

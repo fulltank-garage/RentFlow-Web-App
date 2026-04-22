@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 
 export default function CarDetailTermsSection() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4!">
+    <Box className="apple-card p-5!">
       <Typography className="text-sm font-semibold text-slate-900">
         เงื่อนไขการเช่า
       </Typography>

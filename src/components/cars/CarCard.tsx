@@ -36,9 +36,9 @@ export default function CarCard({ car, showShop = false }: Props) {
         <Card
             elevation={0}
             sx={{ boxShadow: "none" }}
-            className="group rounded-2xl! border border-slate-200 bg-white transition hover:border-slate-400!"
+            className="apple-card group"
         >
-            <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
+            <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
                 <Image
                     src={car.image || "/RentFlow.png"}
                     alt={car.name}
@@ -50,10 +50,10 @@ export default function CarCard({ car, showShop = false }: Props) {
             <CardContent className="p-6">
                 <Box className="flex items-start justify-between gap-3">
                     <Box className="min-w-0">
-                        <Typography className="truncate text-lg font-semibold text-slate-900">
+                        <Typography className="truncate text-xl font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
                             {car.name}
                         </Typography>
-                        <Typography className="text-sm text-slate-600">
+                        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
                             {car.type} • {car.seats} ที่นั่ง • {car.transmission} • {car.fuel}
                         </Typography>
                     </Box>
@@ -63,30 +63,30 @@ export default function CarCard({ car, showShop = false }: Props) {
                     <Box
                         component={shopHref ? "a" : "span"}
                         href={shopHref || undefined}
-                        className="mt-5 block rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 no-underline transition hover:border-slate-300 hover:bg-white"
+                        className="mt-5 block rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4 text-[var(--rf-apple-muted)] no-underline transition hover:bg-white"
                     >
                         <Box className="flex items-end gap-2">
-                            <Typography className="text-base font-black tracking-[-0.02em] text-slate-800">
+                            <Typography className="text-base font-black tracking-[-0.02em] text-[var(--rf-apple-muted)]">
                                 ร้านให้เช่า
                             </Typography>
-                            <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-slate-950">
+                            <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                                 {car.shopName}
                             </Typography>
                         </Box>
                     </Box>
                 ) : null}
 
-                <Box className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+                <Box className="mt-3 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
                     <Box className="flex items-end gap-2">
-                        <Typography className="text-sm text-slate-600">
+                        <Typography className="text-sm text-[var(--rf-apple-muted)]">
                             ราคาเริ่มต้น
                         </Typography>
 
-                        <Typography className="text-2xl font-extrabold text-slate-900">
+                        <Typography className="text-2xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                             {formatTHB(car.pricePerDay)}
                         </Typography>
 
-                        <Typography className="text-sm text-slate-600">/วัน</Typography>
+                        <Typography className="text-sm text-[var(--rf-apple-muted)]">/วัน</Typography>
                     </Box>
                 </Box>
             </CardContent>
@@ -97,8 +97,7 @@ export default function CarCard({ car, showShop = false }: Props) {
                     href={carHref}
                     variant="outlined"
                     fullWidth
-                    className="rounded-xl! border-slate-300! text-slate-900!"
-                    sx={{ textTransform: "none" }}
+                    className="rounded-full!"
                 >
                     ดูรายละเอียด
                 </Button>
@@ -108,14 +107,7 @@ export default function CarCard({ car, showShop = false }: Props) {
                     href={bookingHref}
                     variant="contained"
                     fullWidth
-                    className="rounded-xl! font-semibold!"
-                    sx={{
-                        textTransform: "none",
-                        backgroundColor: "rgb(15 23 42)",
-                        "&:hover": {
-                            backgroundColor: "rgb(2 6 23)",
-                        },
-                    }}
+                    className="rounded-full! font-semibold!"
                 >
                     จองเลย
                 </Button>

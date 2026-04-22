@@ -44,7 +44,7 @@ export default function BookingSummaryCard({
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="lg:col-span-5 rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card lg:col-span-5"
     >
       <CardContent className="p-4!">
         <Typography className="text-sm font-semibold text-slate-900">
@@ -54,10 +54,10 @@ export default function BookingSummaryCard({
           ตรวจสอบรถ จุดรับ-คืน และยอดรวมก่อนชำระเงิน
         </Typography>
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         {!car ? (
-          <Box className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
             <Typography className="text-sm text-slate-700">
               ไม่พบข้อมูลรถ (รหัสรถ: <span className="font-semibold">{carId || "-"}</span>)
             </Typography>
@@ -68,16 +68,15 @@ export default function BookingSummaryCard({
             <Link href="/cars" className="mt-4 inline-block">
               <Button
                 variant="outlined"
-                className="rounded-xl!"
-                sx={{ textTransform: "none" }}
+                className="rounded-full!"
               >
                 กลับไปเลือกรถ
               </Button>
             </Link>
           </Box>
         ) : (
-          <Box className="rounded-xl! border border-slate-200 bg-white p-4!">
-            <Box className="relative aspect-4/3 overflow-hidden rounded-xl bg-slate-50">
+          <Box className="rounded-[18px]! bg-[var(--rf-apple-surface-soft)] p-4!">
+            <Box className="relative aspect-4/3 overflow-hidden rounded-[18px] bg-white">
               <Image
                 src={car.image || "/RentFlow.png"}
                 alt={car.name}

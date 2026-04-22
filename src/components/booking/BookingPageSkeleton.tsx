@@ -77,7 +77,7 @@ function SummaryTopSkeleton() {
 
 function SummaryImageSkeleton() {
   return (
-    <Box className="relative aspect-4/3 overflow-hidden rounded-xl bg-slate-50">
+    <Box className="relative aspect-4/3 overflow-hidden rounded-[22px] bg-[var(--rf-apple-surface-soft)]">
       <Skeleton
         variant="rectangular"
         animation="wave"
@@ -147,14 +147,14 @@ function SummarySkeleton() {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="lg:col-span-5 rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card apple-card-no-hover lg:col-span-5"
     >
       <CardContent className="p-4!">
         <SummaryTopSkeleton />
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
-        <Box className="rounded-xl! border border-slate-200 bg-white p-4!">
+        <Box className="rounded-[22px]! bg-[var(--rf-apple-surface-soft)] p-4!">
           <SummaryImageSkeleton />
 
           <Box className="mt-3 flex flex-col gap-1.5">
@@ -302,7 +302,7 @@ function CheckboxRowSkeleton() {
 function ChatSuggestSkeleton() {
   return (
     <Box
-      className="rounded-2xl border border-amber-200 bg-amber-50 p-4"
+      className="rounded-[22px] bg-amber-50 p-4"
       sx={{
         backgroundImage:
           "radial-gradient(520px 160px at 18% 0%, rgba(251,191,36,0.14), transparent 60%)",
@@ -349,7 +349,7 @@ function ChatSuggestSkeleton() {
           sx={{
             width: { xs: "100%", sm: 220 },
             height: 46,
-            borderRadius: "12px",
+            borderRadius: "999px",
             flexShrink: 0,
           }}
         />
@@ -363,12 +363,12 @@ function FormSkeleton() {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="lg:col-span-7 rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card apple-card-no-hover lg:col-span-7"
     >
       <CardContent className="p-4!">
         <SectionTitleSkeleton titleWidth={110} descWidth={300} />
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         <Box className="grid gap-4">
           <Box className="grid gap-4 sm:grid-cols-2">
@@ -419,7 +419,7 @@ function FormSkeleton() {
             <InputSkeleton />
           </Box>
 
-          <Divider className="border-slate-200!" />
+          <Divider className="border-black/10!" />
 
           <Box className="flex flex-col gap-1.5">
             <Skeleton
@@ -443,14 +443,14 @@ function FormSkeleton() {
               }}
             />
 
-            <Box className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
               <Box className="space-y-1.5">
                 <CheckboxRowSkeleton />
                 <CheckboxRowSkeleton />
                 <CheckboxRowSkeleton />
               </Box>
 
-              <Divider className="my-4! border-slate-200!" />
+              <Divider className="my-4! border-black/10!" />
 
               <Box className="flex items-center justify-between">
                 <Skeleton
@@ -488,7 +488,7 @@ function FormSkeleton() {
                   width: 230,
                   maxWidth: "100%",
                   height: 48,
-                  borderRadius: "12px",
+                  borderRadius: "999px",
                 }}
               />
 
@@ -512,8 +512,8 @@ function FormSkeleton() {
 
 export default function BookingPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
 
         <Box className="mt-6 grid gap-6 lg:grid-cols-12">

@@ -43,7 +43,7 @@ type AuthCardProps = {
 };
 
 const fieldSX = {
-  "& .MuiOutlinedInput-root": { borderRadius: "12px" },
+  "& .MuiOutlinedInput-root": { borderRadius: "18px" },
 };
 
 export default function AuthCard({
@@ -156,7 +156,7 @@ export default function AuthCard({
   }
 
   return (
-    <Box className="relative bg-white">
+    <Box className="apple-page">
       <AppSnackbar
         open={snackbar.open}
         message={snackbar.message}
@@ -164,16 +164,16 @@ export default function AuthCard({
         onClose={closeSnackbar}
       />
 
-      <Container maxWidth="sm" className="relative py-12">
+      <Container maxWidth="sm" className="relative py-14 md:py-20">
         <Card
           elevation={0}
-          className="w-full rounded-2xl! border border-slate-200 bg-white"
-          sx={{ boxShadow: "none", backdropFilter: "blur(6px)" }}
+          className="apple-card w-full"
+          sx={{ backdropFilter: "blur(6px)" }}
         >
           <CardContent className="p-8!">
             <Stack className="mb-6 items-center text-center">
-              <Box className="mb-4 flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-1 py-1">
-                <Box className="relative h-20 w-20">
+              <Box className="mb-4 flex items-center justify-center rounded-[28px] bg-[var(--rf-apple-surface-soft)] px-4 py-4">
+                <Box className="relative h-16 w-16">
                   <Image
                     src="/RentFlow.png"
                     alt="RentFlow Logo"
@@ -187,18 +187,18 @@ export default function AuthCard({
 
             <Stack spacing={1} className="mb-4 items-center text-center">
               <Typography
-                variant="h5"
-                className="text-xl font-bold text-slate-900"
+                className="apple-heading"
+                sx={{ fontSize: { xs: 30, md: 38 } }}
               >
                 {title}
               </Typography>
 
-              <Typography className="text-sm text-slate-600">
+              <Typography className="apple-subtitle text-sm">
                 {subtitle}
               </Typography>
             </Stack>
 
-            <Divider className="my-5! border-slate-200!" />
+            <Divider className="my-5! border-black/10!" />
 
             <Box component="form" onSubmit={handleSubmit} className="grid gap-4">
               {isRegister ? (
@@ -265,12 +265,9 @@ export default function AuthCard({
                 fullWidth
                 variant="contained"
                 disabled={!canSubmit || loading}
-                className="rounded-xl! font-semibold!"
+                className="rounded-full! font-semibold!"
                 sx={{
                   minHeight: 52,
-                  textTransform: "none",
-                  backgroundColor: "rgb(15 23 42)",
-                  "&:hover": { backgroundColor: "rgb(2 6 23)" },
                 }}
               >
                 {loading ? (
@@ -287,7 +284,7 @@ export default function AuthCard({
             </Box>
 
             <Box className="p-4">
-              <Typography className="text-center text-xs! leading-5 text-slate-600">
+              <Typography className="text-center text-xs! leading-5 text-[var(--rf-apple-muted)]">
                 {agreementText}
               </Typography>
             </Box>

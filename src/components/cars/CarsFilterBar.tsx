@@ -41,7 +41,7 @@ export default function CarsFilterBar({
   onReset,
 }: Props) {
   return (
-    <Box className="mt-4 rounded-2xl! border border-slate-200 bg-white p-4">
+    <Box className="apple-card mt-8 p-4 md:p-5">
       <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <TextField
           label="ค้นหารถ"
@@ -155,8 +155,7 @@ export default function CarsFilterBar({
 
         <Button
           variant="outlined"
-          className="rounded-xl!"
-          sx={{ textTransform: "none" }}
+          className="rounded-full!"
           onClick={onReset}
         >
           รีเซ็ตตัวกรอง

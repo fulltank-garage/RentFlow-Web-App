@@ -88,7 +88,7 @@ function HeroBadgesSkeleton() {
 
 function FeatureCardSkeleton() {
   return (
-    <Box className="rounded-2xl! border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex items-start gap-3">
         <Skeleton
           variant="rounded"
@@ -141,7 +141,7 @@ function FeatureCardSkeleton() {
 
 function StepCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
       <Box className="flex items-start gap-3">
         <Skeleton
           variant="rounded"
@@ -193,7 +193,7 @@ function StepCardSkeleton() {
 
 function TrustCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -232,7 +232,7 @@ function TrustCardSkeleton() {
 
 function CTASectionSkeleton() {
   return (
-    <Box className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <Box className="apple-card apple-card-no-hover mt-10 p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -264,7 +264,7 @@ function CTASectionSkeleton() {
           sx={{
             width: 126,
             height: 36.5,
-            borderRadius: "12px",
+            borderRadius: "999px",
           }}
         />
         <Skeleton
@@ -273,7 +273,7 @@ function CTASectionSkeleton() {
           sx={{
             width: 118,
             height: 36.5,
-            borderRadius: "12px",
+            borderRadius: "999px",
           }}
         />
       </Box>
@@ -299,7 +299,7 @@ function FeaturesGridSkeleton() {
 
 function StepsSectionSkeleton() {
   return (
-    <Box className="mt-10 rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover mt-10 p-5">
       <SectionHeadingSkeleton titleWidth={130} descWidth={420} />
 
       <Box className="mt-4 grid gap-4 md:grid-cols-2">
@@ -327,8 +327,8 @@ function TrustSectionSkeleton() {
 
 export default function FeaturesPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
         <HeroBadgesSkeleton />
         <FeaturesGridSkeleton />

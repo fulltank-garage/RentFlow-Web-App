@@ -29,7 +29,7 @@ function CarCardSkeleton() {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card apple-card-no-hover"
     >
       <Skeleton
         variant="rectangular"
@@ -37,8 +37,8 @@ function CarCardSkeleton() {
         sx={{
           width: "100%",
           height: 208,
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
         }}
       />
 
@@ -66,7 +66,7 @@ function CarCardSkeleton() {
           />
         </Box>
 
-        <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
           <Box className="flex items-end gap-2">
             <Skeleton
               variant="text"
@@ -109,7 +109,7 @@ function CarCardSkeleton() {
           sx={{
             width: "100%",
             height: 36,
-            borderRadius: "12px",
+            borderRadius: "999px",
             flex: 1,
           }}
         />
@@ -119,7 +119,7 @@ function CarCardSkeleton() {
           sx={{
             width: "100%",
             height: 36,
-            borderRadius: "12px",
+            borderRadius: "999px",
             flex: 1,
           }}
         />
@@ -130,11 +130,11 @@ function CarCardSkeleton() {
 
 export default function ClassPageSkeleton() {
   return (
-    <Box className="min-h-screen bg-white text-slate-900">
-      <Container maxWidth="lg" className="py-10">
+    <Box className="apple-page text-slate-900">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
 
-        <Box className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Box className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <CarCardSkeleton key={i} />
           ))}

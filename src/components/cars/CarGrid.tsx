@@ -13,11 +13,11 @@ type Props = {
 export default function CarGrid({ cars, showShop = false }: Props) {
     if (cars.length === 0) {
         return (
-            <Box className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-10 text-center">
-                <Typography className="text-sm font-semibold text-slate-900">
+            <Box className="mt-8 rounded-[30px] border border-dashed border-black/10 bg-white p-12 text-center">
+                <Typography className="text-base font-semibold text-[var(--rf-apple-ink)]">
                     ไม่พบรถที่ตรงกับเงื่อนไข
                 </Typography>
-                <Typography className="mt-1 text-sm text-slate-600">
+                <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
                     ลองเปลี่ยนคำค้นหา หรือเลือกประเภทอื่น
                 </Typography>
             </Box>
@@ -25,7 +25,7 @@ export default function CarGrid({ cars, showShop = false }: Props) {
     }
 
     return (
-        <Box className="mt-6 grid gap-4 md:grid-cols-3">
+        <Box className="mt-8 grid gap-5 md:grid-cols-3">
             {cars.map((car) => (
                 <CarCard key={car.id} car={car} showShop={showShop} />
             ))}

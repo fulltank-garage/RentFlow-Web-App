@@ -23,31 +23,32 @@ export default function HelpPage() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-12">
-      <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Box className="flex flex-col gap-2">
+    <Box className="apple-page">
+    <Container maxWidth="lg" className="apple-section">
+      <Box className="mx-auto max-w-3xl text-center">
+        <Box className="flex flex-col gap-3">
           <Typography
-            variant="h5"
-            className="text-2xl font-bold text-slate-900"
+            className="apple-heading"
+            sx={{ fontSize: { xs: 42, md: 64 } }}
           >
             ศูนย์ช่วยเหลือ
           </Typography>
-          <Typography className="text-sm text-slate-600">
+          <Typography className="apple-subtitle text-lg">
             ตรวจสอบสถานะการจอง ติดต่อสาขา หรือส่งรายละเอียดให้ทีมงานช่วยดูแล
           </Typography>
         </Box>
       </Box>
 
-      <Box className="mt-4 flex flex-wrap gap-3">
+      <Box className="mt-8 flex flex-wrap justify-center gap-3">
         <Chip
           label={`${activeBranches} สาขาพร้อมให้บริการ`}
           variant="outlined"
-          className="bg-slate-900/5! text-slate-700!"
+          className="apple-pill text-[var(--rf-apple-muted)]!"
         />
         <Chip
           label={`${phoneReadyCount} เบอร์โทรสำหรับติดต่อ`}
           variant="outlined"
-          className="bg-slate-900/5! text-slate-700!"
+          className="apple-pill text-[var(--rf-apple-muted)]!"
         />
       </Box>
 
@@ -58,29 +59,29 @@ export default function HelpPage() {
       ) : null}
 
       <Box className="mt-6 grid gap-4 md:grid-cols-3">
-        <Box className="rounded-2xl border border-slate-200 bg-white p-4">
-          <Typography className="text-sm font-semibold text-slate-900">
+        <Box className="apple-card p-5">
+          <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
             1. ตรวจสอบสถานะการจอง
           </Typography>
-          <Typography className="mt-2 text-sm text-slate-600">
+          <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
             เริ่มจากหน้ารายการจองเพื่อดูสถานะล่าสุดและรหัสการจองของคุณ
           </Typography>
         </Box>
 
-        <Box className="rounded-2xl border border-slate-200 bg-white p-4">
-          <Typography className="text-sm font-semibold text-slate-900">
+        <Box className="apple-card p-5">
+          <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
             2. ติดต่อสาขาที่เกี่ยวข้อง
           </Typography>
-          <Typography className="mt-2 text-sm text-slate-600">
+          <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
             เลือกสาขาที่รับหรือคืนรถ เพื่อให้ทีมงานช่วยเหลือได้ตรงจุด
           </Typography>
         </Box>
 
-        <Box className="rounded-2xl border border-slate-200 bg-white p-4">
-          <Typography className="text-sm font-semibold text-slate-900">
+        <Box className="apple-card p-5">
+          <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
             3. เตรียมรายละเอียดให้พร้อม
           </Typography>
-          <Typography className="mt-2 text-sm text-slate-600">
+          <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
             แจ้งรหัสการจอง วันรับ-คืนรถ และรายละเอียดปัญหาที่พบ
           </Typography>
         </Box>
@@ -94,11 +95,11 @@ export default function HelpPage() {
         />
       </Box>
 
-      <Box className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-        <Typography className="text-sm font-semibold text-slate-900">
+      <Box className="apple-card mt-10 p-5">
+        <Typography className="text-base font-bold text-[var(--rf-apple-ink)]">
           ต้องการความช่วยเหลือเพิ่มเติม?
         </Typography>
-        <Typography className="mt-1 text-sm text-slate-600">
+        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           ไปที่หน้าติดต่อเราเพื่อดูช่องทางการติดต่อและข้อมูลสาขา
         </Typography>
 
@@ -107,8 +108,7 @@ export default function HelpPage() {
             component={Link}
             href="/my-bookings"
             variant="outlined"
-            className="rounded-xl!"
-            sx={{ textTransform: "none" }}
+            className="rounded-full!"
           >
             ดูรายการจอง
           </Button>
@@ -116,13 +116,13 @@ export default function HelpPage() {
             component={Link}
             href="/contact"
             variant="contained"
-            className="rounded-xl! font-semibold!"
-            sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
+            className="rounded-full! font-semibold!"
           >
             ติดต่อเรา
           </Button>
         </Box>
       </Box>
     </Container>
+    </Box>
   );
 }

@@ -51,16 +51,17 @@ export default function CarsPage() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-12">
-      <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Box className="flex flex-col gap-2">
+    <Box className="apple-page">
+    <Container maxWidth="lg" className="apple-section">
+      <Box className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+        <Box className="flex flex-col gap-3">
           <Typography
-            variant="h5"
-            className="text-2xl font-bold text-slate-900"
+            className="apple-heading"
+            sx={{ fontSize: { xs: 42, md: 64 } }}
           >
             รถทั้งหมด
           </Typography>
-          <Typography className="text-sm text-slate-600">
+          <Typography className="apple-subtitle text-lg">
             เลือกจากรถหลากหลายประเภท ทั้งรถเก๋ง รถ SUV รถกระบะ และอื่น ๆ
             พร้อมรายละเอียดครบถ้วน
           </Typography>
@@ -70,7 +71,7 @@ export default function CarsPage() {
           size="small"
           label={`${cars.length} รายการ`}
           variant="outlined"
-          className="w-min border! border-slate-200! bg-slate-900/5! text-slate-700!"
+          className="apple-pill w-min! text-[var(--rf-apple-muted)]!"
         />
       </Box>
 
@@ -118,11 +119,12 @@ export default function CarsPage() {
           size="small"
           label="กำลังโหลดตัวกรอง"
           variant="outlined"
-          className="mt-6 border! border-slate-200! bg-slate-900/5! text-slate-700!"
+          className="apple-pill mt-6! text-[var(--rf-apple-muted)]!"
         />
       ) : null}
 
       <CarGrid cars={cars} showShop={isMarketplace} />
     </Container>
+    </Box>
   );
 }

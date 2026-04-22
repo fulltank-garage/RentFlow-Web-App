@@ -24,22 +24,23 @@ export default function ContactPage() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-12">
-      <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Box className="flex flex-col gap-2">
+    <Box className="apple-page">
+    <Container maxWidth="lg" className="apple-section">
+      <Box className="mx-auto max-w-3xl text-center">
+        <Box className="flex flex-col gap-3">
           <Typography
-            variant="h5"
-            className="text-2xl font-bold text-slate-900"
+            className="apple-heading"
+            sx={{ fontSize: { xs: 42, md: 64 } }}
           >
             ติดต่อเรา
           </Typography>
-          <Typography className="text-sm text-slate-600">
+          <Typography className="apple-subtitle text-lg">
             เลือกช่องทางที่สะดวกสำหรับติดต่อทีมงาน
           </Typography>
         </Box>
       </Box>
 
-      <Box className="mt-2 flex flex-wrap gap-4">
+      <Box className="mt-8 flex flex-wrap justify-center gap-3">
         <Chip
           icon={
             <SupportAgentRoundedIcon
@@ -49,7 +50,7 @@ export default function ContactPage() {
           }
           label={`${branches.length} สาขาในระบบ`}
           variant="outlined"
-          className="bg-slate-900/5! text-slate-700!"
+          className="apple-pill text-[var(--rf-apple-muted)]!"
         />
         <Chip
           icon={
@@ -60,7 +61,7 @@ export default function ContactPage() {
           }
           label={`${phoneReadyCount} เบอร์โทรพร้อมติดต่อ`}
           variant="outlined"
-          className="bg-slate-900/5! text-slate-700!"
+          className="apple-pill text-[var(--rf-apple-muted)]!"
         />
         <Chip
           icon={
@@ -71,7 +72,7 @@ export default function ContactPage() {
           }
           label="แนบรหัสการจองจะช่วยให้ตรวจสอบได้เร็วขึ้น"
           variant="outlined"
-          className="bg-slate-900/5! text-slate-700!"
+          className="apple-pill text-[var(--rf-apple-muted)]!"
         />
       </Box>
 
@@ -81,7 +82,7 @@ export default function ContactPage() {
         </Alert>
       ) : null}
 
-      <Box className="mt-6 grid gap-4 lg:grid-cols-12">
+      <Box className="mt-10 grid gap-5 lg:grid-cols-12">
         <Box className="lg:col-span-5">
           <ContactInfoCard branches={branches} />
         </Box>
@@ -91,5 +92,6 @@ export default function ContactPage() {
         </Box>
       </Box>
     </Container>
+    </Box>
   );
 }

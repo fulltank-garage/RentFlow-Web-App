@@ -45,7 +45,7 @@ export default function PaymentMethodSection({
         </TextField>
       </Box>
 
-      <Box className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         {method === "promptpay" ? (
           <Box className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Box className="flex flex-col gap-1.5">
@@ -60,7 +60,7 @@ export default function PaymentMethodSection({
               </Typography>
             </Box>
 
-            <Box className="relative h-36 w-36 overflow-hidden rounded-xl border border-slate-200 bg-white">
+            <Box className="relative h-36 w-36 overflow-hidden rounded-[18px] bg-white">
               <Image
                 src="/QR-CODE.jpg"
                 alt="PromptPay QR"
@@ -98,14 +98,14 @@ export default function PaymentMethodSection({
               sx={roundedFieldSX}
             />
             <Typography className="text-xs text-slate-500 sm:col-span-2">
-              * Production จริงควรใช้ Stripe/Omise และไม่เก็บข้อมูลบัตรเอง
+              * ข้อมูลบัตรจะถูกดูแลผ่านผู้ให้บริการชำระเงินที่ปลอดภัย
             </Typography>
           </Box>
         ) : null}
 
         {method === "transfer" ? (
           <Box className="grid gap-4">
-            <Box className="rounded-xl border border-slate-200 bg-white p-4">
+            <Box className="rounded-[18px] bg-white p-4">
               <Box className="flex flex-col gap-1.5">
                 <Typography className="text-sm font-semibold text-slate-900">
                   โอนเข้าบัญชี
@@ -126,7 +126,7 @@ export default function PaymentMethodSection({
             <Button
               component="label"
               variant="outlined"
-              className="rounded-xl!"
+              className="rounded-full!"
               startIcon={<UploadFileRoundedIcon />}
             >
               {slipFile ? "เปลี่ยนไฟล์สลิป" : "แนบสลิปโอนเงิน"}

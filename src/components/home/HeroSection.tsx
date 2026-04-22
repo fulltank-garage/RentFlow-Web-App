@@ -82,222 +82,172 @@ export default function HeroSection({
   };
 
   return (
-    <Box className="relative">
-      <Box className="sticky hero-ipad top-0 h-[30vh] sm:h-[65vh] md:h-[36vh] lg:h-[85vh] overflow-hidden">
-        {heroImages.map((src, i) => {
-          const active = i === heroIndex;
-
-          return (
-            <React.Fragment key={src}>
-              <Box
-                className={[
-                  "absolute inset-0 transition-opacity duration-700",
-                  active ? "opacity-100" : "opacity-0",
-                ].join(" ")}
-                sx={{
-                  backgroundImage: `url(${src})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: {
-                    xs: "center 100%",
-                    md: "center 75%",
-                    lg: "center 80%",
-                  },
-                }}
-              />
-
-              <Box
-                className={[
-                  "absolute inset-0 transition-opacity duration-700",
-                  active ? "opacity-100" : "opacity-0",
-                ].join(" ")}
-                sx={{
-                  backgroundImage: `url(${src})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: {
-                    xs: "center 100%",
-                    md: "center 75%",
-                    lg: "center 80%",
-                  },
-                  filter: "blur(18px)",
-                  transform: "scale(1.06)",
-                  opacity: 0.95,
-                  WebkitMaskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 88%, rgba(0,0,0,1) 100%)",
-                  maskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 55%, rgba(0,0,0,1) 88%, rgba(0,0,0,1) 100%)",
-                }}
-              />
-            </React.Fragment>
-          );
-        })}
-
-        <Box className="absolute inset-0 bg-black/15" />
-
-        <Box
-          className="pointer-events-none absolute bottom-0 left-0 w-full"
-          sx={{
-            height: { xs: "110px", sm: "150px", md: "190px", lg: "240px" },
-            background:
-              "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 45%, rgba(255,255,255,0.88) 78%, rgba(255,255,255,1) 100%)",
-          }}
-        />
-
-        <Box className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+    <Box component="section" className="bg-[var(--rf-apple-bg)]">
+      <Container maxWidth="lg" className="apple-section pt-10! md:pt-14!">
+        <Box className="mx-auto max-w-4xl text-center">
           <Typography
-            className="text-white font-extrabold! drop-shadow-xl!"
+            className="apple-heading"
             sx={{
-              fontSize: { xs: "28px", sm: "40px", md: "48px", lg: "64px" },
-              letterSpacing: "-0.02em",
+              fontSize: { xs: "44px", sm: "64px", md: "80px" },
             }}
           >
-            RentFlow
+            รถที่ใช่ สำหรับทุกการเดินทาง
           </Typography>
-
           <Typography
-            className="mt-4 text-white/90 drop-shadow-md"
-            sx={{ fontSize: { xs: "14px", sm: "16px", md: "18px" } }}
+            className="apple-subtitle mx-auto mt-4 block max-w-2xl text-center"
+            sx={{
+              fontSize: { xs: 18, md: 24 },
+              lineHeight: 1.35,
+              textAlign: "center",
+            }}
           >
-            ยินดีให้บริการรถเช่าคุณภาพดี ราคาชัดเจน พร้อมออกเดินทางทุกเส้นทาง
+            เลือกรถ เช็กราคา และจองได้ในหน้าเดียว พร้อมประสบการณ์ที่เรียบง่ายเหมือนเลือกผลิตภัณฑ์ที่คุณชอบ
           </Typography>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            className="mt-7 flex-wrap justify-center"
+            useFlexGap
+          >
+            {["ราคาชัดเจน", "เลือกรับรถได้หลายสาขา", "พร้อมเดินทาง"].map(
+              (label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  className="apple-pill h-9! px-2! text-[var(--rf-apple-muted)]!"
+                />
+              )
+            )}
+          </Stack>
         </Box>
-      </Box>
 
-      <Container
-        maxWidth="lg"
-        className="relative z-10 -mt-16 pb-12 sm:-mt-16 md:-mt-28 lg:-mt-36"
-      >
-        <Box className="rounded-[28px]! border border-slate-200 bg-white/80! p-6 backdrop-blur-xl! md:p-10">
-          <Box className="grid items-center gap-10 md:grid-cols-2">
-            <Box>
+        <Box className="mt-10 grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
+          <Box className="apple-card relative min-h-[360px] overflow-hidden bg-black md:min-h-[520px]">
+            {heroImages.length ? (
+              heroImages.map((src, i) => {
+                const active = i === heroIndex;
+
+                return (
+                  <Box
+                    key={src}
+                    className={[
+                      "absolute inset-0 transition-all duration-700",
+                      active ? "scale-100 opacity-100" : "scale-[1.02] opacity-0",
+                    ].join(" ")}
+                    sx={{
+                      backgroundImage: `url(${src})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                );
+              })
+            ) : (
+              <Box className="absolute inset-0 bg-linear-to-br from-slate-950 via-slate-800 to-slate-600" />
+            )}
+
+            <Box className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+            <Box className="absolute bottom-6 left-6 right-6 text-white md:bottom-8 md:left-8 md:right-8">
+              <Typography className="text-sm font-semibold text-white/70">
+                RentFlow
+              </Typography>
               <Typography
-                variant="h3"
-                className="font-extrabold tracking-tight text-slate-900"
+                className="mt-2 font-black tracking-[-0.05em]"
+                sx={{ fontSize: { xs: "38px", md: "56px" }, lineHeight: 0.95 }}
               >
-                เช่ารถยนต์ง่าย ๆ พร้อมออกเดินทางทันที
+                พร้อมออกเดินทาง ในไม่กี่คลิก
               </Typography>
-
-              <Typography className="mt-3 text-slate-600">
-                เลือกรถที่เหมาะกับทริปของคุณ — ราคาชัดเจน ไม่มีค่าใช้จ่ายแอบแฝง
-                รองรับรับรถหลายสาขา
-              </Typography>
-
-              <Stack direction="row" spacing={1} className="mt-6 flex-wrap">
-                <Chip
-                  label="ประกันพื้นฐาน"
-                  className="border border-slate-200! bg-slate-900/5! text-slate-700!"
-                />
-                <Chip
-                  label="ยกเลิกฟรี (ตามเงื่อนไข)"
-                  className="border border-slate-200! bg-slate-900/5! text-slate-700!"
-                />
-                <Chip
-                  label="บริการ 24/7"
-                  className="border border-slate-200! bg-slate-900/5! text-slate-700!"
-                />
-              </Stack>
             </Box>
+          </Box>
 
-            <Box id="search" className="scroll-mt-36">
-              <Card
-                elevation={0}
-                className="rounded-2xl! border border-slate-200! bg-white/70! backdrop-blur-xl!"
-                sx={{ boxShadow: "none" }}
-              >
-                <CardContent className="p-4!">
-                  <Typography
-                    variant="h6"
-                    className="font-semibold text-slate-900"
+          <Box id="search" className="scroll-mt-28">
+            <Card elevation={0} className="apple-card h-full">
+              <CardContent className="p-5! md:p-7!">
+                <Typography
+                  className="apple-heading"
+                  sx={{ fontSize: { xs: 30, md: 38 } }}
+                >
+                  ค้นหารถเช่า
+                </Typography>
+                <Typography className="apple-subtitle mt-2 text-sm">
+                  เลือกช่วงเวลา สาขา และรุ่นที่ต้องการ
+                </Typography>
+
+                <Box className="mt-6 grid gap-4">
+                  <TextField
+                    select
+                    label="สาขารับรถ"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    fullWidth
+                    sx={Herotextfield}
                   >
-                    ค้นหารถเช่า
-                  </Typography>
-                  <Typography className="mt-1 text-sm text-slate-600">
-                    กรอกข้อมูลเพื่อดูรถที่ว่างในช่วงเวลาและสาขาที่ต้องการ
-                  </Typography>
+                    <MenuItem value="">ทุกสาขา</MenuItem>
+                    {locations.map((loc) => (
+                      <MenuItem key={loc.value} value={loc.value}>
+                        {loc.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
 
-                  <Box className="mt-5 grid gap-4">
+                  <Box className="grid gap-4 sm:grid-cols-2">
                     <TextField
-                      select
-                      label="สาขารับรถ"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
+                      type="date"
+                      label="วันรับรถ"
+                      value={pickupDate}
+                      onChange={(e) => setPickupDate(e.target.value)}
                       fullWidth
+                      InputLabelProps={{ shrink: true }}
                       sx={Herotextfield}
-                    >
-                      <MenuItem value="">ทุกสาขา</MenuItem>
-                      {locations.map((loc) => (
-                        <MenuItem key={loc.value} value={loc.value}>
-                          {loc.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-
-                    <Box className="grid gap-4 md:grid-cols-2">
-                      <TextField
-                        type="date"
-                        label="วันรับรถ"
-                        value={pickupDate}
-                        onChange={(e) => setPickupDate(e.target.value)}
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
-                        sx={Herotextfield}
-                      />
-                      <TextField
-                        type="date"
-                        label="วันคืนรถ"
-                        value={returnDate}
-                        onChange={(e) => setReturnDate(e.target.value)}
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
-                        sx={Herotextfield}
-                      />
-                    </Box>
-
-                    <Box className="grid gap-4 md:grid-cols-2">
-                      <TextField
-                        select
-                        label="ประเภทรถ"
-                        value={type}
-                        onChange={(e) => setType(e.target.value as CarType | "All")}
-                        fullWidth
-                        sx={Herotextfield}
-                      >
-                        <MenuItem value="All">ทั้งหมด</MenuItem>
-                        {carTypes.map((t) => (
-                          <MenuItem key={t} value={t}>
-                            {t}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-
-                      <TextField
-                        label="ค้นหาชื่อรุ่น"
-                        value={q}
-                        onChange={(e) => setQ(e.target.value)}
-                        placeholder="เช่น Yaris, Cross..."
-                        fullWidth
-                        sx={Herotextfield}
-                      />
-                    </Box>
-
-                    <Button
-                      size="large"
-                      variant="contained"
-                      className="rounded-xl! py-3! font-semibold!"
-                      sx={{
-                        textTransform: "none",
-                        backgroundColor: "rgb(15 23 42)",
-                        "&:hover": {
-                          backgroundColor: "rgb(2 6 23)",
-                        },
-                      }}
-                      onClick={handleSearch}
-                    >
-                      ค้นหารถว่าง
-                    </Button>
+                    />
+                    <TextField
+                      type="date"
+                      label="วันคืนรถ"
+                      value={returnDate}
+                      onChange={(e) => setReturnDate(e.target.value)}
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      sx={Herotextfield}
+                    />
                   </Box>
-                </CardContent>
-              </Card>
-            </Box>
+
+                  <TextField
+                    select
+                    label="ประเภทรถ"
+                    value={type}
+                    onChange={(e) => setType(e.target.value as CarType | "All")}
+                    fullWidth
+                    sx={Herotextfield}
+                  >
+                    <MenuItem value="All">ทั้งหมด</MenuItem>
+                    {carTypes.map((t) => (
+                      <MenuItem key={t} value={t}>
+                        {t}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
+                    label="ค้นหาชื่อรุ่น"
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="เช่น Yaris, Cross..."
+                    fullWidth
+                    sx={Herotextfield}
+                  />
+
+                  <Button
+                    size="large"
+                    variant="contained"
+                    className="min-h-12! rounded-full! text-base!"
+                    onClick={handleSearch}
+                  >
+                    ค้นหารถว่าง
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
           </Box>
         </Box>
       </Container>

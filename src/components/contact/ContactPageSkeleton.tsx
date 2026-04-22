@@ -123,7 +123,7 @@ function InfoRowSkeleton() {
 
 function ContactInfoSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -148,7 +148,7 @@ function ContactInfoSkeleton() {
         />
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
       <Box className="space-y-4">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -156,9 +156,9 @@ function ContactInfoSkeleton() {
         ))}
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
-      <Box className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Box className="flex flex-col gap-1.5">
           <Skeleton
             variant="text"
@@ -204,7 +204,7 @@ function FieldSkeleton({ height = 40 }: { height?: number }) {
       sx={{
         width: "100%",
         height,
-        borderRadius: "10px",
+        borderRadius: "18px",
       }}
     />
   );
@@ -212,7 +212,7 @@ function FieldSkeleton({ height = 40 }: { height?: number }) {
 
 function ContactFormSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -237,7 +237,7 @@ function ContactFormSkeleton() {
         />
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
       <Box className="grid gap-4">
         <Box className="grid gap-4 sm:grid-cols-2">
@@ -258,7 +258,7 @@ function ContactFormSkeleton() {
           sx={{
             width: 110,
             height: 40,
-            borderRadius: "12px",
+            borderRadius: "999px",
           }}
         />
       </Box>
@@ -268,12 +268,12 @@ function ContactFormSkeleton() {
 
 export default function ContactPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
         <ChipsSkeleton />
 
-        <Box className="mt-6 grid gap-4 lg:grid-cols-12">
+        <Box className="mt-8 grid gap-5 lg:grid-cols-12">
           <Box className="lg:col-span-5">
             <ContactInfoSkeleton />
           </Box>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -17,9 +17,6 @@ import {
   ListItemText,
   Box,
   Avatar,
-  Menu,
-  MenuItem,
-  Divider,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -27,10 +24,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { NAV } from "@/src/constants/navigation";
 import { getRentFlowSiteMode } from "@/src/lib/tenant";
-import {
-  getSessionUser,
-  logout as logoutRequest,
-} from "@/src/services/auth/auth.service";
+import { getSessionUser } from "@/src/services/auth/auth.service";
 
 type User = {
   name: string;
@@ -51,7 +45,6 @@ function getDisplayName(user: {
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (v: boolean) => () => setOpen(v);
@@ -59,8 +52,6 @@ export default function Navbar() {
 
   const [user, setUser] = React.useState<User | null>(null);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const openMenu = Boolean(anchorEl);
   const siteMode = React.useMemo(() => getRentFlowSiteMode(), []);
   const navItems = React.useMemo(
     () =>
@@ -102,40 +93,23 @@ export default function Navbar() {
     };
   }, [pathname]);
 
-  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) =>
-    setAnchorEl(e.currentTarget);
-  const handleCloseMenu = () => setAnchorEl(null);
-
-  const handleLogout = React.useCallback(async () => {
-    try {
-      await logoutRequest();
-    } catch {
-      // Ignore logout errors so the UI can still recover locally.
-    }
-
-    setUser(null);
-    handleCloseMenu();
-    setOpen(false);
-    router.push("/");
-    router.refresh();
-  }, [router]);
-
   const isActive = (href: string) => pathname === href;
 
   return (
     <AppBar
       position="sticky"
       elevation={0}
-      className="bg-white/80! backdrop-blur-xl! border-b border-slate-200/80"
+      className="border-b border-black/10 bg-white/75! backdrop-blur-2xl!"
+      sx={{ color: "var(--rf-apple-ink)" }}
     >
       <Container maxWidth="lg">
-        <Toolbar className="px-0! min-h-18.5! flex justify-between gap-4">
+        <Toolbar className="flex min-h-11! justify-between gap-4 px-0!">
           <Box
             component={Link}
             href="/"
-            className="flex items-center gap-2 no-underline"
+            className="flex items-center gap-2.5 no-underline"
           >
-            <Box className="relative h-8 w-8">
+            <Box className="relative h-5 w-5">
               <Image
                 src="/RentFlow.png"
                 alt="RentFlow Logo"
@@ -146,17 +120,17 @@ export default function Navbar() {
             </Box>
 
             <Box className="flex flex-col">
-              <Typography className="font-black! tracking-[-0.02em] text-slate-900! leading-none!">
+              <Typography className="text-[13px]! font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
                 RentFlow
               </Typography>
-              <Typography className="text-[11px]! font-medium! text-slate-500! leading-none! mt-1!">
+              <Typography className="mt-0.5! text-[10px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                 Smart Car Rental
               </Typography>
             </Box>
           </Box>
 
           {!isCompact && (
-            <Box className="flex items-center gap-2">
+            <Box className="flex items-center gap-1">
               {navItems.map((n) => {
                 const active = isActive(n.href);
 
@@ -166,23 +140,24 @@ export default function Navbar() {
                     component={Link}
                     href={n.href}
                     disableElevation
-                    className="rounded-xl! px-4! py-2! min-w-0!"
+                    className="min-w-0! rounded-full! px-3.5! py-1.5!"
                     sx={{
-                      textTransform: "none",
+                      fontSize: 12,
                       fontWeight: 600,
-                      color: active ? "rgb(15 23 42)" : "rgb(71 85 105)",
+                      color: active
+                        ? "var(--rf-apple-ink)"
+                        : "var(--rf-apple-muted)",
                       backgroundColor: active
-                        ? "rgb(226 232 240)"
+                        ? "rgba(0,0,0,0.06)"
                         : "transparent",
                       "&:hover": {
                         backgroundColor: active
-                          ? "rgb(226 232 240)"
-                          : "rgb(226 232 240)",
+                          ? "rgba(0,0,0,0.07)"
+                          : "rgba(0,0,0,0.045)",
+                        color: "var(--rf-apple-ink)",
                       },
-                      transition: "all .12s ease-out",
-                      "&:active": {
-                        transform: "scale(0.96)",
-                      },
+                      transition:
+                        "background-color .2s ease, color .2s ease, opacity .2s ease",
                     }}
                   >
                     {n.label}
@@ -200,8 +175,8 @@ export default function Navbar() {
                     component={Link}
                     href="/login"
                     variant="outlined"
-                    className="rounded-xl! border-slate-300! text-slate-900! hover:border-slate-400!"
-                    sx={{ textTransform: "none", px: 2.2 }}
+                    className="rounded-full!"
+                    sx={{ px: 2.2, py: 0.65, fontSize: 12 }}
                   >
                     เข้าสู่ระบบ
                   </Button>
@@ -210,13 +185,11 @@ export default function Navbar() {
                     component={Link}
                     href="/register"
                     variant="contained"
-                    className="rounded-xl! font-semibold!"
+                    className="rounded-full! font-semibold!"
                     sx={{
-                      textTransform: "none",
                       px: 2.4,
-                      background:
-                        "linear-gradient(135deg, rgb(15 23 42), rgb(30 41 59))",
-                      boxShadow: "0 10px 20px rgba(15,23,42,.15)",
+                      py: 0.65,
+                      fontSize: 12,
                     }}
                   >
                     สมัครสมาชิก
@@ -225,17 +198,16 @@ export default function Navbar() {
               ) : (
                 <>
                   <Button
-                    onClick={handleOpenMenu}
+                    component={Link}
+                    href="/profile"
                     disableRipple
                     disableTouchRipple
-                    className="rounded-2xl! px-2! py-1! border border-slate-200!"
+                    className="rounded-full! px-0! py-0!"
                     sx={{
-                      textTransform: "none",
+                      backgroundColor: "transparent",
+                      border: "0",
                       "&:hover": {
-                        backgroundColor: "white",
-                      },
-                      "&:active": {
-                        opacity: 0.85,
+                        backgroundColor: "transparent",
                       },
                       "&:focus": {
                         outline: "none",
@@ -243,164 +215,27 @@ export default function Navbar() {
                       "&:focus-visible": {
                         outline: "none",
                       },
-                      transition: "none",
+                      transition: "opacity 180ms ease",
                     }}
                   >
                     <Box className="flex items-center gap-2.5">
                       <Avatar
                         src={user.avatarUrl || undefined}
-                        className="bg-slate-900! text-white! ring-2 ring-slate-200"
+                        className="h-8! w-8! bg-[var(--rf-apple-ink)]! text-sm! text-white!"
                       >
                         {user.name[0].toUpperCase()}
                       </Avatar>
 
                       <Box className="text-left">
-                        <Typography className="text-sm! font-semibold! text-slate-900! leading-tight!">
+                        <Typography className="text-[12px]! font-semibold! leading-tight! text-[var(--rf-apple-ink)]!">
                           {user.name}
                         </Typography>
-                        <Typography className="text-[11px]! font-medium! text-slate-500! leading-none! mt-1!">
+                        <Typography className="mt-0.5! text-[10px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                           {user.username || "บัญชีผู้ใช้"}
                         </Typography>
                       </Box>
                     </Box>
                   </Button>
-
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={openMenu}
-                    onClose={handleCloseMenu}
-                    transformOrigin={{ horizontal: "right", vertical: "top" }}
-                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                    MenuListProps={{
-                      sx: {
-                        py: 0,
-                        borderRadius: "inherit",
-                      },
-                    }}
-                    slotProps={{
-                      transition: {
-                        timeout: 180,
-                      },
-                    }}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        mt: 1.25,
-                        minWidth: 240,
-                        width: 240,
-                        borderRadius: "16px",
-                        border: "1px solid rgb(226 232 240)",
-                        boxShadow: "0 18px 45px rgba(15,23,42,.12)",
-                        overflow: "visible",
-                        position: "relative",
-                        transformOrigin: "top right",
-
-                        animation: openMenu
-                          ? "profileMenuIn 180ms cubic-bezier(0.22, 1, 0.36, 1)"
-                          : "none",
-
-                        "@keyframes profileMenuIn": {
-                          "0%": {
-                            opacity: 0,
-                            transform: "translateY(-8px) scale(0.96)",
-                            filter: "blur(4px)",
-                          },
-                          "100%": {
-                            opacity: 1,
-                            transform: "translateY(0) scale(1)",
-                            filter: "blur(0px)",
-                          },
-                        },
-
-                        "&::before": {
-                          content: '""',
-                          position: "absolute",
-                          top: -6,
-                          right: 30,
-                          width: 12,
-                          height: 12,
-                          backgroundColor: "white",
-                          transform: "rotate(45deg)",
-                          borderLeft: "1px solid rgb(226 232 240)",
-                          borderTop: "1px solid rgb(226 232 240)",
-                          zIndex: 0,
-                        },
-
-                        "& .MuiMenu-list": {
-                          p: 0,
-                          borderRadius: "16px",
-                          overflow: "hidden",
-                          backgroundColor: "white",
-                        },
-                      },
-                    }}
-                  >
-                    <Box className="relative z-1 rounded-t-2xl bg-slate-50 px-4 py-3">
-                      <Typography className="font-semibold! text-slate-900!">
-                        {user.name}
-                      </Typography>
-                      <Typography className="text-xs! text-slate-500! break-all">
-                        {user.email}
-                      </Typography>
-                    </Box>
-
-                    <Divider sx={{ m: 0 }} />
-
-                    <MenuItem
-                      component={Link}
-                      href="/profile"
-                      onClick={handleCloseMenu}
-                      sx={{
-                        py: 1.2,
-                        px: 2,
-                        fontSize: 14,
-                      }}
-                    >
-                      โปรไฟล์
-                    </MenuItem>
-
-                    <MenuItem
-                      component={Link}
-                      href="/my-bookings"
-                      onClick={handleCloseMenu}
-                      sx={{
-                        py: 1.2,
-                        px: 2,
-                        fontSize: 14,
-                      }}
-                    >
-                      การจองของฉัน
-                    </MenuItem>
-
-                    <Divider
-                      sx={{
-                        margin: "0 !important",
-                      }}
-                    />
-
-                    <Box sx={{ p: 1 }}>
-                      <MenuItem
-                        onClick={handleLogout}
-                        sx={{
-                          minHeight: 40,
-                          borderRadius: 2,
-                          py: 1,
-                          px: 2,
-                          justifyContent: "center",
-                          fontWeight: 700,
-                          fontSize: 14,
-                          color: "white",
-                          backgroundColor: "rgb(220 38 38)",
-
-                          "&:hover": {
-                            backgroundColor: "rgb(185 28 28)",
-                          },
-                        }}
-                      >
-                        ออกจากระบบ
-                      </MenuItem>
-                    </Box>
-                  </Menu>
                 </>
               )}
             </Box>
@@ -409,8 +244,8 @@ export default function Navbar() {
           {isCompact && (
             <IconButton
               onClick={toggleDrawer(true)}
-              aria-label="Open menu"
-              className="text-slate-900! rounded-xl! border border-slate-200!"
+              aria-label="เปิดเมนู"
+              className="rounded-full! border border-black/10 text-[var(--rf-apple-ink)]!"
             >
               <MenuIcon />
             </IconButton>
@@ -419,11 +254,11 @@ export default function Navbar() {
       </Container>
 
       <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
-        <Box className="w-80 bg-white text-slate-900 h-full flex flex-col">
-          <Box className="px-4 py-4 border-b border-slate-200 flex items-center justify-between">
+        <Box className="flex h-full w-80 flex-col bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-ink)]">
+          <Box className="flex items-center justify-between border-b border-black/10 px-4 py-4">
             <Box className="flex items-center gap-3">
               <Box className="relative flex h-8 w-8 shrink-0 items-center justify-center">
-                <Box className="relative h-8 w-8">
+                <Box className="relative h-6 w-6">
                   <Image
                     src="/RentFlow.png"
                     alt="RentFlow Logo"
@@ -434,17 +269,17 @@ export default function Navbar() {
               </Box>
 
               <Box>
-                <Typography className="font-black! tracking-[-0.02em] text-slate-900! leading-none!">
+                <Typography className="font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
                   RentFlow
                 </Typography>
-                <Typography className="text-[11px]! font-medium! text-slate-500! mt-1! leading-none!">
+                <Typography className="mt-1! text-[11px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                   Smart Car Rental
                 </Typography>
               </Box>
             </Box>
 
-            <IconButton onClick={toggleDrawer(false)} className="p-1!">
-              <CloseIcon className="text-slate-700!" />
+            <IconButton onClick={toggleDrawer(false)} className="rounded-full! p-1!">
+              <CloseIcon className="text-[var(--rf-apple-muted)]!" />
             </IconButton>
           </Box>
 
@@ -458,18 +293,18 @@ export default function Navbar() {
                   component={Link}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-2xl! mb-1.5!"
+                  className="mb-1.5! rounded-2xl!"
                   sx={{
                     px: 2,
                     py: 1.2,
                     backgroundColor: active
-                      ? "rgb(241 245 249)"
+                      ? "rgba(0,0,0,0.055)"
                       : "transparent",
                     border: active
-                      ? "1px solid rgb(226 232 240)"
+                      ? "1px solid rgba(0,0,0,0.08)"
                       : "1px solid transparent",
                     "&:hover": {
-                      backgroundColor: "rgb(248 250 252)",
+                      backgroundColor: "rgba(0,0,0,0.045)",
                     },
                   }}
                 >
@@ -485,7 +320,7 @@ export default function Navbar() {
             })}
           </List>
 
-          <Box className="p-4 border-t border-slate-200 flex flex-col gap-3">
+          <Box className="flex flex-col gap-3 border-t border-black/10 p-4">
             {!user ? (
               <>
                 <Button
@@ -493,8 +328,7 @@ export default function Navbar() {
                   href="/login"
                   variant="outlined"
                   fullWidth
-                  className="rounded-xl! border-slate-300! text-slate-900! hover:border-slate-400!"
-                  sx={{ textTransform: "none" }}
+                  className="rounded-full!"
                   onClick={() => setOpen(false)}
                 >
                   เข้าสู่ระบบ
@@ -505,12 +339,7 @@ export default function Navbar() {
                   href="/register"
                   variant="contained"
                   fullWidth
-                  className="rounded-xl! font-semibold!"
-                  sx={{
-                    textTransform: "none",
-                    background:
-                      "linear-gradient(135deg, rgb(15 23 42), rgb(30 41 59))",
-                  }}
+                  className="rounded-full! font-semibold!"
                   onClick={() => setOpen(false)}
                 >
                   สมัครสมาชิก
@@ -518,35 +347,31 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Box className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <Box className="rounded-[24px] border border-black/10 bg-white px-4 py-3">
                   <Box
                     component={Link}
                     href="/profile"
                     onClick={() => setOpen(false)}
                     sx={{
                       display: "block",
-                      transition: "all .15s ease-out",
+                      transition: "opacity .2s ease",
                       "&:hover": {
-                        backgroundColor: "rgb(248 250 252)",
-                        borderColor: "rgb(203 213 225)",
-                      },
-                      "&:active": {
-                        transform: "scale(0.98)",
+                        backgroundColor: "transparent",
                       },
                     }}
                   >
                     <Box className="flex items-center gap-3">
                       <Avatar
                         src={user.avatarUrl || undefined}
-                        className="bg-slate-900! text-white! h-11! w-11!"
+                        className="h-11! w-11! bg-[var(--rf-apple-ink)]! text-white!"
                       >
                         {user.name[0].toUpperCase()}
                       </Avatar>
                       <Box className="min-w-0">
-                        <Typography className="font-semibold! text-slate-900! truncate">
+                        <Typography className="truncate font-semibold! text-[var(--rf-apple-ink)]!">
                           {user.name}
                         </Typography>
-                        <Typography className="text-xs! text-slate-500! break-all">
+                        <Typography className="break-all text-xs! text-[var(--rf-apple-muted)]!">
                           {user.email}
                         </Typography>
                       </Box>
@@ -555,19 +380,14 @@ export default function Navbar() {
                 </Box>
 
                 <Button
-                  onClick={handleLogout}
-                  variant="contained"
+                  component={Link}
+                  href="/profile"
+                  variant="outlined"
                   fullWidth
-                  className="rounded-xl!"
-                  sx={{
-                    textTransform: "none",
-                    backgroundColor: "rgb(220 38 38)",
-                    "&:hover": {
-                      backgroundColor: "rgb(185 28 28)",
-                    },
-                  }}
+                  className="rounded-full!"
+                  onClick={() => setOpen(false)}
                 >
-                  ออกจากระบบ
+                  จัดการบัญชี
                 </Button>
               </>
             )}

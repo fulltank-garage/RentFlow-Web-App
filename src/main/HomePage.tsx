@@ -36,7 +36,7 @@ export default function HomePage() {
   }, [cars]);
 
   return (
-    <Box className="min-h-screen bg-white text-slate-900">
+    <Box className="apple-page">
       <HeroSection
         heroImages={heroImages}
         location={location}

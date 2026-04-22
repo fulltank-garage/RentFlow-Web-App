@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <Box
       component="footer"
-      className="mt-10 border-t border-slate-200 bg-white"
+      className="border-t border-black/10 bg-[var(--rf-apple-surface-soft)]"
       aria-label="Site footer"
     >
       <Container maxWidth="lg" className="py-10">
@@ -46,14 +46,14 @@ export default function Footer() {
               />
             </Box>
 
-            <Typography className="text-lg font-bold text-slate-900">
+            <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
               {BRAND.name}
             </Typography>
           </Stack>
 
           {/* Links */}
           <Box component="nav" aria-label="Footer navigation">
-            <Typography className="font-semibold! text-slate-900">
+            <Typography className="font-semibold! text-[var(--rf-apple-ink)]">
               เมนู
             </Typography>
 
@@ -62,7 +62,7 @@ export default function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="w-fit text-sm text-slate-600 outline-none transition hover:text-slate-900 focus-visible:rounded focus-visible:ring-2 focus-visible:ring-slate-900/30"
+                  className="w-fit text-sm text-[var(--rf-apple-muted)] outline-none transition hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-black/20"
                 >
                   {item.label}
                 </Link>
@@ -72,17 +72,17 @@ export default function Footer() {
 
           {/* Contact / Social */}
           <Box component="address" className="not-italic">
-            <Typography className="font-semibold! text-slate-900">
+            <Typography className="font-semibold! text-[var(--rf-apple-ink)]">
               ติดต่อ
             </Typography>
 
             <Stack spacing={1.5} className="mt-3">
               {/* email */}
               <Stack direction="row" spacing={1} alignItems="center">
-                <EmailRounded className="text-slate-600!" fontSize="small" />
+                <EmailRounded className="text-[var(--rf-apple-muted)]!" fontSize="small" />
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="text-sm text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30"
+                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                 >
                   {CONTACT.email}
                 </a>
@@ -90,10 +90,10 @@ export default function Footer() {
 
               {/* phone */}
               <Stack direction="row" spacing={1} alignItems="center">
-                <PhoneRounded className="text-slate-600!" fontSize="small" />
+                <PhoneRounded className="text-[var(--rf-apple-muted)]!" fontSize="small" />
                 <a
                   href={`tel:${CONTACT.phone.replace(/-/g, "")}`}
-                  className="text-sm text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30"
+                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                 >
                   {CONTACT.phone}
                 </a>
@@ -101,12 +101,12 @@ export default function Footer() {
 
               {/* socials */}
               <Stack direction="row" spacing={1} alignItems="center">
-                <FacebookRounded fontSize="small" className="text-slate-600!" />
+                <FacebookRounded fontSize="small" className="text-[var(--rf-apple-muted)]!" />
                 <a
                   href={SOCIAL.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-slate-600 underline-offset-4 hover:text-slate-900 hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30"
+                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                 >
                   Facebook
                 </a>
@@ -115,23 +115,23 @@ export default function Footer() {
           </Box>
         </Box>
 
-        <Divider className="my-6! border-slate-200!" />
+        <Divider className="my-6! border-black/10!" />
 
         <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Typography className="text-xs text-slate-500">
+          <Typography className="text-xs text-[var(--rf-apple-muted)]">
             © {year} {BRAND.name} • แพลตฟอร์มให้บริการเช่ารถยนต์ออนไลน์
           </Typography>
 
           <Stack direction="row" spacing={2} className="text-sm">
             <Link
               href="/terms"
-              className="text-slate-500 hover:text-slate-900 underline-offset-2 hover:underline"
+              className="text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)]"
             >
               เงื่อนไขการใช้งาน
             </Link>
             <Link
               href="/privacy"
-              className="text-slate-500 hover:text-slate-900 underline-offset-2 hover:underline"
+              className="text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)]"
             >
               นโยบายความเป็นส่วนตัว
             </Link>

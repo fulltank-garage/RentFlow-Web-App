@@ -33,7 +33,7 @@ function HeaderSkeleton() {
 
 function ChatbotSuggestionSkeleton() {
   return (
-    <Box className="rounded-xl border border-slate-200 bg-white p-3">
+    <Box className="rounded-[18px] bg-white p-3">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -62,7 +62,7 @@ function ChatbotSuggestionSkeleton() {
 
 function ChatbotSkeleton() {
   return (
-    <Box className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover mt-6 p-5">
       <Box className="flex items-start gap-3">
         <Skeleton
           variant="rounded"
@@ -106,7 +106,7 @@ function ChatbotSkeleton() {
           animation="wave"
           sx={{
             height: 40,
-            borderRadius: "10px",
+            borderRadius: "18px",
           }}
         />
         <Skeleton
@@ -144,14 +144,14 @@ function ChatbotSkeleton() {
 
 function FiltersSkeleton() {
   return (
-    <Box className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover mt-6 p-5">
       <Box className="grid gap-4 md:grid-cols-[1fr_1fr_auto]">
         <Skeleton
           variant="rounded"
           animation="wave"
           sx={{
             height: 40,
-            borderRadius: "10px",
+            borderRadius: "18px",
           }}
         />
         <Skeleton
@@ -159,7 +159,7 @@ function FiltersSkeleton() {
           animation="wave"
           sx={{
             height: 40,
-            borderRadius: "10px",
+            borderRadius: "18px",
           }}
         />
         <Box className="flex items-end justify-end">
@@ -169,13 +169,13 @@ function FiltersSkeleton() {
             sx={{
               width: 96,
               height: 40,
-              borderRadius: "12px",
+              borderRadius: "999px",
             }}
           />
         </Box>
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
       <Box className="flex flex-wrap items-center gap-4">
         <Skeleton
@@ -205,7 +205,7 @@ function FiltersSkeleton() {
 
 function FaqItemSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-4">
       <Box className="flex flex-col gap-2.5">
         <Box className="flex flex-wrap items-center gap-3">
           <Skeleton
@@ -256,7 +256,7 @@ function FaqListSkeleton() {
 
 function CtaSkeleton() {
   return (
-    <Box className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <Box className="apple-card apple-card-no-hover mt-10 p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -288,7 +288,7 @@ function CtaSkeleton() {
           mt: 2,
           width: 110,
           height: 36,
-          borderRadius: "12px",
+          borderRadius: "999px",
         }}
       />
     </Box>
@@ -297,8 +297,8 @@ function CtaSkeleton() {
 
 export default function HelpPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
         <ChatbotSkeleton />
         <FiltersSkeleton />

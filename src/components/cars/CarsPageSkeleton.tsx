@@ -16,30 +16,30 @@ import {
 
 function HeaderSkeleton() {
     return (
-        <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <Box className="flex flex-col gap-2">
-                <Typography variant="h5" className="text-2xl font-bold text-slate-900">
+        <Box className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+            <Box className="flex flex-col items-center gap-3">
+                <Typography className="apple-heading">
                     <Skeleton
                         variant="text"
                         animation="wave"
                         sx={{
-                            width: 120,
-                            height: 35,
-                            borderRadius: "8px",
+                            width: { xs: 180, md: 260 },
+                            height: { xs: 52, md: 72 },
+                            borderRadius: "16px",
                             transform: "none",
                         }}
                     />
                 </Typography>
 
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-subtitle">
                     <Skeleton
                         variant="text"
                         animation="wave"
                         sx={{
-                            width: { xs: "100%", sm: 520 },
+                            width: { xs: 300, sm: 560 },
                             maxWidth: "100%",
-                            height: 22,
-                            borderRadius: "8px",
+                            height: 28,
+                            borderRadius: "12px",
                             transform: "none",
                         }}
                     />
@@ -61,7 +61,7 @@ function HeaderSkeleton() {
                         }}
                     />
                 }
-                className="w-min border! border-slate-200! bg-slate-900/5!"
+                className="apple-pill w-min!"
                 sx={{
                     "& .MuiChip-label": {
                         px: 1,
@@ -85,7 +85,7 @@ function FilterInputSkeleton() {
                 value=""
                 sx={{
                     "& .MuiOutlinedInput-root": {
-                        borderRadius: "10px",
+                        borderRadius: "18px",
                         position: "relative",
                         overflow: "hidden",
                         bgcolor: "transparent",
@@ -114,7 +114,7 @@ function FilterInputSkeleton() {
 
 function CarsFilterBarSkeleton() {
     return (
-        <Box className="mt-4 rounded-2xl! border border-slate-200 bg-white p-4">
+        <Box className="apple-card apple-card-no-hover mt-8 p-4 md:p-5">
             <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
                 <FilterInputSkeleton />
                 <FilterInputSkeleton />
@@ -129,11 +129,9 @@ function CarsFilterBarSkeleton() {
                 <Button
                     variant="outlined"
                     disabled
-                    className="rounded-xl!"
+                    className="rounded-full!"
                     sx={{
                         height: 40,
-                        textTransform: "none",
-                        borderColor: "rgb(226 232 240)",
                         color: "transparent",
                     }}
                 >
@@ -155,7 +153,7 @@ function CarsFilterBarSkeleton() {
 
 function ShopBoxSkeleton() {
     return (
-        <Box className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-5 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
             <Box className="flex items-end gap-2">
                 <Skeleton
                     variant="text"
@@ -185,7 +183,7 @@ function ShopBoxSkeleton() {
 
 function PriceBoxSkeleton() {
     return (
-        <Box className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <Box className="mt-3 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
             <Box className="flex items-end gap-2">
                 <Skeleton
                     variant="text"
@@ -229,9 +227,9 @@ function CarCardSkeleton({ showShop = false }: { showShop?: boolean }) {
         <Card
             elevation={0}
             sx={{ boxShadow: "none" }}
-            className="rounded-2xl! border border-slate-200 bg-white"
+            className="apple-card apple-card-no-hover"
         >
-            <Box className="relative h-52 w-full overflow-hidden rounded-t-2xl">
+            <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
                 <Skeleton
                     variant="rectangular"
                     animation="wave"
@@ -287,7 +285,7 @@ function CarCardSkeleton({ showShop = false }: { showShop?: boolean }) {
                     sx={{
                         flex: 1,
                         height: 36.5,
-                        borderRadius: "12px",
+                        borderRadius: "999px",
                     }}
                 />
                 <Skeleton
@@ -296,7 +294,7 @@ function CarCardSkeleton({ showShop = false }: { showShop?: boolean }) {
                     sx={{
                         flex: 1,
                         height: 36.5,
-                        borderRadius: "12px",
+                        borderRadius: "999px",
                     }}
                 />
             </CardActions>
@@ -306,15 +304,17 @@ function CarCardSkeleton({ showShop = false }: { showShop?: boolean }) {
 
 export default function CarsPageSkeleton({ showShop = false }: { showShop?: boolean }) {
     return (
-        <Container maxWidth="lg" className="py-12">
-            <HeaderSkeleton />
-            <CarsFilterBarSkeleton />
+        <Box className="apple-page">
+            <Container maxWidth="lg" className="apple-section">
+                <HeaderSkeleton />
+                <CarsFilterBarSkeleton />
 
-            <Box className="mt-6 grid gap-4 md:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, index) => (
-                    <CarCardSkeleton key={index} showShop={showShop} />
-                ))}
-            </Box>
-        </Container>
+                <Box className="mt-8 grid gap-5 md:grid-cols-3">
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <CarCardSkeleton key={index} showShop={showShop} />
+                    ))}
+                </Box>
+            </Container>
+        </Box>
     );
 }

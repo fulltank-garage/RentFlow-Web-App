@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Box, CircularProgress, Container } from "@mui/material";
+import { Alert, Box, CircularProgress, Container, Typography } from "@mui/material";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { getErrorMessage, getErrorStatus } from "@/src/lib/api-error";
@@ -265,8 +265,21 @@ export default function ProfilePage() {
   }
 
   return (
-    <Box className="bg-white py-6 md:py-8">
+    <Box className="apple-page py-8 md:py-12">
       <Container maxWidth="lg">
+        <Box className="mx-auto mb-8 max-w-3xl text-center">
+          <Typography
+            component="h1"
+            className="apple-heading"
+            sx={{ fontSize: { xs: 42, md: 64 } }}
+          >
+            โปรไฟล์ของฉัน
+          </Typography>
+          <Typography className="apple-subtitle mx-auto mt-3 max-w-xl text-lg!">
+            จัดการข้อมูลบัญชีและรายละเอียดติดต่อของคุณในที่เดียว
+          </Typography>
+        </Box>
+
         <Box className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
           <Box className="grid gap-4">
             {error ? (
@@ -305,7 +318,7 @@ export default function ProfilePage() {
 
           <Box className="space-y-4">
             {saving ? (
-              <Box className="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-6">
+              <Box className="apple-card flex items-center justify-center p-6">
                 <CircularProgress size={22} />
               </Box>
             ) : null}

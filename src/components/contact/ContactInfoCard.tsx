@@ -38,31 +38,31 @@ export default function ContactInfoCard({
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card"
     >
       <CardContent className="p-4!">
-        <Typography className="text-sm font-semibold text-slate-900">
+        <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
           {title}
         </Typography>
-        <Typography className="mt-1 text-sm text-slate-600">
+        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           {description}
         </Typography>
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         {branches.length ? (
           <Box className="space-y-4">
             {branches.map((branch) => (
               <Box
                 key={branch.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4"
               >
                 <Box className="flex flex-wrap items-start justify-between gap-3">
                   <Box>
-                    <Typography className="text-sm font-semibold text-slate-900">
+                    <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
                       {branch.name}
                     </Typography>
-                    <Typography className="mt-1 text-xs text-slate-500">
+                    <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
                       รหัสสาขา: {branch.id}
                     </Typography>
                   </Box>
@@ -89,42 +89,42 @@ export default function ContactInfoCard({
 
                 <Box className="mt-4 space-y-3">
                   <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-xl! border border-slate-200 bg-white">
+                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
                       <PlaceRoundedIcon fontSize="small" />
                     </Box>
                     <Box>
-                      <Typography className="text-xs font-semibold text-slate-900">
+                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
                         ที่อยู่
                       </Typography>
-                      <Typography className="text-sm text-slate-600">
+                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
                         {branch.address || "-"}
                       </Typography>
                     </Box>
                   </Box>
 
                   <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-xl! border border-slate-200 bg-white">
+                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
                       <PhoneRoundedIcon fontSize="small" />
                     </Box>
                     <Box>
-                      <Typography className="text-xs font-semibold text-slate-900">
+                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
                         โทรศัพท์
                       </Typography>
-                      <Typography className="text-sm text-slate-600">
+                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
                         {branch.phone || "ยังไม่มีเบอร์โทร"}
                       </Typography>
                     </Box>
                   </Box>
 
                   <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-xl! border border-slate-200 bg-white">
+                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
                       <AccessTimeRoundedIcon fontSize="small" />
                     </Box>
                     <Box>
-                      <Typography className="text-xs font-semibold text-slate-900">
+                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
                         เวลาเปิด-ปิด
                       </Typography>
-                      <Typography className="text-sm text-slate-600">
+                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
                         {formatBranchHours(branch)}
                       </Typography>
                     </Box>
@@ -134,18 +134,18 @@ export default function ContactInfoCard({
             ))}
           </Box>
         ) : (
-          <Box className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-600">
+          <Box className="rounded-[18px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-5 text-sm text-[var(--rf-apple-muted)]">
             ยังไม่พบสาขาให้ติดต่อในตอนนี้
           </Box>
         )}
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
-        <Box className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <Typography className="text-xs font-semibold text-slate-900">
+        <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
+          <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
             ทิป
           </Typography>
-          <Typography className="mt-1 text-xs text-slate-600">
+          <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
             หากติดต่อเรื่องการจอง แนะนำแนบรหัสการจอง วันรับ-คืนรถ
             และสาขาที่เกี่ยวข้อง จะช่วยให้ทีมงานดูแลได้เร็วขึ้น
           </Typography>

@@ -12,7 +12,7 @@ type Props = {
 export default function CarDetailHero({ image, name }: Props) {
   return (
     <Box className="lg:col-span-7">
-      <Box className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+      <Box className="apple-card relative overflow-hidden">
         <Box className="relative aspect-16/10">
           <Image
             src={image || "/RentFlow.png"}

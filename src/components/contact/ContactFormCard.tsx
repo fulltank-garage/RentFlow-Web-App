@@ -15,24 +15,24 @@ export default function ContactFormCard() {
     <Card
       elevation={0}
       sx={{ boxShadow: "none" }}
-      className="rounded-2xl! border border-slate-200 bg-white"
+      className="apple-card"
     >
       <CardContent className="p-4!">
-        <Typography className="text-sm font-semibold text-slate-900">
+        <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
           เตรียมข้อมูลก่อนติดต่อ
         </Typography>
-        <Typography className="mt-1 text-sm text-slate-600">
+        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           เพื่อให้ทีมงานช่วยตรวจสอบได้เร็วขึ้น กรุณาเตรียมรายละเอียดต่อไปนี้
         </Typography>
 
-        <Divider className="my-5! border-slate-200!" />
+        <Divider className="my-5! border-black/10!" />
 
         <Box className="space-y-4">
-          <Box className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <Typography className="text-sm font-semibold text-slate-900">
+          <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
+            <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
               ข้อมูลที่ควรแจ้ง
             </Typography>
-            <Box className="mt-3 space-y-2 text-sm text-slate-600">
+            <Box className="mt-3 space-y-2 text-sm text-[var(--rf-apple-muted)]">
               <Typography>1. รหัสการจองหรือชื่อผู้จอง</Typography>
               <Typography>2. วันรับรถ วันคืนรถ และสาขาที่เกี่ยวข้อง</Typography>
               <Typography>3. รายละเอียดปัญหาหรือคำขอที่ต้องการให้ช่วย</Typography>
@@ -40,11 +40,11 @@ export default function ContactFormCard() {
             </Box>
           </Box>
 
-          <Box className="rounded-xl border border-slate-200 bg-white p-4">
-            <Typography className="text-sm font-semibold text-slate-900">
+          <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
+            <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
               จัดการรายการจอง
             </Typography>
-            <Typography className="mt-2 text-sm text-slate-600">
+            <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
               หากต้องการตรวจสอบสถานะหรือรายละเอียดการจอง สามารถเปิดหน้ารายการจองของคุณได้ทันที
             </Typography>
 
@@ -53,8 +53,7 @@ export default function ContactFormCard() {
                 component={Link}
                 href="/my-bookings"
                 variant="contained"
-                className="rounded-xl! font-semibold!"
-                sx={{ textTransform: "none", backgroundColor: "rgb(15 23 42)" }}
+                className="rounded-full! font-semibold!"
               >
                 ดูรายการจองของฉัน
               </Button>

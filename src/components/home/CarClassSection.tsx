@@ -23,25 +23,28 @@ export default function CarClassSection({
   loading?: boolean;
 }) {
   return (
-    <Box className="mb-8">
-      <Container maxWidth="lg" className="py-2">
-        <Box className="flex items-end justify-between gap-4">
+    <Box>
+      <Container maxWidth="lg" className="apple-section pt-0!">
+        <Box className="mx-auto max-w-3xl text-center">
           <Box>
-            <Typography variant="h4" className="font-bold text-slate-900">
+            <Typography
+              className="apple-heading"
+              sx={{ fontSize: { xs: 38, md: 56 } }}
+            >
               เลือกตามคลาสรถ
             </Typography>
-            <Typography className="text-sm text-slate-600">
+            <Typography className="apple-subtitle mt-2 text-lg">
               กดการ์ดเพื่อไปหน้ารถตามคลาส
             </Typography>
           </Box>
         </Box>
 
-        <Box className="mt-4 grid gap-4 rounded-3xl border border-slate-200 p-5 sm:grid-cols-2 md:p-7 lg:grid-cols-4">
+        <Box className="apple-card mt-10 grid gap-5 p-5 sm:grid-cols-2 md:p-7 lg:grid-cols-4">
           {loading && !classes.length ? (
             Array.from({ length: 4 }).map((_, index) => (
               <Box
                 key={`class-skeleton-${index}`}
-                className="h-56 rounded-xl border border-slate-200 bg-slate-50"
+                className="h-56 rounded-[26px] bg-[var(--rf-apple-surface-soft)]"
               />
             ))
           ) : classes.length ? (
@@ -52,7 +55,7 @@ export default function CarClassSection({
                 href={`/classes/${x.slug}`}
                 elevation={0}
                 sx={{ boxShadow: "none" }}
-                className="group cursor-pointer overflow-hidden rounded-xl! border border-slate-200! bg-white! hover:border-slate-400!"
+                className="group cursor-pointer overflow-hidden rounded-[var(--rf-apple-card-radius-sm)]! border-0! bg-[var(--rf-apple-surface-soft)]! transition duration-200 hover:scale-[1.01]"
               >
                 <Box className="relative h-36 w-full overflow-hidden">
                   <Image
@@ -67,10 +70,10 @@ export default function CarClassSection({
                 <CardContent className="p-5">
                   <Box className="flex items-start justify-between gap-2">
                     <Box>
-                      <Typography className="text-sm font-semibold text-slate-900">
+                      <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
                         {x.title}
                       </Typography>
-                      <Typography className="mt-1 text-xs text-slate-500">
+                      <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
                         รถในคลาสนี้ {x.count} คัน
                       </Typography>
                     </Box>
@@ -78,25 +81,25 @@ export default function CarClassSection({
                     <Chip
                       size="small"
                       label={x.tag}
-                      className="border border-indigo-200! bg-indigo-500/10! text-indigo-700!"
+                      className="bg-white! text-[var(--rf-apple-blue)]!"
                     />
                   </Box>
 
-                  <Typography className="mt-1 text-xs text-slate-600">
+                  <Typography className="mt-2 text-xs leading-5 text-[var(--rf-apple-muted)]">
                     {x.desc}
                   </Typography>
                 </CardContent>
               </Card>
             ))
           ) : (
-            <Box className="flex min-h-40 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-8 py-12 text-center sm:col-span-2 md:min-h-48 md:px-12 lg:col-span-4">
-              <Typography className="text-base font-medium text-slate-600 md:text-lg">
+            <Box className="flex min-h-40 items-center justify-center rounded-[26px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] px-8 py-12 text-center sm:col-span-2 md:min-h-48 md:px-12 lg:col-span-4">
+              <Typography className="text-base font-semibold text-[var(--rf-apple-muted)] md:text-lg">
                 ยังไม่มีการจัดกลุ่มคลาสรถในตอนนี้
               </Typography>
             </Box>
           )}
         </Box>
-        <Divider className="my-6! border-slate-200!" />
+        <Divider className="mt-14! border-black/10!" />
       </Container>
     </Box>
   );

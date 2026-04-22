@@ -35,8 +35,9 @@ export default function MyBookingDetailPage() {
 
   if (!booking.local) {
     return (
-      <Container maxWidth="lg" className="py-12">
-        <Box className="rounded-2xl border border-slate-200 bg-white p-6">
+      <Box className="apple-page">
+        <Container maxWidth="lg" className="apple-section">
+        <Box className="apple-card apple-card-no-hover p-6">
           <Typography className="text-lg font-semibold text-slate-900">
             ไม่พบรายการจอง
           </Typography>
@@ -50,13 +51,14 @@ export default function MyBookingDetailPage() {
               component={Link}
               href="/my-bookings"
               variant="outlined"
-              className="rounded-xl!"
+              className="rounded-full!"
             >
               กลับไปหน้ารายการจอง
             </Button>
           </Box>
         </Box>
-      </Container>
+        </Container>
+      </Box>
     );
   }
 
@@ -64,7 +66,8 @@ export default function MyBookingDetailPage() {
   const p = booking.pricing;
 
   return (
-    <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
       <Box className="flex flex-col gap-2">
         <Typography variant="h5" className="text-2xl font-bold text-slate-900">
           รายละเอียดการจอง
@@ -74,7 +77,7 @@ export default function MyBookingDetailPage() {
         </Typography>
       </Box>
 
-      <Box className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+      <Box className="apple-card mt-6 p-5">
         <Box className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <Box className="space-y-1">
             <Typography className="text-sm font-semibold text-slate-900">
@@ -97,7 +100,7 @@ export default function MyBookingDetailPage() {
           <Box className="flex flex-wrap items-center gap-2">
             <Button
               variant="outlined"
-              className="rounded-xl!"
+              className="rounded-full!"
               onClick={() => booking.router.back()}
             >
               ย้อนกลับ
@@ -105,7 +108,7 @@ export default function MyBookingDetailPage() {
 
             <Button
               variant="outlined"
-              className="rounded-xl! border-rose-200! text-rose-700! hover:border-rose-300!"
+              className="rounded-full! border-rose-200! text-rose-700! hover:border-rose-300!"
               disabled={!booking.canCancel}
               onClick={() => booking.setOpenCancel(true)}
             >
@@ -116,7 +119,7 @@ export default function MyBookingDetailPage() {
               component={Link}
               href="/contact"
               variant="contained"
-              className="rounded-xl! bg-slate-900! hover:bg-slate-800!"
+              className="rounded-full! bg-slate-900! hover:bg-slate-800!"
             >
               ติดต่อแอดมิน
             </Button>
@@ -126,11 +129,11 @@ export default function MyBookingDetailPage() {
 
       <Box className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <Box className="space-y-4 md:col-span-2">
-          <Paper elevation={0} className="rounded-2xl! border border-slate-200 p-4">
+          <Paper elevation={0} className="apple-card p-5">
             <Typography className="text-sm font-semibold text-slate-900">
               ข้อมูลรับ-คืนรถ
             </Typography>
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
 
             <Box className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Box>
@@ -159,11 +162,11 @@ export default function MyBookingDetailPage() {
             </Box>
           </Paper>
 
-          <Paper elevation={0} className="rounded-2xl! border border-slate-200 p-4">
+          <Paper elevation={0} className="apple-card p-5">
             <Typography className="text-sm font-semibold text-slate-900">
               ข้อมูลผู้จอง
             </Typography>
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
 
             <Box className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <Box>
@@ -189,11 +192,11 @@ export default function MyBookingDetailPage() {
             </Box>
           </Paper>
 
-          <Paper elevation={0} className="rounded-2xl! border border-slate-200 p-4">
+          <Paper elevation={0} className="apple-card p-5">
             <Typography className="text-sm font-semibold text-slate-900">
               เงื่อนไขสำคัญ
             </Typography>
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
 
             <Box className="space-y-2">
               <Typography className="text-sm text-slate-600">
@@ -210,11 +213,11 @@ export default function MyBookingDetailPage() {
         </Box>
 
         <Box className="space-y-4">
-          <Paper elevation={0} className="rounded-2xl! border border-slate-200 p-4">
+          <Paper elevation={0} className="apple-card p-5">
             <Typography className="text-sm font-semibold text-slate-900">
               สรุปราคา
             </Typography>
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
 
             <Box className="space-y-2">
               <Box className="flex items-center justify-between">
@@ -248,7 +251,7 @@ export default function MyBookingDetailPage() {
                 </Box>
               ) : null}
 
-              <Divider className="my-3! border-slate-200!" />
+              <Divider className="my-3! border-black/10!" />
 
               <Box className="flex items-center justify-between">
                 <Typography className="text-sm font-semibold text-slate-900">
@@ -260,7 +263,7 @@ export default function MyBookingDetailPage() {
               </Box>
             </Box>
 
-            <Box className="mt-4 rounded-xl! border border-slate-200 bg-slate-50 p-4">
+            <Box className="mt-4 rounded-[22px]! bg-[var(--rf-apple-surface-soft)] p-4">
               <Typography className="text-xs text-slate-600">
                 ใบเสร็จ/เอกสารยืนยันจะพร้อมหลังสถานะ “ยืนยันแล้ว”
               </Typography>
@@ -270,7 +273,7 @@ export default function MyBookingDetailPage() {
               <Button
                 fullWidth
                 variant="outlined"
-                className="rounded-xl!"
+                className="rounded-full!"
                 disabled={local.status === "pending" || local.status === "cancelled"}
               >
                 ดาวน์โหลดใบยืนยัน
@@ -278,11 +281,11 @@ export default function MyBookingDetailPage() {
             </Box>
           </Paper>
 
-          <Paper elevation={0} className="rounded-2xl! border border-slate-200 p-4">
+          <Paper elevation={0} className="apple-card p-5">
             <Typography className="text-sm font-semibold text-slate-900">
               การช่วยเหลือ
             </Typography>
-            <Divider className="my-4! border-slate-200!" />
+            <Divider className="my-4! border-black/10!" />
             <Typography className="text-sm text-slate-600">
               หากพบปัญหาเรื่องการรับรถ/คืนรถ หรืออยากเปลี่ยนข้อมูล
               กรุณาติดต่อแอดมิน
@@ -293,7 +296,7 @@ export default function MyBookingDetailPage() {
                 component={Link}
                 href="/contact"
                 variant="contained"
-                className="rounded-xl! bg-slate-900! hover:bg-slate-800!"
+                className="rounded-full! bg-slate-900! hover:bg-slate-800!"
                 fullWidth
               >
                 ไปที่ศูนย์ช่วยเหลือ
@@ -320,7 +323,7 @@ export default function MyBookingDetailPage() {
             ใช่หรือไม่?
           </Typography>
 
-          <Box className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+          <Box className="mt-3 rounded-[18px] bg-rose-50 p-3">
             <Typography className="text-xs text-rose-700">
               เมื่อยกเลิกแล้ว จะไม่สามารถกู้คืนสถานะเดิมได้
             </Typography>
@@ -330,20 +333,21 @@ export default function MyBookingDetailPage() {
         <DialogActions className="p-4">
           <Button
             variant="outlined"
-            className="rounded-xl!"
+            className="rounded-full!"
             onClick={() => booking.setOpenCancel(false)}
           >
             ย้อนกลับ
           </Button>
           <Button
             variant="contained"
-            className="rounded-xl! bg-rose-600! hover:bg-rose-700!"
+            className="rounded-full! bg-rose-600! hover:bg-rose-700!"
             onClick={booking.doCancel}
           >
             ยกเลิกการจอง
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+      </Container>
+    </Box>
   );
 }

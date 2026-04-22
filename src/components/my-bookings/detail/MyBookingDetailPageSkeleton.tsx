@@ -32,7 +32,7 @@ function HeaderSkeleton() {
 
 function TopCardSkeleton() {
   return (
-    <Box className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover mt-6 p-5">
       <Box className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <Box className="flex-1 space-y-2">
           <Skeleton variant="text" animation="wave" sx={{ width: "56%", height: 20, borderRadius: "8px", transform: "none" }} />
@@ -43,9 +43,9 @@ function TopCardSkeleton() {
         </Box>
 
         <Box className="flex flex-wrap items-center gap-2">
-          <Skeleton variant="rounded" animation="wave" sx={{ width: 92, height: 36, borderRadius: "12px" }} />
-          <Skeleton variant="rounded" animation="wave" sx={{ width: 118, height: 36, borderRadius: "12px" }} />
-          <Skeleton variant="rounded" animation="wave" sx={{ width: 124, height: 36, borderRadius: "12px" }} />
+          <Skeleton variant="rounded" animation="wave" sx={{ width: 92, height: 36, borderRadius: "999px" }} />
+          <Skeleton variant="rounded" animation="wave" sx={{ width: 118, height: 36, borderRadius: "999px" }} />
+          <Skeleton variant="rounded" animation="wave" sx={{ width: 124, height: 36, borderRadius: "999px" }} />
         </Box>
       </Box>
     </Box>
@@ -54,9 +54,9 @@ function TopCardSkeleton() {
 
 function SectionCardSkeleton({ rows = 2 }: { rows?: number }) {
   return (
-    <Box className="rounded-2xl border border-slate-200 p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton variant="text" animation="wave" sx={{ width: 110, height: 20, borderRadius: "8px", transform: "none" }} />
-      <Box className="my-4 h-px bg-slate-200" />
+      <Box className="my-4 h-px bg-black/10" />
 
       <Box className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {Array.from({ length: rows }).map((_, i) => (
@@ -73,9 +73,9 @@ function SectionCardSkeleton({ rows = 2 }: { rows?: number }) {
 
 function TermsSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton variant="text" animation="wave" sx={{ width: 95, height: 20, borderRadius: "8px", transform: "none" }} />
-      <Box className="my-4 h-px bg-slate-200" />
+      <Box className="my-4 h-px bg-black/10" />
 
       <Box className="space-y-2">
         <Skeleton variant="text" animation="wave" sx={{ width: "78%", height: 18, borderRadius: "8px", transform: "none" }} />
@@ -88,9 +88,9 @@ function TermsSkeleton() {
 
 function PriceCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton variant="text" animation="wave" sx={{ width: 80, height: 20, borderRadius: "8px", transform: "none" }} />
-      <Box className="my-4 h-px bg-slate-200" />
+      <Box className="my-4 h-px bg-black/10" />
 
       <Box className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -100,7 +100,7 @@ function PriceCardSkeleton() {
           </Box>
         ))}
 
-        <Box className="my-3 h-px bg-slate-200" />
+        <Box className="my-3 h-px bg-black/10" />
 
         <Box className="flex items-center justify-between">
           <Skeleton variant="text" animation="wave" sx={{ width: 60, height: 18, borderRadius: "8px", transform: "none" }} />
@@ -108,33 +108,33 @@ function PriceCardSkeleton() {
         </Box>
       </Box>
 
-      <Box className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Skeleton variant="text" animation="wave" sx={{ width: "95%", height: 16, borderRadius: "8px", transform: "none" }} />
       </Box>
 
-      <Skeleton variant="rounded" animation="wave" sx={{ mt: 2, width: "100%", height: 36, borderRadius: "12px" }} />
+      <Skeleton variant="rounded" animation="wave" sx={{ mt: 2, width: "100%", height: 36, borderRadius: "999px" }} />
     </Box>
   );
 }
 
 function HelpCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton variant="text" animation="wave" sx={{ width: 85, height: 20, borderRadius: "8px", transform: "none" }} />
-      <Box className="my-4 h-px bg-slate-200" />
+      <Box className="my-4 h-px bg-black/10" />
       <Box className="flex flex-col gap-1.5">
         <Skeleton variant="text" animation="wave" sx={{ width: "100%", height: 18, borderRadius: "8px", transform: "none" }} />
         <Skeleton variant="text" animation="wave" sx={{ width: "78%", height: 18, borderRadius: "8px", transform: "none" }} />
       </Box>
-      <Skeleton variant="rounded" animation="wave" sx={{ mt: 3, width: "100%", height: 36, borderRadius: "12px" }} />
+      <Skeleton variant="rounded" animation="wave" sx={{ mt: 3, width: "100%", height: 36, borderRadius: "999px" }} />
     </Box>
   );
 }
 
 export default function MyBookingDetailPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <HeaderSkeleton />
         <TopCardSkeleton />
 

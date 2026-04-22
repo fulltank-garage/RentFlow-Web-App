@@ -15,18 +15,17 @@ type Props = {
 export default function MyBookingsList({ data, onReset }: Props) {
   if (data.length === 0) {
     return (
-      <Box className="rounded-2xl! border border-slate-200 bg-slate-50 p-8 text-center">
-        <Typography className="text-sm font-semibold text-slate-900">
+      <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-8 text-center">
+        <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
           ไม่พบรายการจอง
         </Typography>
-        <Typography className="mt-1 text-sm text-slate-600">
+        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           ลองเปลี่ยนคำค้นหา หรือเลือกสถานะอื่น
         </Typography>
 
         <Button
           variant="outlined"
-          className="mt-4! rounded-xl!"
-          sx={{ textTransform: "none" }}
+          className="mt-4! rounded-full!"
           onClick={onReset}
         >
           รีเซ็ตตัวกรอง
@@ -40,22 +39,22 @@ export default function MyBookingsList({ data, onReset }: Props) {
       {data.map((b) => (
         <Box
           key={b.id}
-          className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-400"
+          className="apple-card p-4"
         >
           <Box className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <Box className="min-w-0">
-              <Typography className="truncate text-sm font-semibold text-slate-900">
-                {b.carName} <span className="text-slate-400">•</span>{" "}
-                <span className="text-slate-600">{b.id}</span>
+              <Typography className="truncate text-sm font-semibold text-[var(--rf-apple-ink)]">
+                {b.carName} <span className="text-[var(--rf-apple-muted)]">•</span>{" "}
+                <span className="text-[var(--rf-apple-muted)]">{b.id}</span>
               </Typography>
 
-              <Typography className="mt-1 text-xs text-slate-600">
+              <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
                 รับรถ:{" "}
-                <span className="font-semibold text-slate-900">
+                <span className="font-semibold text-[var(--rf-apple-ink)]">
                   {b.pickupDate}
                 </span>{" "}
                 • คืนรถ:{" "}
-                <span className="font-semibold text-slate-900">
+                <span className="font-semibold text-[var(--rf-apple-ink)]">
                   {b.returnDate}
                 </span>
               </Typography>
@@ -64,11 +63,11 @@ export default function MyBookingsList({ data, onReset }: Props) {
             <Box className="flex flex-wrap items-center gap-4! md:gap-2">
               <StatusChip s={b.status} />
 
-              <Box className="flex items-center justify-between gap-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-                <Typography className="text-sm! text-slate-500">
+              <Box className="flex items-center justify-between gap-1 rounded-full bg-[var(--rf-apple-surface-soft)] px-3 py-2">
+                <Typography className="text-sm! text-[var(--rf-apple-muted)]">
                   ยอดรวม
                 </Typography>
-                <Typography className="text-sm! font-bold text-slate-900">
+                <Typography className="text-sm! font-bold text-[var(--rf-apple-ink)]">
                   {formatTHB(b.totalPrice)}
                 </Typography>
               </Box>
@@ -77,8 +76,7 @@ export default function MyBookingsList({ data, onReset }: Props) {
                 component={Link}
                 href={`/my-bookings/${encodeURIComponent(b.id)}`}
                 variant="outlined"
-                className="rounded-xl!"
-                sx={{ textTransform: "none" }}
+                className="rounded-full!"
               >
                 ดูรายละเอียด
               </Button>

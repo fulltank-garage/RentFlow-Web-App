@@ -13,22 +13,21 @@ import {
 
 export default function AuthCardSkeleton() {
   return (
-    <Box className="relative bg-white">
+    <Box className="apple-page relative">
       <Box aria-hidden className="pointer-events-none fixed inset-0" />
 
-      <Container maxWidth="sm" className="relative py-12">
+      <Container maxWidth="sm" className="relative py-14 md:py-20">
         <Card
           elevation={0}
-          className="w-full rounded-2xl! border border-slate-200 bg-white"
+          className="apple-card apple-card-no-hover w-full"
           sx={{
-            boxShadow: "none",
             backdropFilter: "blur(6px)",
           }}
         >
           <CardContent className="p-8!">
             {/* Logo */}
             <Stack className="mb-6 items-center text-center">
-              <Box className="mb-4 flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-1 py-1">
+              <Box className="mb-4 flex items-center justify-center rounded-[28px] bg-[var(--rf-apple-surface-soft)] px-1 py-1">
                 <Box className="relative h-20 w-20 flex items-center justify-center">
                   <Skeleton
                     variant="rounded"
@@ -70,14 +69,14 @@ export default function AuthCardSkeleton() {
               />
             </Stack>
 
-            <Divider className="my-5! border-slate-200!" />
+            <Divider className="my-5! border-black/10!" />
 
             <Stack spacing={2} className="items-center">
               <Box
-                className="w-full rounded-xl border border-slate-200 bg-white"
+                className="w-full bg-[var(--rf-apple-surface-soft)]"
                 sx={{
                   minHeight: 54,
-                  borderRadius: "12px",
+                  borderRadius: "18px",
                   px: 2.25,
                   py: 1.5,
                 }}

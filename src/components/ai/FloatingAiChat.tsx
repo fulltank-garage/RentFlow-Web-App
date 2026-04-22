@@ -44,23 +44,23 @@ function RecommendationItem({
     : `/cars/${encodeURIComponent(car.id)}`;
 
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-3">
+    <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-3">
       <Stack direction="row" spacing={1.5} alignItems="center">
-        <Box className="relative h-14 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-100">
+        <Box className="relative h-14 w-16 shrink-0 overflow-hidden rounded-[18px] bg-white">
           {car.image ? (
             <Image src={car.image} alt={car.name} fill className="object-cover" />
           ) : (
-            <Box className="grid h-full place-items-center text-slate-400">
+            <Box className="grid h-full place-items-center text-[var(--rf-apple-muted)]">
               <DirectionsCarRoundedIcon fontSize="small" />
             </Box>
           )}
         </Box>
 
         <Box className="min-w-0 flex-1">
-          <Typography className="truncate text-sm font-bold text-slate-900">
+          <Typography className="truncate text-sm font-bold text-[var(--rf-apple-ink)]">
             {car.name}
           </Typography>
-          <Typography className="text-xs text-slate-500">
+          <Typography className="text-xs text-[var(--rf-apple-muted)]">
             {car.seats} ที่นั่ง • {car.type} • {formatTHB(car.pricePerDay)}/วัน
           </Typography>
         </Box>
@@ -72,7 +72,7 @@ function RecommendationItem({
             key={reason}
             size="small"
             label={reason}
-            className="h-6! border border-slate-200! bg-slate-50! text-[11px]! text-slate-600!"
+            className="h-6! bg-white! text-[11px]! text-[var(--rf-apple-muted)]!"
           />
         ))}
       </Box>
@@ -82,7 +82,7 @@ function RecommendationItem({
         href={detailHref}
         size="small"
         fullWidth
-        className="mt-3 rounded-xl! border-slate-300! text-slate-900!"
+        className="mt-3 rounded-full!"
         variant="outlined"
         sx={{ textTransform: "none" }}
       >
@@ -134,11 +134,11 @@ export default function FloatingAiChat() {
       {open ? (
         <Paper
           elevation={0}
-          className="mb-4 w-[calc(100vw-40px)] max-w-[420px] overflow-hidden rounded-[28px]! border border-slate-200 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.22)]"
+          className="mb-4 w-[calc(100vw-40px)] max-w-[420px] overflow-hidden rounded-[30px]! border border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.18)]"
         >
-          <Box className="bg-slate-950 px-5 py-4 text-white">
+          <Box className="bg-[var(--rf-apple-ink)] px-5 py-4 text-white">
             <Stack direction="row" alignItems="center" spacing={1.5}>
-              <Box className="grid h-10 w-10 place-items-center rounded-2xl bg-white/10">
+              <Box className="grid h-10 w-10 place-items-center rounded-full bg-white/10">
                 <AutoAwesomeRoundedIcon />
               </Box>
               <Box className="min-w-0 flex-1">
@@ -163,8 +163,8 @@ export default function FloatingAiChat() {
           </Box>
 
           <Box className="min-h-[360px] max-h-[70vh] overflow-y-auto p-5">
-            <Box className="rounded-2xl bg-slate-50 p-3">
-              <Typography className="text-sm leading-6 text-slate-700">
+            <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-3">
+              <Typography className="text-sm leading-6 text-[var(--rf-apple-muted)]">
                 บอกจำนวนคน งบประมาณ หรือสไตล์ทริป แล้ว AI จะช่วยคัดรถที่เหมาะให้
               </Typography>
             </Box>
@@ -176,10 +176,10 @@ export default function FloatingAiChat() {
                   size="small"
                   label={suggestion}
                   onClick={() => setQuery(suggestion)}
-                  className={`h-auto! min-h-11! w-full! cursor-pointer justify-start! rounded-xl! border px-2! py-2! text-left! text-[12px]! font-bold! leading-5! shadow-sm! transition hover:-translate-y-0.5 ${
+                  className={`h-auto! min-h-11! w-full! cursor-pointer justify-start! rounded-[18px]! border px-2! py-2! text-left! text-[12px]! font-bold! leading-5! transition hover:-translate-y-0.5 ${
                     query === suggestion
-                      ? "border-slate-950! bg-slate-950! text-white!"
-                      : "border-slate-200! bg-amber-50! text-slate-900! hover:border-slate-400! hover:bg-white!"
+                      ? "border-[var(--rf-apple-blue)]! bg-[var(--rf-apple-blue)]! text-white!"
+                      : "border-black/10! bg-[var(--rf-apple-surface-soft)]! text-[var(--rf-apple-ink)]! hover:bg-white!"
                   }`}
                   sx={{
                     "& .MuiChip-label": {
@@ -193,11 +193,11 @@ export default function FloatingAiChat() {
             </Box>
 
             {result ? (
-              <Box className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                <Typography className="text-sm font-bold text-slate-900">
+              <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-3">
+                <Typography className="text-sm font-bold text-[var(--rf-apple-ink)]">
                   คำแนะนำ
                 </Typography>
-                <Typography className="mt-1 text-sm leading-6 text-slate-700">
+                <Typography className="mt-1 text-sm leading-6 text-[var(--rf-apple-muted)]">
                   {result.summary}
                 </Typography>
 
@@ -208,7 +208,7 @@ export default function FloatingAiChat() {
                     ))}
                   </Box>
                 ) : (
-                  <Typography className="mt-3 text-sm text-slate-500">
+                  <Typography className="mt-3 text-sm text-[var(--rf-apple-muted)]">
                     ยังไม่มีรถที่ตรงกับเงื่อนไขในตอนนี้
                   </Typography>
                 )}
@@ -222,7 +222,7 @@ export default function FloatingAiChat() {
             ) : null}
           </Box>
 
-          <Box className="border-t border-slate-200 p-4">
+          <Box className="border-t border-black/10 p-4">
             <Stack direction="row" spacing={1}>
               <TextField
                 value={query}
@@ -238,13 +238,13 @@ export default function FloatingAiChat() {
                 fullWidth
                 multiline
                 maxRows={3}
-                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "16px" } }}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: "18px" } }}
               />
               <IconButton
                 aria-label="ส่งคำถามให้ AI"
                 onClick={() => void ask()}
                 disabled={loading || !query.trim()}
-                className="h-10 w-10 rounded-2xl! bg-slate-950! text-white! disabled:bg-slate-200!"
+                className="h-10 w-10 rounded-full! bg-[var(--rf-apple-blue)]! text-white! disabled:bg-black/10!"
               >
                 {loading ? (
                   <CircularProgress size={18} color="inherit" />
@@ -260,23 +260,23 @@ export default function FloatingAiChat() {
       {!open ? (
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Box
-            className={`hidden rounded-2xl border border-slate-200 bg-white px-4 py-2 text-right shadow-[0_14px_40px_rgba(15,23,42,0.16)] transition-all duration-500 sm:block ${
+            className={`hidden rounded-[20px] border border-black/10 bg-white px-4 py-2 text-right shadow-[0_14px_40px_rgba(0,0,0,0.12)] transition-all duration-500 sm:block ${
               showHint
                 ? "translate-x-0 opacity-100"
                 : "pointer-events-none translate-x-3 opacity-0"
             }`}
           >
-            <Typography className="text-sm font-bold text-slate-950">
+            <Typography className="text-sm font-bold text-[var(--rf-apple-ink)]">
               AI ช่วยเลือก
             </Typography>
-            <Typography className="text-xs text-slate-500">
+            <Typography className="text-xs text-[var(--rf-apple-muted)]">
               แนะนำรถให้เหมาะกับทริป
             </Typography>
           </Box>
           <IconButton
             aria-label="เปิดผู้ช่วย AI"
             onClick={() => setOpen(true)}
-            className="h-16 w-16 rounded-full! bg-slate-950! text-white! shadow-[0_18px_48px_rgba(15,23,42,0.35)] transition hover:scale-105 hover:bg-slate-900!"
+            className="h-16 w-16 rounded-full! bg-[var(--rf-apple-ink)]! text-white! shadow-[0_18px_48px_rgba(0,0,0,0.28)] transition hover:scale-105 hover:bg-black!"
           >
             <svg width="0" height="0" aria-hidden="true" focusable="false">
               <defs>

@@ -11,8 +11,8 @@ function FieldShell({
   children: React.ReactNode;
 }) {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white px-4 py-4">
-      <Typography className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.08em] text-slate-400">
+    <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-4">
+      <Typography className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--rf-apple-muted)]">
         {label}
       </Typography>
       {children}
@@ -60,25 +60,25 @@ export function ProfileField({
               alignItems: "center",
               fontSize: "1rem",
               fontWeight: 700,
-              color: "rgb(15 23 42)",
+              color: "var(--rf-apple-ink)",
               lineHeight: 1.75,
             },
             "& .MuiInputBase-input": {
               padding: 0,
             },
             "& .MuiInputBase-input::placeholder": {
-              color: "rgb(148 163 184)",
+              color: "var(--rf-apple-muted)",
               opacity: 1,
               fontWeight: 500,
             },
             "& .Mui-disabled": {
-              WebkitTextFillColor: "rgb(15 23 42)",
+              WebkitTextFillColor: "var(--rf-apple-ink)",
               opacity: 1,
             },
           }}
         />
       ) : (
-        <Typography className="min-h-7.5 wrap-break-word text-base font-bold leading-7 text-slate-900">
+        <Typography className="min-h-7.5 wrap-break-word text-base font-bold leading-7 text-[var(--rf-apple-ink)]">
           {value || "-"}
         </Typography>
       )}

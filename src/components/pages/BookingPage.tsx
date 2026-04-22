@@ -14,26 +14,21 @@ export default function BookingPage() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-12">
-      <Box className="flex flex-col gap-2">
-        <Typography variant="h5" className="text-2xl font-bold text-slate-900">
+    <Box className="apple-page">
+    <Container maxWidth="lg" className="apple-section">
+      <Box className="mx-auto max-w-3xl text-center">
+        <Typography
+          className="apple-heading"
+          sx={{ fontSize: { xs: 42, md: 64 } }}
+        >
           จองรถ
         </Typography>
-        <Typography className="text-sm text-slate-600">
-          เลือกจุดรับ-คืนรถ + วันเวลา แล้วไปชำระเงิน
-        </Typography>
-
-        <Typography className="text-xs text-slate-500">
-          โหมดจุดรับ-คืนรถ:{" "}
-          <span className="font-semibold text-slate-900">
-            {booking.merchantBranchesEnabled
-              ? "มีสาขาให้บริการ"
-              : "รับ-คืนตามสถานที่ที่ระบุ"}
-          </span>
+        <Typography className="apple-subtitle mt-3 text-lg">
+          เลือกจุดรับ-คืนรถ วันเวลา และข้อมูลผู้จอง
         </Typography>
       </Box>
 
-      <Box className="mt-6 grid gap-6 lg:grid-cols-12">
+      <Box className="mt-10 grid gap-6 lg:grid-cols-12">
         <BookingSummaryCard
           car={booking.car}
           carId={booking.carId}
@@ -52,17 +47,17 @@ export default function BookingPage() {
         <Card
           elevation={0}
           sx={{ boxShadow: "none" }}
-          className="lg:col-span-7 rounded-2xl! border border-slate-200 bg-white"
+          className="apple-card lg:col-span-7"
         >
           <CardContent className="p-4!">
-            <Typography className="text-sm font-semibold text-slate-900">
+            <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
               ข้อมูลการจอง
             </Typography>
-            <Typography className="mt-1 text-xs text-slate-500">
+            <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
               เลือกจุดรับ-คืนรถ วันเวลา และกรอกข้อมูลผู้จอง
             </Typography>
 
-            <Divider className="my-5! border-slate-200!" />
+            <Divider className="my-5! border-black/10!" />
 
             <BookingForm
               fieldSX={booking.fieldSX}
@@ -112,5 +107,6 @@ export default function BookingPage() {
         </Card>
       </Box>
     </Container>
+    </Box>
   );
 }

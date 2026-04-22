@@ -27,45 +27,45 @@ export default function PaymentPage() {
   }
 
   return (
-    <Container maxWidth="lg" className="py-12">
-      <Box className="flex flex-col gap-2">
-        <Typography variant="h5" className="text-2xl font-bold text-slate-900">
-          ชำระเงิน
-        </Typography>
-        <Typography className="text-sm text-slate-600">
-          ยืนยันการชำระเงินสำหรับการจอง{" "}
-          <span className="font-semibold text-slate-900">
-            {payment.bookingId}
-          </span>
-        </Typography>
-      </Box>
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
+        <Box className="flex flex-col gap-2">
+          <Typography variant="h5" className="text-2xl font-bold text-slate-900">
+            ชำระเงิน
+          </Typography>
+          <Typography className="text-sm text-slate-600">
+            ยืนยันการชำระเงินสำหรับการจอง{" "}
+            <span className="font-semibold text-slate-900">
+              {payment.bookingId}
+            </span>
+          </Typography>
+        </Box>
 
-      <Box className="mt-6 grid gap-6 lg:grid-cols-12">
-        <PaymentBookingSummaryCard
-          bookingId={payment.bookingId}
-          carId={payment.carId}
-          car={payment.car}
-          days={payment.days}
-          pickupDate={payment.pickupDate}
-          returnDate={payment.returnDate}
-          pickupPoint={payment.pickupPoint}
-          returnPoint={payment.returnPoint}
-          pickupTime={payment.pickupTime}
-          returnTime={payment.returnTime}
-          amount={payment.amount}
-          addonKeys={payment.addonKeys}
-          addonsTotal={payment.addonsTotal}
-          carSubTotal={payment.carSubTotal}
-          carNet={payment.carNet}
-          carDiscount={payment.carDiscount}
-          discountPct={payment.discountPct}
-          extraCharge={payment.extraCharge}
-        />
+        <Box className="mt-6 grid gap-6 lg:grid-cols-12">
+          <PaymentBookingSummaryCard
+            bookingId={payment.bookingId}
+            carId={payment.carId}
+            car={payment.car}
+            days={payment.days}
+            pickupDate={payment.pickupDate}
+            returnDate={payment.returnDate}
+            pickupPoint={payment.pickupPoint}
+            returnPoint={payment.returnPoint}
+            pickupTime={payment.pickupTime}
+            returnTime={payment.returnTime}
+            amount={payment.amount}
+            addonKeys={payment.addonKeys}
+            addonsTotal={payment.addonsTotal}
+            carSubTotal={payment.carSubTotal}
+            carNet={payment.carNet}
+            carDiscount={payment.carDiscount}
+            discountPct={payment.discountPct}
+            extraCharge={payment.extraCharge}
+          />
 
         <Card
           elevation={0}
-          sx={{ boxShadow: "none" }}
-          className="order-1 rounded-2xl! border border-slate-200 bg-white lg:order-2 lg:col-span-7"
+          className="apple-card order-1 lg:order-2 lg:col-span-7"
         >
           <CardContent className="p-6">
             {payment.done ? (
@@ -94,7 +94,7 @@ export default function PaymentPage() {
               roundedFieldSX={payment.roundedFieldSX}
             />
 
-            <Divider className="my-6! border-slate-200!" />
+            <Divider className="my-6! border-black/10!" />
 
             <PaymentMethodSection
               method={payment.method}
@@ -114,7 +114,7 @@ export default function PaymentPage() {
                 variant="contained"
                 disabled={!payment.canPay}
                 onClick={payment.handleConfirm}
-                className="rounded-xl! px-5! py-2.5! font-semibold!"
+                className="rounded-full! px-5! py-2.5! font-semibold!"
                 sx={{
                   textTransform: "none",
                   backgroundColor: "rgb(15 23 42)",
@@ -125,7 +125,8 @@ export default function PaymentPage() {
             </Stack>
           </CardContent>
         </Card>
-      </Box>
-    </Container>
+        </Box>
+      </Container>
+    </Box>
   );
 }

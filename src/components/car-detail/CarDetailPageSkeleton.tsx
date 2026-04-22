@@ -6,7 +6,7 @@ import { Box, Container, Skeleton } from "@mui/material";
 function HeroSkeleton() {
   return (
     <Box className="lg:col-span-7">
-      <Box className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+      <Box className="apple-card apple-card-no-hover overflow-hidden">
         <Box className="aspect-16/10">
           <Skeleton
             variant="rectangular"
@@ -25,7 +25,7 @@ function HeroSkeleton() {
 
 function SummaryCardSkeleton() {
   return (
-    <Box className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5 lg:col-span-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -61,9 +61,9 @@ function SummaryCardSkeleton() {
         />
       </Box>
 
-      <Box className="my-5 h-px bg-slate-200" />
+      <Box className="my-5 h-px bg-black/10" />
 
-      <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-5">
         <Box className="flex flex-col gap-1.5">
           <Skeleton
             variant="text"
@@ -104,12 +104,12 @@ function SummaryCardSkeleton() {
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ width: "100%", height: 42, borderRadius: "12px" }}
+          sx={{ width: "100%", height: 42, borderRadius: "999px" }}
         />
         <Skeleton
           variant="rounded"
           animation="wave"
-          sx={{ width: "100%", height: 42, borderRadius: "12px" }}
+          sx={{ width: "100%", height: 42, borderRadius: "999px" }}
         />
       </Box>
     </Box>
@@ -118,7 +118,7 @@ function SummaryCardSkeleton() {
 
 function OverviewSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex flex-col gap-1.5">
         <Skeleton
           variant="text"
@@ -167,7 +167,7 @@ function OverviewSkeleton() {
 
 function IncludedCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
       <Box className="flex items-start gap-2">
         <Skeleton
           variant="rounded"
@@ -209,7 +209,7 @@ function IncludedCardSkeleton() {
 
 function IncludedSectionSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton
         variant="text"
         animation="wave"
@@ -233,7 +233,7 @@ function IncludedSectionSkeleton() {
 
 function TermsSectionSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton
         variant="text"
         animation="wave"
@@ -293,7 +293,7 @@ function TermsSectionSkeleton() {
 
 function SpecsCardSkeleton() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Skeleton
         variant="text"
         animation="wave"
@@ -337,8 +337,8 @@ function SpecsCardSkeleton() {
 
 export default function CarDetailPageSkeleton() {
   return (
-    <Box className="bg-white">
-      <Container maxWidth="lg" className="py-12">
+    <Box className="apple-page">
+      <Container maxWidth="lg" className="apple-section">
         <Box className="mt-5 grid gap-6 lg:grid-cols-12">
           <HeroSkeleton />
           <SummaryCardSkeleton />

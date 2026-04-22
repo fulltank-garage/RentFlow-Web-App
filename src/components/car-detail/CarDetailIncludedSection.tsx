@@ -16,10 +16,12 @@ function IncludedCard({
 }) {
   const Icon = positive ? TaskAltRoundedIcon : DoNotDisturbAltRoundedIcon;
   const iconClass = positive ? "text-emerald-600" : "text-rose-600";
-  const bgClass = positive ? "bg-slate-50" : "bg-white";
+  const bgClass = positive
+    ? "bg-[var(--rf-apple-surface-soft)]"
+    : "bg-white";
 
   return (
-    <Box className={`rounded-2xl border border-slate-200 p-4 ${bgClass}`}>
+    <Box className={`rounded-[22px] p-4 ${bgClass}`}>
       <Box className="flex items-start gap-2">
         <Icon fontSize="small" className={`mt-0.5 ${iconClass}`} />
         <Box>
@@ -40,7 +42,7 @@ function IncludedCard({
 
 export default function CarDetailIncludedSection() {
   return (
-    <Box className="rounded-2xl border border-slate-200 bg-white p-4!">
+    <Box className="apple-card p-5!">
       <Typography className="text-sm font-semibold text-slate-900">
         สิ่งที่รวมในราคา
       </Typography>
