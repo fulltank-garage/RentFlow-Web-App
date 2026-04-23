@@ -1,9 +1,6 @@
 "use client";
 
 import * as React from "react";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import ReceiptLongRoundedIcon from "@mui/icons-material/ReceiptLongRounded";
-import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { formatTHB } from "@/src/constants/money";
 
@@ -219,7 +216,7 @@ function ReceiptPreviewSection({
 }) {
   return (
     <Box className="rounded-[30px] border border-black/6 bg-[#f8fafc] p-4 md:p-5">
-      <Typography className="text-sm font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+      <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
         {title}
       </Typography>
 
@@ -229,7 +226,7 @@ function ReceiptPreviewSection({
             key={`${title}-${field.label}`}
             className={`${field.wide ? "col-span-12" : "col-span-12 sm:col-span-6"} rounded-[24px] bg-white px-4 py-4 shadow-[0_16px_40px_rgba(15,23,42,0.06)]`}
           >
-            <Typography className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--rf-apple-muted)]">
+            <Typography className="apple-label-text font-bold uppercase text-[var(--rf-apple-muted)]">
               {field.label}
             </Typography>
             <Typography
@@ -678,25 +675,19 @@ export default function BookingReceiptCard({
   return (
     <Box className="apple-card apple-card-no-hover mx-auto mt-8 max-w-4xl p-5 md:p-6">
       <Box className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <Box className="flex min-w-0 items-start gap-3">
-          <Box className="grid h-12 w-12 place-items-center rounded-full bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-ink)]">
-            <ReceiptLongRoundedIcon />
-          </Box>
-          <Box className="min-w-0">
-            <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
-              ใบเสร็จการจอง
-            </Typography>
-            <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-              ระบบจะดาวน์โหลดไฟล์ให้ทันทีหลังเข้าหน้านี้ และสามารถโหลดซ้ำได้ตลอดเวลา
-            </Typography>
-          </Box>
+        <Box className="min-w-0">
+          <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+            ใบเสร็จการจอง
+          </Typography>
+          <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
+            ระบบจะดาวน์โหลดไฟล์ให้ทันทีหลังเข้าหน้านี้ และสามารถโหลดซ้ำได้ตลอดเวลา
+          </Typography>
         </Box>
 
         <Button
           variant="contained"
           onClick={() => void handleDownload("manual")}
           disabled={downloading}
-          startIcon={<DownloadRoundedIcon />}
           className="rounded-full! px-5! font-semibold!"
         >
           {downloading
@@ -711,10 +702,7 @@ export default function BookingReceiptCard({
         {downloadStatus === "error" ? (
           <Typography className="text-[#dc2626]">{helperText}</Typography>
         ) : (
-          <>
-            <TaskAltRoundedIcon sx={{ fontSize: 18, color: "#16a34a" }} />
-            <Typography className="text-[var(--rf-apple-muted)]">{helperText}</Typography>
-          </>
+          <Typography className="text-[var(--rf-apple-muted)]">{helperText}</Typography>
         )}
       </Box>
 
@@ -753,19 +741,19 @@ export default function BookingReceiptCard({
         <Box className="space-y-5 px-5 py-5 md:px-8 md:py-8">
           <Box className="grid gap-4 md:grid-cols-[minmax(0,1fr)_280px]">
             <Box className="rounded-[28px] border border-black/6 bg-[#f8fafc] p-5">
-              <Typography className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--rf-apple-muted)]">
+              <Typography className="apple-label-text font-bold uppercase text-[var(--rf-apple-muted)]">
                 รหัสการจอง
               </Typography>
-              <Typography className="mt-3 break-all text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)] md:text-[2rem]">
+              <Typography className="apple-card-title-lg mt-3 break-all font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                 {bookingReference}
               </Typography>
             </Box>
 
             <Box className="rounded-[28px] border border-emerald-200/70 bg-[linear-gradient(180deg,#f0fdf4_0%,#dcfce7_100%)] p-5">
-              <Typography className="text-[11px] font-bold uppercase tracking-[0.16em] text-emerald-700">
+              <Typography className="apple-label-text font-bold uppercase text-emerald-700">
                 ยอดชำระรวม
               </Typography>
-              <Typography className="mt-3 text-[2.1rem] font-black tracking-[-0.05em] text-emerald-700">
+              <Typography className="apple-price-text mt-3 font-black tracking-[-0.05em] text-emerald-700">
                 {formatTHB(amount)}
               </Typography>
             </Box>
@@ -775,7 +763,7 @@ export default function BookingReceiptCard({
           <ReceiptPreviewSection title="รายละเอียดการเช่า" fields={tripFields} />
 
           <Box className="rounded-[30px] border border-black/6 bg-[#f8fafc] p-4 md:p-5">
-            <Typography className="text-sm font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
               หมายเหตุ
             </Typography>
             <Typography className="mt-3 text-sm leading-7 text-[var(--rf-apple-muted)]">

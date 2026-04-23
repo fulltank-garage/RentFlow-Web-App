@@ -61,7 +61,7 @@ export function useCatalogDirectory(tenantSlug?: string) {
 
       setError(messages.length ? messages.join(" • ") : null);
       const elapsed = Date.now() - start;
-      const delay = Math.max(2000 - elapsed, 0);
+      const delay = Math.max(500 - elapsed, 0);
       await new Promise((resolve) => window.setTimeout(resolve, delay));
       if (cancelled) return;
       setLoading(false);

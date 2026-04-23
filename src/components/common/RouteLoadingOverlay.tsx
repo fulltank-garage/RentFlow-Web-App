@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 function isModifiedClick(event: MouseEvent) {
   return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
@@ -9,9 +9,11 @@ function isModifiedClick(event: MouseEvent) {
 
 export default function RouteLoadingOverlay() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [visible, setVisible] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
   const timersRef = React.useRef<number[]>([]);
+  const hasMountedRef = React.useRef(false);
 
   const clearTimers = React.useCallback(() => {
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -35,6 +37,17 @@ export default function RouteLoadingOverlay() {
       queueTimer(() => setVisible(false), 250);
     }, 1400);
   }, [clearTimers, queueTimer]);
+
+  React.useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      const previous = window.history.scrollRestoration;
+      window.history.scrollRestoration = "manual";
+
+      return () => {
+        window.history.scrollRestoration = previous;
+      };
+    }
+  }, []);
 
   React.useEffect(() => {
     function handleClick(event: MouseEvent) {
@@ -70,13 +83,38 @@ export default function RouteLoadingOverlay() {
   }, [clearTimers, startLoading]);
 
   React.useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    scrollToTop();
+
+    const frameA = window.requestAnimationFrame(scrollToTop);
+    const frameB = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(scrollToTop);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameA);
+      window.cancelAnimationFrame(frameB);
+    };
+  }, [pathname, searchParams]);
+
+  React.useEffect(() => {
     if (!visible) return;
 
     setProgress(100);
     const timer = window.setTimeout(() => setVisible(false), 280);
 
     return () => window.clearTimeout(timer);
-  }, [pathname, visible]);
+  }, [pathname, searchParams, visible]);
 
   if (!visible) return null;
 

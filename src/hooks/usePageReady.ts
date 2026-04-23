@@ -9,7 +9,7 @@ type Options = {
 };
 
 export default function usePageReady(options?: Options) {
-  const minDelay = options?.minDelay ?? 2000;
+  const minDelay = options?.minDelay ?? 500;
   const skipDelay = React.useMemo(
     () =>
       Boolean(options?.disableDuringFlowTransition) &&

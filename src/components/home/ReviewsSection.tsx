@@ -13,7 +13,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import RateReviewRoundedIcon from "@mui/icons-material/RateReviewRounded";
 import AppSnackbar, {
   type AppSnackbarSeverity,
 } from "@/src/components/common/AppSnackbar";
@@ -166,7 +165,7 @@ export default function ReviewsSection() {
         key={key}
         elevation={0}
         sx={{ boxShadow: "none" }}
-        className="apple-card min-w-[320px] max-w-[320px] rounded-[26px]! border border-black/10 bg-white sm:min-w-[420px] sm:max-w-[420px]"
+        className="apple-card min-w-[280px] max-w-[280px] rounded-[26px]! border border-black/10 bg-white sm:min-w-[420px] sm:max-w-[420px]"
       >
         <CardContent className="p-4!">
           <Box className="flex flex-wrap items-start justify-between gap-3">
@@ -217,11 +216,10 @@ export default function ReviewsSection() {
           onClose={closeSnackbar}
         />
 
-        <Box className="mx-auto max-w-3xl text-center">
+        <Box className="apple-section-intro max-w-3xl">
           <Box className="flex flex-col gap-4">
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 38, md: 56 } }}
+              className="apple-heading apple-section-title"
             >
               รีวิวจากผู้ใช้งาน
             </Typography>
@@ -259,9 +257,6 @@ export default function ReviewsSection() {
             </Box>
           ) : (
             <Box className="flex min-h-72 flex-col items-center justify-center rounded-[26px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-8 text-center">
-              <Box className="grid h-12 w-12 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
-                <RateReviewRoundedIcon />
-              </Box>
               <Typography className="mt-4 text-sm font-semibold text-[var(--rf-apple-ink)]">
                 ยังไม่มีรีวิว
               </Typography>
@@ -286,11 +281,10 @@ export default function ReviewsSection() {
         onClose={closeSnackbar}
       />
 
-      <Box className="mx-auto max-w-3xl text-center">
-        <Box className="flex flex-col gap-4">
-          <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 38, md: 56 } }}
+        <Box className="apple-section-intro max-w-3xl">
+          <Box className="flex flex-col gap-4">
+            <Typography
+              className="apple-heading apple-section-title"
           >
             รีวิวจากผู้ใช้งาน
           </Typography>
@@ -307,18 +301,13 @@ export default function ReviewsSection() {
           className="apple-card"
         >
           <CardContent className="p-5!">
-            <Box className="flex items-center gap-3">
-              <Box className="grid h-11 w-11 place-items-center rounded-full bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-blue)]">
-                <RateReviewRoundedIcon />
-              </Box>
-              <Box>
-                <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
-                  เขียนรีวิว
-                </Typography>
-                <Typography className="text-xs text-[var(--rf-apple-muted)]">
-                  ไม่ต้องเข้าสู่ระบบหรือมีรายการจอง
-                </Typography>
-              </Box>
+            <Box>
+              <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
+                เขียนรีวิว
+              </Typography>
+              <Typography className="text-xs text-[var(--rf-apple-muted)]">
+                ไม่ต้องเข้าสู่ระบบหรือมีรายการจอง
+              </Typography>
             </Box>
 
             <Box
@@ -432,9 +421,6 @@ export default function ReviewsSection() {
             </Box>
           ) : (
             <Box className="flex min-h-72 flex-col items-center justify-center rounded-[26px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-8 text-center">
-              <Box className="grid h-12 w-12 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
-                <RateReviewRoundedIcon />
-              </Box>
               <Typography className="mt-4 text-sm font-semibold text-[var(--rf-apple-ink)]">
                 ยังไม่มีรีวิว
               </Typography>

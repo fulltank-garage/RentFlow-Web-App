@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { Box, Container, Typography, Chip, Button } from "@mui/material";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import FeaturesPageSkeleton from "@/src/components/feature/FeaturesPageSkeleton";
 import {
   HERO_BADGES,
@@ -23,11 +22,10 @@ export default function FeaturesPage() {
   return (
     <Box className="apple-page">
     <Container maxWidth="lg" className="apple-section">
-      <Box className="mx-auto max-w-3xl text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             ทำไมต้อง RentFlow
           </Typography>
@@ -41,12 +39,6 @@ export default function FeaturesPage() {
         {HERO_BADGES.map((b) => (
           <Chip
             key={b}
-            icon={
-              <CheckCircleRoundedIcon
-                fontSize="small"
-                className="text-emerald-500! ml-2!"
-              />
-            }
             label={b}
             className="apple-pill text-[var(--rf-apple-muted)]!"
             variant="outlined"
@@ -57,7 +49,7 @@ export default function FeaturesPage() {
       <Box className="mt-8">
         <Box className="flex items-end justify-between gap-3">
           <Box>
-            <Typography className="text-2xl font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-card-title-lg font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
               จุดเด่นของระบบ
             </Typography>
             <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
@@ -66,43 +58,38 @@ export default function FeaturesPage() {
           </Box>
         </Box>
 
-        <Box className="mt-4 grid gap-4 md:grid-cols-2">
+        <Box className="apple-shelf apple-shelf-wide mt-4 md:grid md:grid-cols-2">
           {FEATURES.map((f) => (
             <Box
               key={f.title}
               className="apple-card p-5"
             >
-              <Box className="flex items-start gap-3">
-                <Box className="mt-0.5 grid h-10 w-10 place-items-center rounded-full bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-blue)]">
-                  {f.icon}
-                </Box>
-                <Box className="min-w-0">
-                  <Typography className="text-base font-bold text-[var(--rf-apple-ink)]">
-                    {f.title}
-                  </Typography>
-                  <Typography className="mt-1 text-sm leading-relaxed text-[var(--rf-apple-muted)]">
-                    {f.desc}
-                  </Typography>
-                </Box>
+              <Box className="min-w-0">
+                <Typography className="text-base font-bold text-[var(--rf-apple-ink)]">
+                  {f.title}
+                </Typography>
+                <Typography className="mt-1 text-sm leading-relaxed text-[var(--rf-apple-muted)]">
+                  {f.desc}
+                </Typography>
               </Box>
             </Box>
           ))}
         </Box>
       </Box>
 
-      <Box className="apple-card mt-10 p-5">
-        <Typography className="text-2xl font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
+      <Box className="mt-10">
+        <Typography className="apple-card-title-lg font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
           ขั้นตอนการจอง
         </Typography>
         <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           ตั้งแต่ค้นหารถจนถึงชำระเงิน — เราทำให้ทุกขั้นตอนชัดเจนและง่ายดาย
         </Typography>
 
-        <Box className="mt-4 grid gap-4 md:grid-cols-2">
+        <Box className="apple-shelf apple-shelf-wide mt-4 md:grid md:grid-cols-2">
           {HOW_IT_WORKS.map((s) => (
             <Box
               key={s.step}
-              className="rounded-[24px] bg-[var(--rf-apple-surface-soft)] p-4"
+              className="apple-card p-5"
             >
               <Box className="flex items-start gap-3">
                 <Box className="grid h-9 w-9 place-items-center rounded-full bg-[var(--rf-apple-ink)] text-white">
@@ -123,14 +110,14 @@ export default function FeaturesPage() {
       </Box>
 
       <Box className="mt-10">
-        <Typography className="text-2xl font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
+        <Typography className="apple-card-title-lg font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
           ความน่าเชื่อถือ & ความปลอดภัย
         </Typography>
         <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
           สิ่งที่ผู้ใช้มักอยากรู้ก่อนจอง — เราใส่ไว้ให้ครบ
         </Typography>
 
-        <Box className="mt-4 grid gap-4 md:grid-cols-2">
+        <Box className="apple-shelf apple-shelf-wide mt-4 md:grid md:grid-cols-2">
           {TRUST_POINTS.map((t) => (
             <Box
               key={t.title}

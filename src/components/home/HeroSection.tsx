@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -58,6 +59,8 @@ export default function HeroSection({
 }: Props) {
   const router = useRouter();
   const [heroIndex, setHeroIndex] = React.useState(0);
+  const [highlightAnnouncement, setHighlightAnnouncement] = React.useState(true);
+  const [loadedHeroImages, setLoadedHeroImages] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     if (!heroImages.length) return;
@@ -68,6 +71,30 @@ export default function HeroSection({
 
     return () => clearInterval(t);
   }, [heroImages.length]);
+
+  React.useEffect(() => {
+    if (!heroImages.length) return;
+
+    heroImages.forEach((src) => {
+      if (loadedHeroImages.includes(src)) return;
+
+      const image = new window.Image();
+      image.src = src;
+      image.onload = () => {
+        setLoadedHeroImages((current) =>
+          current.includes(src) ? current : [...current, src]
+        );
+      };
+    });
+  }, [heroImages, loadedHeroImages]);
+
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setHighlightAnnouncement(false);
+    }, 1200);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
@@ -81,27 +108,97 @@ export default function HeroSection({
     router.push(`/cars?${params.toString()}`);
   };
 
+  const activeHeroLoaded = heroImages[heroIndex]
+    ? loadedHeroImages.includes(heroImages[heroIndex])
+    : false;
+
   return (
     <Box component="section" className="bg-[var(--rf-apple-bg)]">
+      <Box
+        sx={{
+          backgroundColor: highlightAnnouncement
+            ? "var(--rf-apple-blue)"
+            : "#ececef",
+          transition: "background-color .7s ease",
+        }}
+      >
+        <Container maxWidth="lg">
+          <Box className="flex min-h-11 items-center justify-center px-2 py-2 text-center sm:px-3 sm:py-1">
+            <Typography
+              component="div"
+              className="apple-announcement-text max-w-4xl tracking-[-0.016em]"
+              sx={{
+                color: highlightAnnouncement ? "white" : "var(--rf-apple-ink)",
+                transition: "color .7s ease",
+              }}
+            >
+              <Box
+                component="span"
+                className="inline-flex flex-wrap items-center justify-center gap-1 rounded-full px-2 py-1 sm:px-3"
+                sx={{
+                  "& a": {
+                    display: "inline",
+                    padding: 0,
+                    color: highlightAnnouncement
+                      ? "inherit"
+                      : "var(--rf-apple-blue)",
+                    backgroundColor: "transparent",
+                    textDecorationLine: "none",
+                    textDecorationThickness: "1.5px",
+                    textUnderlineOffset: "2px",
+                    fontWeight: 400,
+                    boxShadow: "none",
+                    transition:
+                      "opacity .3s ease, color .7s ease, text-decoration-color .7s ease",
+                  },
+                  "& a:hover": {
+                    opacity: 0.88,
+                    textDecorationLine: "underline",
+                  },
+                }}
+              >
+                <Box
+                  component={Link}
+                  href="/cars"
+                  className="shrink-0"
+                >
+                  เลือกดูรถเช่าออนไลน์
+                </Box>
+                <Box component="span">
+                  แล้วรับความช่วยเหลือจากทีมงาน พร้อมบริการจองที่ง่ายขึ้นและตัวเลือกรถอีกมากมาย
+                </Box>
+              </Box>
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+
       <Container maxWidth="lg" className="apple-section pt-[56px]!">
-        <Box className="mx-auto max-w-4xl text-center">
+        <Box className="apple-section-intro max-w-4xl md:max-w-none">
           <Typography
-            className="apple-heading"
+            className="apple-heading apple-display-title"
             sx={{
-              fontSize: { xs: "44px", sm: "64px", md: "80px" },
+              whiteSpace: { xs: "normal", md: "normal" },
+              lineHeight: { xs: 1.08, md: 1.06 },
+              fontSize: {
+                md: "clamp(2.55rem, 2.05rem + 1.55vw, 3.55rem)",
+                lg: "clamp(3rem, 2.55rem + 1.2vw, 4.05rem)",
+              },
             }}
           >
-            รถที่ใช่ สำหรับทุกการเดินทาง
+            <Box component="span" sx={{ display: "block" }}>
+              รถที่ใช่ สำหรับทุกการเดินทาง
+            </Box>
+            <Box component="span" sx={{ display: "block" }}>
+              พร้อมออกเดินทาง ในไม่กี่คลิก
+            </Box>
           </Typography>
           <Box
-            className="apple-subtitle mt-4 flex flex-col items-center justify-center text-center"
+            className="apple-subtitle apple-hero-subtitle mx-auto mt-4 flex max-w-4xl flex-col items-center justify-center text-center"
             sx={{
-              width: "100vw",
-              ml: "calc(50% - 50vw)",
-              fontSize: { xs: 18, md: 24 },
-              lineHeight: 1.35,
               textAlign: "center",
               textWrap: "balance",
+              width: "100%",
             }}
           >
             <Box component="span" sx={{ display: "block", width: "100%", textAlign: "center" }}>
@@ -131,17 +228,20 @@ export default function HeroSection({
         </Box>
 
         <Box className="mt-10 grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
-          <Box className="apple-card relative min-h-[360px] overflow-hidden bg-black md:min-h-[520px]">
+          <Box className="apple-card relative min-h-[320px] overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,1),rgba(248,249,251,0.98)_48%,rgba(229,232,238,0.94))] sm:min-h-[380px] md:min-h-[520px]">
             {heroImages.length ? (
               heroImages.map((src, i) => {
                 const active = i === heroIndex;
+                const imageLoaded = loadedHeroImages.includes(src);
 
                 return (
                   <Box
                     key={src}
                     className={[
                       "absolute inset-0 transition-all duration-700",
-                      active ? "scale-100 opacity-100" : "scale-[1.02] opacity-0",
+                      active && imageLoaded
+                        ? "scale-100 opacity-100"
+                        : "scale-[1.02] opacity-0",
                     ].join(" ")}
                     sx={{
                       backgroundImage: `url(${src})`,
@@ -152,30 +252,23 @@ export default function HeroSection({
                 );
               })
             ) : (
-              <Box className="absolute inset-0 bg-linear-to-br from-slate-950 via-slate-800 to-slate-600" />
+              <>
+                <Box className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,1),rgba(248,249,251,0.98)_48%,rgba(229,232,238,0.94))]" />
+                <Box className="absolute inset-0 bg-linear-to-b from-white/34 via-white/12 to-slate-200/20" />
+              </>
             )}
-
-            <Box className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-            <Box className="absolute bottom-6 left-6 right-6 text-white md:bottom-8 md:left-8 md:right-8">
-              <Typography
-                className="font-black tracking-[-0.05em]"
-                sx={{
-                  fontSize: { xs: "34px", md: "48px", lg: "52px" },
-                  lineHeight: 0.98,
-                  whiteSpace: { md: "nowrap" },
-                }}
-              >
-                พร้อมออกเดินทาง ในไม่กี่คลิก
-              </Typography>
-            </Box>
+            <Box
+              className={`absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300 ${
+                activeHeroLoaded ? "opacity-100" : "opacity-0"
+              }`}
+            />
           </Box>
 
           <Box id="search" className="scroll-mt-28">
             <Card elevation={0} className="apple-card h-full">
-              <CardContent className="p-5! md:p-7!">
+              <CardContent className="p-5! sm:p-6! md:p-7!">
                 <Typography
-                  className="apple-heading"
-                  sx={{ fontSize: { xs: 30, md: 38 } }}
+                  className="apple-heading apple-auth-title"
                 >
                   ค้นหารถเช่า
                 </Typography>

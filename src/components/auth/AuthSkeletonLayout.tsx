@@ -12,13 +12,14 @@ import {
 } from "@mui/material";
 
 type AuthSkeletonLayoutProps = {
-  mode: "login" | "register";
+  mode: "login" | "register" | "forgot-password";
 };
 
 export default function AuthSkeletonLayout({
   mode,
 }: AuthSkeletonLayoutProps) {
   const isRegister = mode === "register";
+  const isForgotPassword = mode === "forgot-password";
 
   return (
     <Box className="apple-page relative">
@@ -33,15 +34,17 @@ export default function AuthSkeletonLayout({
           <CardContent className="p-8!">
             <Stack className="mb-6 items-center text-center">
               <Box className="mb-4 flex items-center justify-center">
-                <Skeleton
-                  variant="rounded"
-                  animation="wave"
-                  sx={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: "16px",
-                  }}
-                />
+                <Box className="flex h-16 w-16 items-center justify-center">
+                  <Skeleton
+                    variant="rounded"
+                    animation="wave"
+                    sx={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: "12px",
+                    }}
+                  />
+                </Box>
               </Box>
             </Stack>
 
@@ -50,7 +53,7 @@ export default function AuthSkeletonLayout({
                 variant="text"
                 animation="wave"
                 sx={{
-                  width: isRegister ? 210 : 180,
+                  width: isRegister ? 210 : isForgotPassword ? 230 : 180,
                   maxWidth: "100%",
                   height: 38,
                   borderRadius: "8px",
@@ -61,7 +64,7 @@ export default function AuthSkeletonLayout({
                 variant="text"
                 animation="wave"
                 sx={{
-                  width: isRegister ? 360 : 320,
+                  width: isRegister ? 360 : isForgotPassword ? 380 : 320,
                   maxWidth: "100%",
                   height: 20,
                   borderRadius: "8px",
@@ -104,7 +107,7 @@ export default function AuthSkeletonLayout({
                   variant="text"
                   animation="wave"
                   sx={{
-                    width: isRegister ? 120 : 28,
+                    width: isRegister || isForgotPassword ? 110 : 28,
                     height: 16,
                     borderRadius: "8px",
                     transform: "none",
@@ -113,7 +116,7 @@ export default function AuthSkeletonLayout({
                 />
               </Box>
 
-              {isRegister ? (
+              {isRegister || isForgotPassword ? (
                 <Box className="space-y-1.5">
                   <Skeleton
                     variant="rounded"
@@ -124,7 +127,7 @@ export default function AuthSkeletonLayout({
                     variant="text"
                     animation="wave"
                     sx={{
-                      width: 92,
+                      width: isForgotPassword ? 92 : 92,
                       height: 16,
                       borderRadius: "8px",
                       transform: "none",
@@ -139,34 +142,50 @@ export default function AuthSkeletonLayout({
                 animation="wave"
                 sx={{ width: "100%", height: 52, borderRadius: "999px" }}
               />
+
+              {isForgotPassword ? (
+                <Skeleton
+                  variant="text"
+                  animation="wave"
+                  sx={{
+                    width: 156,
+                    height: 20,
+                    borderRadius: "8px",
+                    transform: "none",
+                    justifySelf: "center",
+                  }}
+                />
+              ) : null}
             </Box>
 
-            <Box className="p-4">
-              <Box className="flex flex-col items-center gap-1">
-                <Skeleton
-                  variant="text"
-                  animation="wave"
-                  sx={{
-                    width: isRegister ? "92%" : "88%",
-                    maxWidth: 380,
-                    height: 18,
-                    borderRadius: "6px",
-                    transform: "none",
-                  }}
-                />
-                <Skeleton
-                  variant="text"
-                  animation="wave"
-                  sx={{
-                    width: isRegister ? "82%" : "74%",
-                    maxWidth: 320,
-                    height: 18,
-                    borderRadius: "6px",
-                    transform: "none",
-                  }}
-                />
+            {!isForgotPassword ? (
+              <Box className="p-4">
+                <Box className="flex flex-col items-center gap-1">
+                  <Skeleton
+                    variant="text"
+                    animation="wave"
+                    sx={{
+                      width: isRegister ? "92%" : "88%",
+                      maxWidth: 380,
+                      height: 18,
+                      borderRadius: "6px",
+                      transform: "none",
+                    }}
+                  />
+                  <Skeleton
+                    variant="text"
+                    animation="wave"
+                    sx={{
+                      width: isRegister ? "82%" : "74%",
+                      maxWidth: 320,
+                      height: 18,
+                      borderRadius: "6px",
+                      transform: "none",
+                    }}
+                  />
+                </Box>
               </Box>
-            </Box>
+            ) : null}
           </CardContent>
         </Card>
       </Container>

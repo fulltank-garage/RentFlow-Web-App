@@ -17,10 +17,10 @@ export default function BookingAddons({
 }: Props) {
   return (
     <Box>
-      <Typography className="text-sm font-semibold text-slate-900">
+      <Typography className="apple-card-title font-semibold text-slate-900">
         บริการเสริม
       </Typography>
-      <Typography className="mt-1 text-xs text-slate-500">
+      <Typography className="apple-label-text mt-1 text-slate-500">
         เลือกความต้องการเพิ่มเติมไว้ก่อนได้ ราคาส่วนนี้ยังไม่ถูกรวมในยอดชำระออนไลน์อัตโนมัติ
       </Typography>
 
@@ -44,15 +44,15 @@ export default function BookingAddons({
                 label={
                   <Box className="flex w-full items-start justify-between">
                     <Box>
-                      <Typography className="text-sm font-semibold text-slate-900">
+                      <Typography className="apple-body-sm font-semibold text-slate-900">
                         {a.title}
                       </Typography>
-                      <Typography className="text-xs text-slate-500">
+                      <Typography className="apple-label-text text-slate-500">
                         {a.desc}
                       </Typography>
                     </Box>
 
-                    <Typography className="ml-auto whitespace-nowrap text-sm font-bold text-slate-900">
+                    <Typography className="apple-body-sm ml-auto whitespace-nowrap font-bold text-slate-900">
                       {priceText}
                     </Typography>
                   </Box>
@@ -71,10 +71,10 @@ export default function BookingAddons({
         <Divider className="my-4! border-slate-200!" />
 
         <Box className="flex items-center justify-between">
-          <Typography className="text-sm text-slate-600">
+          <Typography className="apple-body-sm text-slate-600">
             มูลค่าบริการเสริมโดยประมาณ
           </Typography>
-          <Typography className="text-sm font-bold text-slate-900">
+          <Typography className="apple-body-sm font-bold text-slate-900">
             {addonsTotal > 0 ? formatTHB(addonsTotal) : "-"}
           </Typography>
         </Box>

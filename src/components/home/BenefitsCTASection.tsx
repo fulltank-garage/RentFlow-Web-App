@@ -11,32 +11,23 @@ import {
     Button,
 } from "@mui/material";
 
-import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
-import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
-import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
-import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
-
 type Benefit = {
     title: string;
     desc: string;
-    Icon: typeof PaidOutlinedIcon;
 };
 
 const BENEFITS: Benefit[] = [
     {
         title: "ราคาชัดเจน",
         desc: "แสดงราคารวมก่อนจอง ลดปัญหาค่าใช้จ่ายแอบแฝง",
-        Icon: PaidOutlinedIcon,
     },
     {
         title: "รถสภาพดี",
         desc: "ตรวจเช็คและทำความสะอาดก่อนส่งมอบทุกครั้ง",
-        Icon: VerifiedOutlinedIcon,
     },
     {
         title: "ซัพพอร์ต 24/7",
         desc: "มีทีมช่วยเหลือกรณีฉุกเฉินตลอดการเช่า",
-        Icon: SupportAgentOutlinedIcon,
     },
 ];
 
@@ -48,7 +39,7 @@ export default function BenefitsCTASection() {
     return (
         <Container maxWidth="lg" className="apple-section pt-0!">
             {/* Benefits */}
-            <Box className="grid gap-5 md:grid-cols-3">
+            <Box className="apple-shelf mt-1 md:grid md:grid-cols-3">
                 {BENEFITS.map((b) => (
                     <Card
                         key={b.title}
@@ -56,20 +47,14 @@ export default function BenefitsCTASection() {
                         sx={{ boxShadow: "none" }}
                         className="apple-card group"
                     >
-                        <CardContent className="p-6!">
-                            <Box className="flex items-start gap-4">
-                                <Box className="grid h-11 w-11 place-items-center rounded-full bg-[var(--rf-apple-surface-soft)]">
-                                    <b.Icon className="text-[var(--rf-apple-blue)]" fontSize="small" />
-                                </Box>
-
-                                <Box className="min-w-0">
-                                    <Typography variant="h6" className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
-                                        {b.title}
-                                    </Typography>
-                                    <Typography className="mt-1 text-sm leading-6 text-[var(--rf-apple-muted)]">
-                                        {b.desc}
-                                    </Typography>
-                                </Box>
+                        <CardContent className="p-5! sm:p-6!">
+                            <Box className="min-w-0">
+                                <Typography variant="h6" className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+                                    {b.title}
+                                </Typography>
+                                <Typography className="mt-1 text-sm leading-6 text-[var(--rf-apple-muted)]">
+                                    {b.desc}
+                                </Typography>
                             </Box>
                         </CardContent>
                     </Card>
@@ -78,10 +63,10 @@ export default function BenefitsCTASection() {
 
             {/* CTA */}
             <Box className="apple-card mt-8 overflow-hidden!">
-                <Box className="p-6 md:p-8">
+                <Box className="p-5 sm:p-6 md:p-8">
                     <Box className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <Box className="max-w-2xl">
-                            <Typography className="text-3xl font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
+                            <Typography className="apple-card-title-lg font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
                                 พร้อมจองรถสำหรับทริปถัดไปแล้วใช่ไหม?
                             </Typography>
                             <Typography className="mt-2 text-base text-[var(--rf-apple-muted)]">
@@ -101,7 +86,7 @@ export default function BenefitsCTASection() {
                             </Box>
                         </Box>
 
-                        <Box className="flex flex-col gap-2 sm:flex-row">
+                        <Box className="flex flex-col gap-2 sm:flex-row md:min-w-[232px]">
                             <Button
                                 size="large"
                                 variant="contained"
@@ -117,7 +102,6 @@ export default function BenefitsCTASection() {
                                 variant="outlined"
                                 className="rounded-full!"
                                 onClick={scrollToSearch}
-                                endIcon={<ArrowUpwardRoundedIcon />}
                             >
                                 ไปที่ค้นหา
                             </Button>

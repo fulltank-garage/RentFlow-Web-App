@@ -2,9 +2,14 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Box, CircularProgress, Container, Typography } from "@mui/material";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Typography,
+} from "@mui/material";
 import { getErrorMessage, getErrorStatus } from "@/src/lib/api-error";
 import usePageReady from "@/src/hooks/usePageReady";
 
@@ -65,24 +70,6 @@ const ACCOUNT_FIELDS: FieldConfig[] = [
     key: "avatarUrl",
     editable: true,
     placeholder: "https://example.com/avatar.jpg",
-  },
-];
-
-const SYSTEM_FIELDS: FieldConfig[] = [
-  {
-    label: "ผู้ให้บริการเข้าสู่ระบบ",
-    key: "provider",
-    editable: false,
-  },
-  {
-    label: "สร้างบัญชีเมื่อ",
-    key: "createdAt",
-    editable: false,
-  },
-  {
-    label: "อัปเดตล่าสุด",
-    key: "updatedAt",
-    editable: false,
   },
 ];
 
@@ -154,10 +141,18 @@ export default function ProfilePage() {
 
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
+  const [passwordSaving, setPasswordSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [passwordError, setPasswordError] = React.useState<string | null>(null);
+  const [passwordSuccess, setPasswordSuccess] = React.useState<string | null>(null);
   const [profile, setProfile] = React.useState<ProfileData | null>(null);
   const [draft, setDraft] = React.useState<ProfileData | null>(null);
   const [isEditing, setIsEditing] = React.useState(false);
+  const [passwordDraft, setPasswordDraft] = React.useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   React.useEffect(() => {
     let cancelled = false;
@@ -260,6 +255,58 @@ export default function ProfilePage() {
     []
   );
 
+  const handlePasswordDraftChange = React.useCallback(
+    (key: "currentPassword" | "newPassword" | "confirmPassword", value: string) => {
+      setPasswordDraft((prev) => ({ ...prev, [key]: value }));
+    },
+    []
+  );
+
+  const handleChangePassword = React.useCallback(async () => {
+    setPasswordError(null);
+    setPasswordSuccess(null);
+
+    if (!passwordDraft.currentPassword.trim()) {
+      setPasswordError("กรุณากรอกรหัสผ่านปัจจุบัน");
+      return;
+    }
+
+    if (!passwordDraft.newPassword.trim()) {
+      setPasswordError("กรุณากรอกรหัสผ่านใหม่");
+      return;
+    }
+
+    if (passwordDraft.newPassword.length < 6) {
+      setPasswordError("รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร");
+      return;
+    }
+
+    if (passwordDraft.newPassword !== passwordDraft.confirmPassword) {
+      setPasswordError("รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน");
+      return;
+    }
+
+    setPasswordSaving(true);
+
+    try {
+      await usersApi.changePassword({
+        currentPassword: passwordDraft.currentPassword,
+        newPassword: passwordDraft.newPassword,
+      });
+
+      setPasswordDraft({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordSuccess("เปลี่ยนรหัสผ่านเรียบร้อยแล้ว");
+    } catch (err: unknown) {
+      setPasswordError(getErrorMessage(err, "ไม่สามารถเปลี่ยนรหัสผ่านได้"));
+    } finally {
+      setPasswordSaving(false);
+    }
+  }, [passwordDraft]);
+
   if (!ready || loading || !profile || !draft) {
     return <ProfilePageSkeleton />;
   }
@@ -267,23 +314,23 @@ export default function ProfilePage() {
   return (
     <Box className="apple-page">
       <Container maxWidth="lg" className="apple-section">
-        <Box className="mx-auto mb-10 max-w-3xl text-center md:mb-12">
+        <Box className="apple-section-intro mb-10 max-w-3xl md:mb-12">
+          <Box className="flex flex-col gap-3">
           <Typography
             component="h1"
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             โปรไฟล์ของฉัน
           </Typography>
-          <Box
-            className="apple-subtitle mt-3 flex w-screen justify-center text-center text-lg!"
+          <Typography
+            className="apple-subtitle text-lg"
             sx={{
-              ml: "calc(50% - 50vw)",
               textAlign: "center",
               textWrap: "balance",
             }}
           >
             จัดการข้อมูลบัญชีและรายละเอียดติดต่อของคุณในที่เดียว
+          </Typography>
           </Box>
         </Box>
 
@@ -297,7 +344,6 @@ export default function ProfilePage() {
 
             <ProfileSectionCard
               title="ข้อมูลบัญชี"
-              icon={<PersonRoundedIcon fontSize="small" />}
             >
               <ProfileFieldsGrid
                 fields={ACCOUNT_FIELDS}
@@ -308,22 +354,70 @@ export default function ProfilePage() {
               />
             </ProfileSectionCard>
 
-            <ProfileSectionCard
-              title="ข้อมูลระบบ"
-              icon={<InfoOutlinedIcon fontSize="small" />}
-            >
-              <ProfileFieldsGrid
-                fields={SYSTEM_FIELDS}
-                profile={profile}
-                draft={draft}
-                isEditing={false}
-                onDraftChange={handleDraftChange}
-                columns="grid-cols-1"
-              />
+            <ProfileSectionCard title="เปลี่ยนรหัสผ่าน">
+              <Typography className="apple-body-sm text-[var(--rf-apple-muted)]">
+                อัปเดตรหัสผ่านของบัญชีนี้ได้จากส่วนนี้ทันที
+              </Typography>
+
+              {passwordError ? (
+                <Alert severity="error" className="rounded-2xl!">
+                  {passwordError}
+                </Alert>
+              ) : null}
+
+              {passwordSuccess ? (
+                <Alert severity="success" className="rounded-2xl!">
+                  {passwordSuccess}
+                </Alert>
+              ) : null}
+
+              <Box className="grid gap-3">
+                <ProfileField
+                  label="รหัสผ่านปัจจุบัน"
+                  value={passwordDraft.currentPassword}
+                  mode="edit"
+                  type="password"
+                  placeholder="กรอกรหัสผ่านปัจจุบัน"
+                  onChange={(value) =>
+                    handlePasswordDraftChange("currentPassword", value)
+                  }
+                />
+                <ProfileField
+                  label="รหัสผ่านใหม่"
+                  value={passwordDraft.newPassword}
+                  mode="edit"
+                  type="password"
+                  placeholder="กรอกรหัสผ่านใหม่"
+                  onChange={(value) =>
+                    handlePasswordDraftChange("newPassword", value)
+                  }
+                />
+                <ProfileField
+                  label="ยืนยันรหัสผ่านใหม่"
+                  value={passwordDraft.confirmPassword}
+                  mode="edit"
+                  type="password"
+                  placeholder="กรอกรหัสผ่านใหม่อีกครั้ง"
+                  onChange={(value) =>
+                    handlePasswordDraftChange("confirmPassword", value)
+                  }
+                />
+              </Box>
+
+              <Box className="flex justify-end">
+                <Button
+                  variant="contained"
+                  className="rounded-full! px-5! font-semibold!"
+                  onClick={handleChangePassword}
+                  disabled={passwordSaving}
+                >
+                  {passwordSaving ? "กำลังเปลี่ยนรหัสผ่าน..." : "เปลี่ยนรหัสผ่าน"}
+                </Button>
+              </Box>
             </ProfileSectionCard>
           </Box>
 
-          <Box className="space-y-5">
+          <Box className="order-first space-y-5 lg:order-none">
             {saving ? (
               <Box className="apple-card flex items-center justify-center p-6">
                 <CircularProgress size={22} />

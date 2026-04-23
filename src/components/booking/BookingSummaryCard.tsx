@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Box, Button, Card, CardContent, Divider, Typography } from "@mui/material";
 import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
+import StableImage from "@/src/components/common/StableImage";
 
 type Props = {
   car?: Car | null;
@@ -46,11 +46,11 @@ export default function BookingSummaryCard({
       sx={{ boxShadow: "none" }}
       className="apple-card lg:col-span-5"
     >
-      <CardContent className="p-4!">
-        <Typography className="text-sm font-semibold text-slate-900">
+      <CardContent className="p-4! sm:p-5!">
+        <Typography className="apple-card-title font-semibold text-slate-900">
           สรุปการจอง
         </Typography>
-        <Typography className="mt-1 text-xs text-slate-500">
+        <Typography className="apple-label-text mt-1 text-slate-500">
           ตรวจสอบรถ จุดรับ-คืน และยอดรวมก่อนชำระเงิน
         </Typography>
 
@@ -58,10 +58,10 @@ export default function BookingSummaryCard({
 
         {!car ? (
           <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
-            <Typography className="text-sm text-slate-700">
+            <Typography className="apple-body-sm text-slate-700">
               ไม่พบข้อมูลรถ (รหัสรถ: <span className="font-semibold">{carId || "-"}</span>)
             </Typography>
-            <Typography className="mt-2 text-xs text-slate-500">
+            <Typography className="apple-label-text mt-2 text-slate-500">
               กรุณากลับไปเลือกจากหน้า “รถทั้งหมด”
             </Typography>
 
@@ -75,28 +75,27 @@ export default function BookingSummaryCard({
             </Link>
           </Box>
         ) : (
-          <Box className="rounded-[18px]! bg-[var(--rf-apple-surface-soft)] p-4!">
-            <Box className="relative aspect-4/3 overflow-hidden rounded-[18px] bg-white">
-              <Image
-                src={car.image || "/RentFlow.png"}
-                alt={car.name}
-                fill
-                className="object-cover"
-              />
-            </Box>
+          <Box className="rounded-[18px]! bg-[var(--rf-apple-surface-soft)] p-4! sm:p-5!">
+            <StableImage
+              className="aspect-4/3 rounded-[18px]"
+              src={car.image || "/RentFlow.png"}
+              alt={car.name}
+              sizes="(min-width: 1200px) 34vw, (min-width: 640px) 50vw, 100vw"
+              imageClassName="object-cover"
+            />
 
             <Box className="mt-3 flex items-start justify-between gap-3">
               <Box className="min-w-0">
-                <Typography className="truncate text-base font-semibold text-slate-900">
+                <Typography className="apple-card-title truncate font-semibold text-slate-900">
                   {car.name}
                 </Typography>
-                <Typography className="mt-1 text-xs text-slate-600">
+                <Typography className="apple-label-text mt-1 text-slate-600">
                   {car.type} • {car.seats} ที่นั่ง • {car.transmission} • {car.fuel}
                 </Typography>
               </Box>
             </Box>
 
-            <Box className="mb-6! space-y-2 text-sm">
+            <Box className="apple-body-sm mb-2! mt-4 space-y-2">
               <Box className="flex items-center justify-between">
                 <Typography className="text-slate-600">ราคา/วัน</Typography>
                 <Typography className="font-semibold text-slate-900">
@@ -110,7 +109,7 @@ export default function BookingSummaryCard({
                   <Typography component="div" className="font-semibold text-slate-900">
                     {finalPickupPoint || "-"}
                   </Typography>
-                  <Typography component="div" className="text-xs font-normal text-slate-500">
+                  <Typography component="div" className="apple-label-text font-normal text-slate-500">
                     {pickupDate && pickupTime ? `${pickupDate} ${pickupTime}` : "-"}
                   </Typography>
                 </Box>
@@ -122,7 +121,7 @@ export default function BookingSummaryCard({
                   <Typography component="div" className="font-semibold text-slate-900">
                     {finalReturnPoint || "-"}
                   </Typography>
-                  <Typography component="div" className="text-xs font-normal text-slate-500">
+                  <Typography component="div" className="apple-label-text font-normal text-slate-500">
                     {returnDate && returnTime ? `${returnDate} ${returnTime}` : "-"}
                   </Typography>
                 </Box>
@@ -141,7 +140,7 @@ export default function BookingSummaryCard({
                     บริการเสริมที่เลือก
                   </Typography>
                   {addonsTotal > 0 ? (
-                    <Typography className="text-[11px] text-slate-500">
+                    <Typography className="apple-label-text text-slate-500">
                       ยังไม่รวมในยอดชำระออนไลน์
                     </Typography>
                   ) : null}
@@ -175,7 +174,7 @@ export default function BookingSummaryCard({
 
               <Box className="flex items-center justify-between">
                 <Typography className="text-slate-600">ยอดรวม</Typography>
-                <Typography className="text-lg font-bold text-slate-900">
+                <Typography className="apple-card-title font-bold text-slate-900">
                   {amount > 0 ? formatTHB(amount) : "-"}
                 </Typography>
               </Box>

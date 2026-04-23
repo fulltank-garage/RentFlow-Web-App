@@ -13,7 +13,6 @@ import {
   Alert,
   Chip,
 } from "@mui/material";
-import VerifiedRoundedIcon from "@mui/icons-material/VerifiedRounded";
 import BookingFlowScreen from "@/src/components/booking/BookingFlowScreen";
 import BookingFlowSteps from "@/src/components/booking/BookingFlowSteps";
 import PaymentPageSkeleton from "@/src/components/payment/PaymentPageSkeleton";
@@ -36,11 +35,10 @@ export default function PaymentPage() {
         <Container maxWidth="lg" className="apple-section">
           <BookingFlowSteps currentStep="payment" className="mb-8" />
 
-          <Box className="mx-auto max-w-3xl text-center">
+          <Box className="apple-section-intro max-w-3xl">
             <Box className="flex flex-col gap-4">
               <Typography
-                className="apple-heading"
-                sx={{ fontSize: { xs: 38, md: 56 } }}
+                className="apple-heading apple-section-title"
               >
                 ชำระเงิน
               </Typography>
@@ -63,7 +61,7 @@ export default function PaymentPage() {
             </Box>
           </Box>
 
-          <Box className="mt-10 grid gap-6 lg:grid-cols-12">
+          <Box className="mt-10 grid gap-5 lg:grid-cols-12 lg:gap-6">
             <PaymentBookingSummaryCard
               bookingId={payment.bookingId}
               carId={payment.carId}
@@ -102,7 +100,6 @@ export default function PaymentPage() {
 
                 {payment.done ? (
                   <Alert
-                    icon={<VerifiedRoundedIcon />}
                     severity="success"
                     className="mt-5 rounded-[22px]!"
                   >

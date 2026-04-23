@@ -3,9 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Box, Container, Typography, Stack, Divider } from "@mui/material";
-import FacebookRounded from "@mui/icons-material/FacebookRounded";
-import EmailRounded from "@mui/icons-material/EmailRounded";
-import PhoneRounded from "@mui/icons-material/PhoneRounded";
 
 import { NAV } from "@/src/constants/navigation";
 
@@ -33,23 +30,29 @@ export default function Footer() {
       className="border-t border-black/10 bg-[var(--rf-apple-surface-soft)]"
       aria-label="Site footer"
     >
-      <Container maxWidth="lg" className="py-10">
-        <Box className="grid gap-10 md:grid-cols-3">
+      <Container maxWidth="lg" className="py-10 md:py-12">
+        <Box className="grid gap-8 md:grid-cols-3 md:gap-10">
           {/* Brand */}
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box className="relative h-6 w-6 shrink-0">
-              <Image
-                src="/RentFlow.png"
-                alt="RentFlow Logo"
-                fill
-                className="object-contain"
-              />
-            </Box>
+          <Box className="space-y-3">
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Box className="relative h-6 w-6 shrink-0">
+                <Image
+                  src="/RentFlow.png"
+                  alt="RentFlow Logo"
+                  fill
+                  className="object-contain"
+                />
+              </Box>
 
-            <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
-              {BRAND.name}
+              <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+                {BRAND.name}
+              </Typography>
+            </Stack>
+
+            <Typography className="apple-body-sm max-w-sm text-[var(--rf-apple-muted)] md:hidden">
+              {BRAND.tagline}
             </Typography>
-          </Stack>
+          </Box>
 
           {/* Links */}
           <Box component="nav" aria-label="Footer navigation">
@@ -62,7 +65,7 @@ export default function Footer() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="w-fit text-sm text-[var(--rf-apple-muted)] outline-none transition hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-black/20"
+                  className="apple-body-sm w-fit text-[var(--rf-apple-muted)] outline-none transition hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:ring-2 focus-visible:ring-black/20"
                 >
                   {item.label}
                 </Link>
@@ -77,52 +80,44 @@ export default function Footer() {
             </Typography>
 
             <Stack spacing={1.5} className="mt-3">
-              {/* email */}
-              <Stack direction="row" spacing={1} alignItems="center">
-                <EmailRounded className="text-[var(--rf-apple-muted)]!" fontSize="small" />
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
-                >
-                  {CONTACT.email}
-                </a>
-              </Stack>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="apple-body-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+              >
+                อีเมล: {CONTACT.email}
+              </a>
 
-              {/* phone */}
-              <Stack direction="row" spacing={1} alignItems="center">
-                <PhoneRounded className="text-[var(--rf-apple-muted)]!" fontSize="small" />
-                <a
-                  href={`tel:${CONTACT.phone.replace(/-/g, "")}`}
-                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
-                >
-                  {CONTACT.phone}
-                </a>
-              </Stack>
+              <a
+                href={`tel:${CONTACT.phone.replace(/-/g, "")}`}
+                className="apple-body-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+              >
+                โทร: {CONTACT.phone}
+              </a>
 
-              {/* socials */}
-              <Stack direction="row" spacing={1} alignItems="center">
-                <FacebookRounded fontSize="small" className="text-[var(--rf-apple-muted)]!" />
-                <a
-                  href={SOCIAL.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
-                >
-                  Facebook
-                </a>
-              </Stack>
+              <a
+                href={SOCIAL.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="apple-body-sm text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)] focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+              >
+                Facebook
+              </a>
             </Stack>
           </Box>
         </Box>
 
         <Divider className="my-6! border-black/10!" />
 
-        <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Typography className="text-xs text-[var(--rf-apple-muted)]">
+        <Box className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <Typography className="apple-label-text text-[var(--rf-apple-muted)]">
             © {year} {BRAND.name} • แพลตฟอร์มให้บริการเช่ารถยนต์ออนไลน์
           </Typography>
 
-          <Stack direction="row" spacing={2} className="text-sm">
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={{ xs: 1, sm: 2 }}
+            className="text-sm"
+          >
             <Link
               href="/terms"
               className="text-[var(--rf-apple-muted)] hover:text-[var(--rf-apple-ink)]"

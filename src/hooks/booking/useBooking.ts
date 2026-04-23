@@ -740,7 +740,7 @@ export default function useBooking() {
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setReady(true);
-    }, 2000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);

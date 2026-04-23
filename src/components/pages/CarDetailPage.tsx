@@ -50,7 +50,7 @@ export default function CarDetailPage({ carId }: { carId: string }) {
   return (
     <Box className="apple-page">
       <Container maxWidth="lg" className="apple-section">
-        <Box className="mt-5 grid gap-6 lg:grid-cols-12">
+        <Box className="grid gap-5 lg:grid-cols-12 lg:gap-6">
           <CarDetailHero
             image={detail.image}
             name={detail.name}

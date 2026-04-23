@@ -1,12 +1,16 @@
+"use client";
+
 import { Box, Skeleton } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function BookingFlowStepsSkeleton({
   className = "",
 }: {
   className?: string;
 }) {
-  const CIRCLE_SIZE = 50;
-  const CONNECTOR_WIDTH = 92;
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const CIRCLE_SIZE = isMobile ? 42 : 50;
+  const CONNECTOR_WIDTH = isMobile ? 44 : 92;
   const TRACK_COLUMNS = Array.from({ length: 4 }, (_, index) =>
     index === 3 ? `${CIRCLE_SIZE}px` : `${CIRCLE_SIZE}px ${CONNECTOR_WIDTH}px`
   ).join(" ");
@@ -16,16 +20,16 @@ export default function BookingFlowStepsSkeleton({
       className={`relative left-1/2 w-screen -translate-x-1/2 ${className}`.trim()}
     >
       <Box className="overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <Box className="mx-auto w-fit px-3">
+        <Box className="mx-auto w-fit px-4">
           <Box
             sx={{
               display: "grid",
               gridTemplateColumns: TRACK_COLUMNS,
-              gridTemplateRows: "50px auto",
+              gridTemplateRows: `${CIRCLE_SIZE}px auto`,
               alignItems: "center",
               justifyItems: "center",
               justifyContent: "center",
-              rowGap: "12px",
+              rowGap: isMobile ? "10px" : "12px",
             }}
           >
           {Array.from({ length: 4 }).map((_, index) => (
@@ -37,8 +41,8 @@ export default function BookingFlowStepsSkeleton({
                 variant="circular"
                 animation="wave"
                 sx={{
-                  width: 50,
-                  height: 50,
+                  width: CIRCLE_SIZE,
+                  height: CIRCLE_SIZE,
                   gridColumn: index * 2 + 1,
                   gridRow: 1,
                 }}
@@ -53,7 +57,7 @@ export default function BookingFlowStepsSkeleton({
                     justifySelf: "stretch",
                     width: "calc(100% + 8px)",
                     ml: "-4px",
-                    height: 10,
+                    height: isMobile ? 8 : 10,
                     borderRadius: 0,
                   }}
                 />
@@ -62,8 +66,8 @@ export default function BookingFlowStepsSkeleton({
                 variant="text"
                 animation="wave"
                 sx={{
-                  width: 120,
-                  height: 20,
+                  width: isMobile ? CIRCLE_SIZE + 32 : 120,
+                  height: isMobile ? 18 : 20,
                   borderRadius: "8px",
                   transform: "none",
                   gridColumn: index * 2 + 1,

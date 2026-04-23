@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Box, Container, Divider, Skeleton } from "@mui/material";
+import { Box, Container, Skeleton } from "@mui/material";
 
 function HeaderSkeleton() {
   return (
@@ -104,7 +104,7 @@ function BranchInfoRowSkeleton() {
 
 function ContactInfoSkeleton() {
   return (
-    <Box className="apple-card apple-card-no-hover p-4!">
+    <Box>
       <Skeleton
         variant="text"
         animation="wave"
@@ -127,8 +127,6 @@ function ContactInfoSkeleton() {
           transform: "none",
         }}
       />
-
-      <Divider className="my-5! border-black/10!" />
 
       <Box className="space-y-4">
         {Array.from({ length: 2 }).map((_, index) => (
@@ -183,8 +181,6 @@ function ContactInfoSkeleton() {
         ))}
       </Box>
 
-      <Divider className="my-5! border-black/10!" />
-
       <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
         <Skeleton
           variant="text"
@@ -225,7 +221,7 @@ function ContactInfoSkeleton() {
 
 function ContactPreparationSkeleton() {
   return (
-    <Box className="apple-card apple-card-no-hover p-4!">
+    <Box>
       <Skeleton
         variant="text"
         animation="wave"
@@ -248,8 +244,6 @@ function ContactPreparationSkeleton() {
           transform: "none",
         }}
       />
-
-      <Divider className="my-5! border-black/10!" />
 
       <Box className="space-y-4">
         <Box className="rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">

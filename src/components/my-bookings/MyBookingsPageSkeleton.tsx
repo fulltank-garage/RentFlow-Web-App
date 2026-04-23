@@ -62,14 +62,14 @@ function FiltersSkeleton() {
 function BookingItemSkeleton() {
   return (
     <Box className="apple-card apple-card-no-hover p-4">
-      <Box className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <Box className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <Box className="min-w-0 flex-1 space-y-1.5">
           <Skeleton
             variant="text"
             animation="wave"
             sx={{
-              width: "64%",
-              height: 20,
+              width: "72%",
+              height: 22,
               borderRadius: "8px",
               transform: "none",
             }}
@@ -78,7 +78,17 @@ function BookingItemSkeleton() {
             variant="text"
             animation="wave"
             sx={{
-              width: "52%",
+              width: "46%",
+              height: 16,
+              borderRadius: "8px",
+              transform: "none",
+            }}
+          />
+          <Skeleton
+            variant="text"
+            animation="wave"
+            sx={{
+              width: "44%",
               height: 16,
               borderRadius: "8px",
               transform: "none",
@@ -86,21 +96,29 @@ function BookingItemSkeleton() {
           />
         </Box>
 
-        <Box className="flex flex-wrap items-center gap-4! md:gap-3">
+        <Box className="flex flex-col gap-2 md:items-end">
+          <Box className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4! md:justify-end md:gap-2">
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              sx={{ width: 168, height: 40, borderRadius: "999px" }}
+            />
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              sx={{ width: 132, height: 44, borderRadius: "999px" }}
+            />
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              sx={{ width: 176, height: 44, borderRadius: "999px" }}
+            />
+          </Box>
+
           <Skeleton
             variant="rounded"
             animation="wave"
-            sx={{ width: 92, height: 28, borderRadius: "999px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            animation="wave"
-            sx={{ width: 128, height: 36, borderRadius: "999px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            animation="wave"
-            sx={{ width: 112, height: 36, borderRadius: "999px" }}
+            sx={{ width: "100%", maxWidth: 184, height: 44, borderRadius: "999px" }}
           />
         </Box>
       </Box>

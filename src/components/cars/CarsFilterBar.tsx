@@ -40,9 +40,24 @@ export default function CarsFilterBar({
   onReturnDateChange,
   onReset,
 }: Props) {
+  const fieldSX = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "18px",
+    },
+  };
+
   return (
-    <Box className="apple-card mt-8 p-4 md:p-5">
-      <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+    <Box className="apple-card mt-8 p-4 sm:p-5">
+      <Box className="mb-4 flex flex-col gap-1">
+        <Box className="apple-card-title font-semibold text-[var(--rf-apple-ink)]">
+          ค้นหาและกรองรถ
+        </Box>
+        <Box className="apple-body-sm text-[var(--rf-apple-muted)]">
+          ปรับสาขา ช่วงวัน และประเภทรถให้ตรงกับการเดินทางของคุณ
+        </Box>
+      </Box>
+
+      <Box className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <TextField
           label="ค้นหารถ"
           value={q}
@@ -50,11 +65,7 @@ export default function CarsFilterBar({
           size="small"
           fullWidth
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         />
 
         <TextField
@@ -65,11 +76,7 @@ export default function CarsFilterBar({
           size="small"
           fullWidth
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         >
           <MenuItem value="all">ทั้งหมด</MenuItem>
           {carTypes.map((carType) => (
@@ -87,11 +94,7 @@ export default function CarsFilterBar({
           size="small"
           fullWidth
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         >
           <MenuItem value="">ทั้งหมด</MenuItem>
           {locations.map((loc) => (
@@ -110,11 +113,7 @@ export default function CarsFilterBar({
           fullWidth
           InputLabelProps={{ shrink: true }}
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         />
 
         <TextField
@@ -126,15 +125,11 @@ export default function CarsFilterBar({
           fullWidth
           InputLabelProps={{ shrink: true }}
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         />
       </Box>
 
-      <Box className="mt-4 grid gap-4 md:grid-cols-2">
+      <Box className="mt-4 grid gap-4 sm:grid-cols-2">
         <TextField
           select
           label="เรียงตาม"
@@ -143,11 +138,7 @@ export default function CarsFilterBar({
           size="small"
           fullWidth
           variant="outlined"
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "10px",
-            },
-          }}
+          sx={fieldSX}
         >
           <MenuItem value="price_asc">ราคาต่ำ → สูง</MenuItem>
           <MenuItem value="price_desc">ราคาสูง → ต่ำ</MenuItem>
@@ -155,7 +146,7 @@ export default function CarsFilterBar({
 
         <Button
           variant="outlined"
-          className="rounded-full!"
+          className="rounded-full! py-2.5!"
           onClick={onReset}
         >
           รีเซ็ตตัวกรอง

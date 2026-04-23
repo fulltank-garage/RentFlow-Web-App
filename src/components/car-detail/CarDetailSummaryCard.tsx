@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import VerifiedRoundedIcon from "@mui/icons-material/VerifiedRounded";
 import { toTHBText } from "@/src/utils/car-detail/carDetail.format";
 
 type Props = {
@@ -37,10 +36,10 @@ export default function CarDetailSummaryCard({ detail }: Props) {
       sx={{ boxShadow: "none" }}
       className="apple-card lg:col-span-5"
     >
-      <CardContent className="p-4!">
+      <CardContent className="p-4! sm:p-5!">
         <Box className="flex items-start justify-between gap-3">
           <Box className="min-w-0">
-            <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-card-title-lg truncate font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
               {detail.name}
             </Typography>
             <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
@@ -53,11 +52,9 @@ export default function CarDetailSummaryCard({ detail }: Props) {
         <Box className="mt-3 flex items-center gap-2">
           <Chip
             size="small"
-            icon={<VerifiedRoundedIcon fontSize="small" />}
             label="ตรวจเช็คก่อนส่งมอบ"
             variant="outlined"
             className="apple-pill text-[var(--rf-apple-muted)]!"
-            sx={{ ml: 1 }}
           />
         </Box>
 
@@ -68,7 +65,7 @@ export default function CarDetailSummaryCard({ detail }: Props) {
             ราคาเริ่มต้น
           </Typography>
           <Box className="mt-1 flex items-end gap-2">
-            <Typography className="text-3xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-price-text font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
               {toTHBText(detail.pricePerDay)}
             </Typography>
             <Typography className="text-sm font-medium text-[var(--rf-apple-muted)]">

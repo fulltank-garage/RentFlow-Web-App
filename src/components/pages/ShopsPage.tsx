@@ -16,7 +16,7 @@ export default function ShopsPage() {
   React.useEffect(() => {
     const timer = window.setTimeout(() => {
       setMinimumLoading(false);
-    }, 2000);
+    }, 500);
 
     return () => window.clearTimeout(timer);
   }, []);

@@ -33,8 +33,7 @@ export default function ClassPage({ slug }: { slug: string }) {
         <Box className="mx-auto max-w-3xl text-center">
           <Box className="flex flex-col gap-3">
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 42, md: 64 } }}
+              className="apple-heading apple-page-title"
             >
               รถ{meta.title}
             </Typography>

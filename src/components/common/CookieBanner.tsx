@@ -9,7 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import CookieRoundedIcon from "@mui/icons-material/CookieRounded";
 
 const KEY = "rf_cookie_consent_v1";
 
@@ -68,13 +67,6 @@ export default function CookieBanner() {
       >
         <Box className="p-4 sm:p-5">
           <Stack direction="row" spacing={1.5} alignItems="flex-start">
-            <Box
-              className="grid h-10 w-10 place-items-center rounded-2xl border border-slate-200 bg-slate-50"
-              sx={{ flex: "0 0 auto" }}
-            >
-              <CookieRoundedIcon fontSize="small" />
-            </Box>
-
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Stack
                 direction="row"

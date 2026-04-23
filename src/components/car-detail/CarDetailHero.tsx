@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import { Box, Chip, Typography } from "@mui/material";
+import StableImage from "@/src/components/common/StableImage";
 
 type Props = {
   image?: string;
@@ -11,20 +11,26 @@ type Props = {
 };
 
 export default function CarDetailHero({ image, name, isAvailable = true }: Props) {
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+
   return (
     <Box className="lg:col-span-7">
       <Box className="apple-card relative overflow-hidden">
-        <Box className="relative aspect-16/10">
-          <Image
-            src={image || "/RentFlow.png"}
-            alt={name}
-            fill
-            className="object-cover"
-            priority
-          />
-        </Box>
+        <StableImage
+          className="aspect-16/10"
+          src={image || "/RentFlow.png"}
+          alt={name}
+          priority
+          sizes="(min-width: 1200px) 58vw, 100vw"
+          imageClassName="object-cover"
+          onLoadedChange={setImageLoaded}
+        />
 
-        <Box className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/10 to-transparent" />
+        <Box
+          className={`pointer-events-none absolute inset-0 bg-linear-to-t from-black/10 to-transparent transition-opacity duration-300 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
         {!isAvailable ? (
           <>
             <Box className="absolute left-5 top-5 z-[1]">

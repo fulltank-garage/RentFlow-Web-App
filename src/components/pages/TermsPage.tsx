@@ -38,11 +38,10 @@ export default function TermsPage() {
       <Box aria-hidden className="pointer-events-none fixed inset-0" />
 
       <Container maxWidth="lg" className="apple-section relative">
-        <Box className="mx-auto max-w-3xl text-center">
+        <Box className="apple-section-intro max-w-3xl">
           <Box className="flex flex-col gap-4">
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 38, md: 56 } }}
+              className="apple-heading apple-section-title"
             >
               เงื่อนไขการใช้งาน
             </Typography>

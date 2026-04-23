@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Box,
@@ -41,6 +42,7 @@ type AuthCardProps = {
   submitErrorMessage: string;
   agreementText: React.ReactNode;
   redirectTo?: string;
+  forgotPasswordHref?: string;
 };
 
 const fieldSX = {
@@ -55,6 +57,7 @@ export default function AuthCard({
   submitErrorMessage,
   agreementText,
   redirectTo = "/",
+  forgotPasswordHref,
 }: AuthCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -171,7 +174,7 @@ export default function AuthCard({
           className="apple-card w-full"
           sx={{ backdropFilter: "blur(6px)" }}
         >
-          <CardContent className="p-8!">
+          <CardContent className="p-5! sm:p-6! md:p-8!">
             <Stack className="mb-6 items-center text-center">
               <Box className="mb-4 flex items-center justify-center">
                 <Box className="relative h-16 w-16">
@@ -188,8 +191,7 @@ export default function AuthCard({
 
             <Stack spacing={1} className="mb-4 items-center text-center">
               <Typography
-                className="apple-heading"
-                sx={{ fontSize: { xs: 30, md: 38 } }}
+                className="apple-heading apple-auth-title"
               >
                 {title}
               </Typography>
@@ -282,6 +284,23 @@ export default function AuthCard({
                   "เข้าสู่ระบบ"
                 )}
               </Button>
+
+              {!isRegister && forgotPasswordHref ? (
+                <Box className="flex items-center justify-center gap-0.5 text-sm text-[var(--rf-apple-muted)]">
+                  <span>มีปัญหาในการเข้าสู่ระบบ?</span>
+                  <Link
+                    href={forgotPasswordHref}
+                    className="font-semibold text-[var(--rf-apple-blue)] transition-opacity duration-300 hover:opacity-80"
+                    style={{
+                      textDecorationLine: "underline",
+                      textDecorationThickness: "1.5px",
+                      textUnderlineOffset: "2px",
+                    }}
+                  >
+                    ลืมรหัสผ่าน
+                  </Link>
+                </Box>
+              ) : null}
             </Box>
 
             <Box className="p-4">

@@ -2,15 +2,9 @@
 
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
-  Divider,
   Chip,
 } from "@mui/material";
-import PlaceRoundedIcon from "@mui/icons-material/PlaceRounded";
-import PhoneRoundedIcon from "@mui/icons-material/PhoneRounded";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import { formatLocationLabel } from "@/src/lib/rentflow-catalog";
 import type { Branch } from "@/src/services/branches/branches.types";
 
@@ -35,122 +29,97 @@ export default function ContactInfoCard({
   description?: string;
 }) {
   return (
-    <Card
-      elevation={0}
-      sx={{ boxShadow: "none" }}
-      className="apple-card"
-    >
-      <CardContent className="p-4!">
-        <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
-          {title}
-        </Typography>
-        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-          {description}
-        </Typography>
+    <Box>
+      <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+        {title}
+      </Typography>
+      <Typography className="apple-body-sm mt-1 text-[var(--rf-apple-muted)]">
+        {description}
+      </Typography>
 
-        <Divider className="my-5! border-black/10!" />
+      {branches.length ? (
+        <Box className="mt-5 space-y-4">
+          {branches.map((branch) => (
+            <Box
+              key={branch.id}
+              className="apple-card rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4"
+            >
+              <Box className="flex flex-wrap items-start justify-between gap-3">
+                <Box>
+                  <Typography className="apple-card-title font-semibold text-[var(--rf-apple-ink)]">
+                    {branch.name}
+                  </Typography>
+                  <Typography className="apple-label-text mt-1 text-[var(--rf-apple-muted)]">
+                    รหัสสาขา: {branch.id}
+                  </Typography>
+                </Box>
 
-        {branches.length ? (
-          <Box className="space-y-4">
-            {branches.map((branch) => (
-              <Box
-                key={branch.id}
-                className="apple-card apple-card-no-hover rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4"
-              >
-                <Box className="flex flex-wrap items-start justify-between gap-3">
-                  <Box>
-                    <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
-                      {branch.name}
-                    </Typography>
-                    <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
-                      รหัสสาขา: {branch.id}
-                    </Typography>
-                  </Box>
-
-                  <Box className="flex flex-wrap gap-2">
-                    {branch.locationId ? (
-                      <Chip
-                        size="small"
-                        label={formatLocationLabel(branch.locationId)}
-                        className="border! border-slate-200! bg-white! text-slate-700!"
-                      />
-                    ) : null}
+                <Box className="flex flex-wrap gap-2">
+                  {branch.locationId ? (
                     <Chip
                       size="small"
-                      label={branch.isActive ? "พร้อมให้บริการ" : "ปิดใช้งาน"}
-                      className={
-                        branch.isActive
-                          ? "border! border-emerald-200! bg-emerald-50! text-emerald-700!"
-                          : "border! border-slate-200! bg-white! text-slate-500!"
-                      }
+                      label={formatLocationLabel(branch.locationId)}
+                      className="!border-0 !bg-slate-100 !text-slate-700"
                     />
-                  </Box>
-                </Box>
-
-                <Box className="mt-4 space-y-3">
-                  <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
-                      <PlaceRoundedIcon fontSize="small" />
-                    </Box>
-                    <Box>
-                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
-                        ที่อยู่
-                      </Typography>
-                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
-                        {branch.address || "-"}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
-                      <PhoneRoundedIcon fontSize="small" />
-                    </Box>
-                    <Box>
-                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
-                        โทรศัพท์
-                      </Typography>
-                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
-                        {branch.phone || "ยังไม่มีเบอร์โทร"}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  <Box className="flex items-start gap-3">
-                    <Box className="grid h-9 w-9 place-items-center rounded-full bg-white text-[var(--rf-apple-blue)]">
-                      <AccessTimeRoundedIcon fontSize="small" />
-                    </Box>
-                    <Box>
-                      <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
-                        เวลาเปิด-ปิด
-                      </Typography>
-                      <Typography className="text-sm text-[var(--rf-apple-muted)]">
-                        {formatBranchHours(branch)}
-                      </Typography>
-                    </Box>
-                  </Box>
+                  ) : null}
+                  <Chip
+                    size="small"
+                    label={branch.isActive ? "พร้อมให้บริการ" : "ปิดใช้งาน"}
+                    className={
+                      branch.isActive
+                        ? "!border-0 !bg-green-500 !text-white"
+                        : "!border-0 !bg-rose-500 !text-white"
+                    }
+                  />
                 </Box>
               </Box>
-            ))}
-          </Box>
-        ) : (
-          <Box className="rounded-[18px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-5 text-sm text-[var(--rf-apple-muted)]">
-            ยังไม่พบสาขาให้ติดต่อในตอนนี้
-          </Box>
-        )}
 
-        <Divider className="my-5! border-black/10!" />
+              <Box className="mt-4 space-y-3">
+                <Box>
+                  <Typography className="apple-label-text font-semibold text-[var(--rf-apple-ink)]">
+                    ที่อยู่
+                  </Typography>
+                  <Typography className="apple-body-sm text-[var(--rf-apple-muted)]">
+                    {branch.address || "-"}
+                  </Typography>
+                </Box>
 
-        <Box className="apple-card apple-card-no-hover rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
-          <Typography className="text-xs font-semibold text-[var(--rf-apple-ink)]">
-            ทิป
-          </Typography>
-          <Typography className="mt-1 text-xs text-[var(--rf-apple-muted)]">
-            หากติดต่อเรื่องการจอง แนะนำแนบรหัสการจอง วันรับ-คืนรถ
-            และสาขาที่เกี่ยวข้อง จะช่วยให้ทีมงานดูแลได้เร็วขึ้น
-          </Typography>
+                <Box>
+                  <Typography className="apple-label-text font-semibold text-[var(--rf-apple-ink)]">
+                    โทรศัพท์
+                  </Typography>
+                  <Typography className="apple-body-sm text-[var(--rf-apple-muted)]">
+                    {branch.phone || "ยังไม่มีเบอร์โทร"}
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography className="apple-label-text font-semibold text-[var(--rf-apple-ink)]">
+                    เวลาเปิด-ปิด
+                  </Typography>
+                  <Typography className="apple-body-sm text-[var(--rf-apple-muted)]">
+                    {formatBranchHours(branch)}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          ))}
         </Box>
-      </CardContent>
-    </Card>
+      ) : (
+        <Box className="apple-body-sm mt-5 rounded-[18px] border border-dashed border-black/10 bg-[var(--rf-apple-surface-soft)] p-5 text-[var(--rf-apple-muted)]">
+          ยังไม่พบสาขาให้ติดต่อในตอนนี้
+        </Box>
+      )}
+
+      <Box className="apple-card mt-5 rounded-[18px] bg-[var(--rf-apple-surface-soft)] p-4">
+        <Typography className="apple-label-text font-semibold text-[var(--rf-apple-ink)]">
+          ทิป
+        </Typography>
+        <Typography className="apple-label-text mt-1 text-[var(--rf-apple-muted)]">
+          หากติดต่อเรื่องการจอง แนะนำแนบรหัสการจอง วันรับ-คืนรถ
+          และสาขาที่เกี่ยวข้อง จะช่วยให้ทีมงานดูแลได้เร็วขึ้น
+        </Typography>
+      </Box>
+    </Box>
   );
 }

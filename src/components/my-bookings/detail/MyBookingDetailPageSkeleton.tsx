@@ -28,18 +28,6 @@ function HeaderSkeleton() {
             transform: "none",
           }}
         />
-        <Box className="mt-2 flex flex-wrap justify-center gap-3">
-          <Skeleton
-            variant="rounded"
-            animation="wave"
-            sx={{ width: 190, height: 28, borderRadius: "999px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            animation="wave"
-            sx={{ width: 220, height: 28, borderRadius: "999px" }}
-          />
-        </Box>
       </Box>
     </Box>
   );
@@ -72,24 +60,46 @@ function TopCardSkeleton() {
                   transform: "none",
                 }}
               />
-            </Box>
-
-            <Box className="flex flex-wrap items-center gap-2">
-              <Skeleton
-                variant="rounded"
-                animation="wave"
-                sx={{ width: 110, height: 28, borderRadius: "999px" }}
-              />
               <Skeleton
                 variant="text"
                 animation="wave"
                 sx={{
-                  width: 240,
+                  width: "42%",
                   height: 18,
                   borderRadius: "8px",
                   transform: "none",
                 }}
               />
+            </Box>
+
+            <Box className="flex flex-wrap items-start gap-2">
+              <Skeleton
+                variant="rounded"
+                animation="wave"
+                sx={{ width: 132, height: 44, borderRadius: "999px" }}
+              />
+              <Box className="grid gap-1">
+                <Skeleton
+                  variant="text"
+                  animation="wave"
+                  sx={{
+                    width: 220,
+                    height: 18,
+                    borderRadius: "8px",
+                    transform: "none",
+                  }}
+                />
+                <Skeleton
+                  variant="text"
+                  animation="wave"
+                  sx={{
+                    width: 214,
+                    height: 18,
+                    borderRadius: "8px",
+                    transform: "none",
+                  }}
+                />
+              </Box>
             </Box>
           </Box>
 
@@ -109,49 +119,6 @@ function TopCardSkeleton() {
               animation="wave"
               sx={{ width: 124, height: 36, borderRadius: "999px" }}
             />
-          </Box>
-        </Box>
-
-        <Box className="rounded-[26px] bg-[var(--rf-apple-surface-soft)] p-4 md:p-5">
-          <Box className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-            <Box className="grid gap-2 sm:grid-cols-2">
-              {Array.from({ length: 2 }).map((_, index) => (
-                <Box
-                  key={`booking-overview-card-${index}`}
-                  className="rounded-[20px] bg-white px-4 py-3"
-                >
-                  <Skeleton
-                    variant="text"
-                    animation="wave"
-                    sx={{
-                      width: 80,
-                      height: 16,
-                      borderRadius: "8px",
-                      transform: "none",
-                    }}
-                  />
-                  <Skeleton
-                    variant="text"
-                    animation="wave"
-                    sx={{
-                      mt: 0.5,
-                      width: "78%",
-                      height: 18,
-                      borderRadius: "8px",
-                      transform: "none",
-                    }}
-                  />
-                </Box>
-              ))}
-            </Box>
-
-            <Box className="rounded-[20px] bg-white px-4 py-3">
-              <Skeleton
-                variant="rounded"
-                animation="wave"
-                sx={{ width: 220, height: 28, borderRadius: "999px" }}
-              />
-            </Box>
           </Box>
         </Box>
       </Box>
@@ -178,6 +145,18 @@ function SectionCardSkeleton({
           transform: "none",
         }}
       />
+      <Skeleton
+        variant="text"
+        animation="wave"
+        sx={{
+          mt: 1,
+          width: 220,
+          maxWidth: "100%",
+          height: 18,
+          borderRadius: "8px",
+          transform: "none",
+        }}
+      />
       <Divider className="my-4! border-black/10!" />
 
       <Box
@@ -186,7 +165,10 @@ function SectionCardSkeleton({
         }`}
       >
         {Array.from({ length: rows }).map((_, index) => (
-          <Box key={`detail-section-row-${columns}-${index}`} className="space-y-1.5">
+          <Box
+            key={`detail-section-row-${columns}-${index}`}
+            className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4 space-y-1.5"
+          >
             <Skeleton
               variant="text"
               animation="wave"

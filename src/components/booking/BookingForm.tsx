@@ -109,7 +109,7 @@ export default function BookingForm({
 }: Props) {
   return (
     <Box component="form" onSubmit={onSubmit} className="grid gap-4">
-      <Box className="grid gap-4 lg:grid-cols-3">
+      <Box className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <TextField
           label="ชื่อ-นามสกุล"
           value={fullName}
@@ -207,7 +207,7 @@ export default function BookingForm({
                 <Typography className="mt-1 text-xs text-amber-800">
                   ต่อรองราคา/ขอเงื่อนไขพิเศษ หรือประเมินค่าส่งเพิ่มเติมได้
                 </Typography>
-                <Typography className="mt-2 text-[11px] text-amber-700">
+                <Typography className="apple-label-text mt-2 text-amber-700">
                   * ระบบจะส่งรายละเอียดการจองแบบย่อให้แอดมินอัตโนมัติ
                 </Typography>
               </Box>
@@ -246,7 +246,7 @@ export default function BookingForm({
             type="submit"
             variant="contained"
             disabled={!canSubmit || loading || checkingAvailability || !carAvailable}
-            className="rounded-xl! px-6! py-3! font-semibold!"
+            className="rounded-xl! px-6! py-3! font-semibold! sm:min-w-[260px]"
             sx={{
               textTransform: "none",
               backgroundColor: "#059669",

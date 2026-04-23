@@ -88,18 +88,16 @@ export default function CarsPage() {
   return (
     <Box className="apple-page">
     <Container maxWidth="lg" className="apple-section">
-      <Box className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             {isTenantCarsPage ? "รถทั้งหมดของ" : "รถทั้งหมด"}
           </Typography>
           {isTenantCarsPage && scopedShopName ? (
             <Typography
-              className="text-center font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]"
-              sx={{ fontSize: { xs: 28, md: 44 }, lineHeight: 1.05 }}
+              className="apple-tenant-title text-center font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]"
             >
               {scopedShopName}
             </Typography>

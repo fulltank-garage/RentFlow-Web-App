@@ -28,10 +28,9 @@ export default function BookingPage() {
         <Container maxWidth="lg" className="apple-section">
           <BookingFlowSteps currentStep="booking" className="mb-8" />
 
-          <Box className="mx-auto max-w-3xl text-center">
+          <Box className="apple-section-intro max-w-3xl">
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 42, md: 64 } }}
+              className="apple-heading apple-page-title"
             >
               จองรถ
             </Typography>
@@ -40,7 +39,7 @@ export default function BookingPage() {
             </Typography>
           </Box>
 
-          <Box className="mt-10 grid gap-6 lg:grid-cols-12">
+          <Box className="mt-10 grid gap-5 lg:grid-cols-12 lg:gap-6">
             <BookingSummaryCard
               car={booking.car}
               carId={booking.carId}

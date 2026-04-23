@@ -91,20 +91,7 @@ function HeroBadgesSkeleton() {
 function FeatureCardSkeleton() {
   return (
     <Box className="apple-card apple-card-no-hover p-5">
-      <Box className="flex items-start gap-3">
-        <Skeleton
-          variant="rounded"
-          animation="wave"
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: "999px",
-            flexShrink: 0,
-            mt: "2px",
-          }}
-        />
-
-        <Box className="min-w-0 flex-1 space-y-1.5">
+      <Box className="min-w-0 space-y-1.5">
           <Skeleton
             variant="text"
             animation="wave"
@@ -135,7 +122,6 @@ function FeatureCardSkeleton() {
               transform: "none",
             }}
           />
-        </Box>
       </Box>
     </Box>
   );
@@ -143,7 +129,7 @@ function FeatureCardSkeleton() {
 
 function StepCardSkeleton() {
   return (
-    <Box className="rounded-[24px] bg-[var(--rf-apple-surface-soft)] p-4">
+    <Box className="apple-card apple-card-no-hover p-5">
       <Box className="flex items-start gap-3">
         <Skeleton
           variant="rounded"
@@ -293,7 +279,7 @@ function FeaturesGridSkeleton() {
 
 function StepsSectionSkeleton() {
   return (
-    <Box className="apple-card apple-card-no-hover mt-10 p-5">
+    <Box className="mt-10">
       <SectionHeadingSkeleton titleWidth={138} descWidth={420} />
 
       <Box className="mt-4 grid gap-4 md:grid-cols-2">

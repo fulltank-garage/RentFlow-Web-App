@@ -40,7 +40,7 @@ export default function CarCard({ car, showShop = false }: Props) {
       sx={{ boxShadow: "none" }}
       className="apple-card group"
     >
-      <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
+      <Box className="relative h-52 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)] sm:h-56">
         <Image
           src={car.image || "/RentFlow.png"}
           alt={car.name}
@@ -64,10 +64,10 @@ export default function CarCard({ car, showShop = false }: Props) {
         ) : null}
       </Box>
 
-      <CardContent className="p-6">
+      <CardContent className="p-5 sm:p-6">
         <Box className="flex items-start justify-between gap-3">
           <Box className="min-w-0">
-            <Typography className="truncate text-xl font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-card-title truncate font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
               {car.name}
             </Typography>
             <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
@@ -82,11 +82,11 @@ export default function CarCard({ car, showShop = false }: Props) {
             href={shopHref || undefined}
             className="mt-5 block rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4 text-[var(--rf-apple-muted)] no-underline transition hover:bg-white"
           >
-            <Box className="flex items-end gap-2">
+            <Box className="flex flex-wrap items-end gap-x-2 gap-y-1">
               <Typography className="text-base font-black tracking-[-0.02em] text-[var(--rf-apple-muted)]">
                 ร้านให้เช่า
               </Typography>
-              <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+              <Typography className="apple-card-title-lg truncate font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                 {car.shopName}
               </Typography>
             </Box>
@@ -99,7 +99,7 @@ export default function CarCard({ car, showShop = false }: Props) {
               ราคาเริ่มต้น
             </Typography>
 
-            <Typography className="text-2xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+            <Typography className="apple-price-text font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
               {formatTHB(car.pricePerDay)}
             </Typography>
 
@@ -110,7 +110,10 @@ export default function CarCard({ car, showShop = false }: Props) {
         </Box>
       </CardContent>
 
-      <CardActions sx={{ p: "0px 16px 16px" }} className="gap-2">
+      <CardActions
+        sx={{ p: { xs: "0px 20px 20px", sm: "0px 16px 16px" } }}
+        className="flex-col gap-2 sm:flex-row"
+      >
         <Button
           component={Link}
           href={carHref}

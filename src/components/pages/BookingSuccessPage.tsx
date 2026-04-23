@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import { Box, Button, Chip, Container, Typography } from "@mui/material";
 import BookingReceiptCard from "@/src/components/booking/BookingReceiptCard";
 import BookingFlowScreen from "@/src/components/booking/BookingFlowScreen";
@@ -56,13 +55,8 @@ export default function BookingSuccessPage({
 
           <Box className="mx-auto max-w-3xl text-center">
             <Box className="flex flex-col items-center gap-4">
-              <Box className="grid h-22 w-22 place-items-center rounded-full bg-[#eef2ff] text-[#4f46e5]">
-                <CheckCircleRoundedIcon sx={{ fontSize: 54 }} />
-              </Box>
-
               <Typography
-                className="apple-heading"
-                sx={{ fontSize: { xs: 38, md: 56 } }}
+                className="apple-heading apple-section-title"
               >
                 จองสำเร็จ
               </Typography>

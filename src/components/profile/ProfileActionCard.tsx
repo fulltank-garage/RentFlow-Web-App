@@ -3,12 +3,10 @@
 import * as React from "react";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { logout as logoutRequest } from "@/src/services/auth/auth.service";
+import {
+  clearCachedSessionUser,
+  logout as logoutRequest,
+} from "@/src/services/auth/auth.service";
 
 export default function ProfileActionCard({
   isEditing,
@@ -32,13 +30,14 @@ export default function ProfileActionCard({
       // ปล่อยให้กลับหน้าหลักได้แม้คำขอออกจากระบบไม่สำเร็จ
     }
 
+    clearCachedSessionUser();
     router.push("/");
     router.refresh();
   }, [router]);
 
   return (
     <Box className="apple-card p-5 md:p-6">
-      <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+      <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
         จัดการบัญชี
       </Typography>
 
@@ -47,7 +46,6 @@ export default function ProfileActionCard({
           <Button
             fullWidth
             variant="contained"
-            startIcon={<EditRoundedIcon />}
             className="rounded-full! py-2.5! font-semibold!"
             onClick={onStartEdit}
           >
@@ -58,7 +56,6 @@ export default function ProfileActionCard({
             <Button
               fullWidth
               variant="contained"
-              startIcon={<SaveRoundedIcon />}
               className="rounded-full! py-2.5! font-semibold!"
               onClick={onSave}
             >
@@ -68,7 +65,6 @@ export default function ProfileActionCard({
             <Button
               fullWidth
               variant="outlined"
-              startIcon={<CloseRoundedIcon />}
               className="rounded-full! py-2.5!"
               onClick={onCancel}
             >
@@ -80,7 +76,6 @@ export default function ProfileActionCard({
         <Button
           fullWidth
           variant="outlined"
-          startIcon={<HomeRoundedIcon />}
           className="rounded-full! py-2.5!"
           onClick={() => router.push("/")}
         >
@@ -115,12 +110,14 @@ export default function ProfileActionCard({
       <Button
         fullWidth
         variant="contained"
-        startIcon={<LogoutRoundedIcon />}
-        className="rounded-full! py-2.5! font-semibold!"
+        className="rounded-full! bg-rose-500! py-2.5! font-semibold! text-white! hover:bg-rose-600!"
         sx={{
-          backgroundColor: "rgb(220 38 38) !important",
+          backgroundColor: "rgb(244 63 94) !important",
+          color: "#fff !important",
+          boxShadow: "none !important",
           "&:hover": {
-            backgroundColor: "rgb(185 28 28) !important",
+            backgroundColor: "rgb(225 29 72) !important",
+            boxShadow: "none !important",
           },
         }}
         onClick={handleLogout}

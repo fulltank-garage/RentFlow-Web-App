@@ -10,7 +10,6 @@ import {
   Container,
   Typography,
   Button,
-  IconButton,
   Drawer,
   List,
   ListItemButton,
@@ -18,13 +17,15 @@ import {
   Box,
   Avatar,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { NAV } from "@/src/constants/navigation";
 import { getRentFlowSiteMode } from "@/src/lib/tenant";
-import { getSessionUser } from "@/src/services/auth/auth.service";
+import {
+  clearCachedSessionUser,
+  getCachedSessionUser,
+  getSessionUser,
+} from "@/src/services/auth/auth.service";
+import type { Customer } from "@/src/services/auth/auth.types";
 
 type User = {
   name: string;
@@ -32,6 +33,33 @@ type User = {
   username?: string;
   avatarUrl?: string;
 };
+
+function MobileMenuGlyph({ open }: { open: boolean }) {
+  return (
+    <Box className="relative block h-4 w-5" aria-hidden="true">
+      <Box
+        className="absolute left-0 top-[4px] h-[1.5px] w-5 rounded-full bg-[var(--rf-apple-ink)]/75"
+        sx={{
+          transform: open
+            ? "translateY(3px) rotate(45deg)"
+            : "translateY(0) rotate(0deg)",
+          transition:
+            "transform .42s cubic-bezier(0.22, 1, 0.36, 1), background-color .28s ease",
+        }}
+      />
+      <Box
+        className="absolute left-0 top-[10px] h-[1.5px] w-5 rounded-full bg-[var(--rf-apple-ink)]/75"
+        sx={{
+          transform: open
+            ? "translateY(-3px) rotate(-45deg)"
+            : "translateY(0) rotate(0deg)",
+          transition:
+            "transform .42s cubic-bezier(0.22, 1, 0.36, 1), background-color .28s ease",
+        }}
+      />
+    </Box>
+  );
+}
 
 function getDisplayName(user: {
   name?: string;
@@ -43,14 +71,27 @@ function getDisplayName(user: {
   return user.name || fullName || user.username || "ผู้ใช้งาน";
 }
 
+const useHydrationLayoutEffect =
+  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
+
+function mapCustomerToNavbarUser(user: Customer | null): User | null {
+  if (!user) return null;
+
+  return {
+    name: getDisplayName(user),
+    email: user.email,
+    username: user.username,
+    avatarUrl: user.avatarUrl,
+  };
+}
+
 export default function Navbar() {
   const pathname = usePathname();
 
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = (v: boolean) => () => setOpen(v);
-  const isCompact = useMediaQuery("(max-width: 800px)");
-
   const [user, setUser] = React.useState<User | null>(null);
+  const [authResolved, setAuthResolved] = React.useState(false);
 
   const siteMode = React.useMemo(() => getRentFlowSiteMode(), []);
   const navItems = React.useMemo(
@@ -61,6 +102,14 @@ export default function Navbar() {
     [siteMode]
   );
 
+  useHydrationLayoutEffect(() => {
+    const cachedUser = getCachedSessionUser();
+    if (!cachedUser) return;
+
+    setUser(mapCustomerToNavbarUser(cachedUser));
+    setAuthResolved(true);
+  }, []);
+
   React.useEffect(() => {
     let cancelled = false;
 
@@ -68,20 +117,14 @@ export default function Navbar() {
       try {
         const currentUser = await getSessionUser();
         if (!cancelled) {
-          setUser(
-            currentUser
-              ? {
-                  name: getDisplayName(currentUser),
-                  email: currentUser.email,
-                  username: currentUser.username,
-                  avatarUrl: currentUser.avatarUrl,
-                }
-              : null
-          );
+          setUser(mapCustomerToNavbarUser(currentUser));
+          setAuthResolved(true);
         }
       } catch {
         if (!cancelled) {
+          clearCachedSessionUser();
           setUser(null);
+          setAuthResolved(true);
         }
       }
     }
@@ -99,17 +142,17 @@ export default function Navbar() {
     <AppBar
       position="sticky"
       elevation={0}
-      className="border-b border-black/10 bg-white/75! backdrop-blur-2xl!"
+      className="bg-white/90! backdrop-blur-2xl!"
       sx={{ color: "var(--rf-apple-ink)" }}
     >
       <Container maxWidth="lg">
-        <Toolbar className="flex min-h-11! justify-between gap-4 px-0!">
+        <Toolbar className="flex min-h-[52px]! justify-between gap-3 px-0! md:min-h-11! md:gap-4">
           <Box
             component={Link}
             href="/"
-            className="flex items-center gap-2.5 no-underline"
+            className="flex min-w-0 items-center gap-2 no-underline md:gap-2.5"
           >
-            <Box className="relative h-5 w-5">
+            <Box className="relative h-5 w-5 shrink-0">
               <Image
                 src="/RentFlow.png"
                 alt="RentFlow Logo"
@@ -119,18 +162,25 @@ export default function Navbar() {
               />
             </Box>
 
-            <Box className="flex flex-col">
-              <Typography className="text-[13px]! font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
+            <Box className="flex min-w-0 flex-col">
+              <Typography className="apple-nav-brand truncate font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
                 RentFlow
               </Typography>
-              <Typography className="mt-0.5! text-[10px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
+              <Typography className="apple-nav-caption mt-0.5! truncate font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                 Smart Car Rental
               </Typography>
             </Box>
           </Box>
 
-          {!isCompact && (
-            <Box className="flex items-center gap-1">
+          <Box
+            className="items-center gap-1"
+            sx={{
+              display: "none",
+              "@media (min-width: 801px)": {
+                display: "flex",
+              },
+            }}
+          >
               {navItems.map((n) => {
                 const active = isActive(n.href);
 
@@ -140,10 +190,11 @@ export default function Navbar() {
                     component={Link}
                     href={n.href}
                     disableElevation
-                    className="min-w-0! rounded-full! px-3.5! py-1.5!"
+                    className="apple-nav-link min-w-0! rounded-full! px-3.5! py-1.5! !font-normal"
                     sx={{
-                      fontSize: 12,
-                      fontWeight: 600,
+                      fontWeight: "400 !important",
+                      lineHeight: 1.42859,
+                      letterSpacing: "-0.016em",
                       color: active
                         ? "var(--rf-apple-ink)"
                         : "var(--rf-apple-muted)",
@@ -164,19 +215,37 @@ export default function Navbar() {
                   </Button>
                 );
               })}
-            </Box>
-          )}
+          </Box>
 
-          {!isCompact && (
-            <Box className="flex items-center gap-2">
-              {!user ? (
+          <Box
+            className="items-center gap-2"
+            sx={{
+              display: "none",
+              minWidth: 228,
+              justifyContent: "flex-end",
+              "@media (min-width: 801px)": {
+                display: "flex",
+              },
+            }}
+          >
+              {!authResolved ? (
+                <Box className="h-10! w-[228px]! rounded-full! px-0! py-0!">
+                  <Box className="flex h-full w-full items-center justify-end gap-2.5">
+                    <Box className="h-8 w-8 shrink-0 rounded-full bg-black/[0.1]" />
+                    <Box className="min-w-0 flex-1 text-left">
+                      <Box className="h-[15px] w-[108px] rounded-full bg-black/[0.11]" />
+                      <Box className="mt-1.5 h-[10px] w-[72px] rounded-full bg-black/[0.075]" />
+                    </Box>
+                  </Box>
+                </Box>
+              ) : !user ? (
                 <>
                   <Button
                     component={Link}
                     href="/login"
                     variant="outlined"
-                    className="rounded-full!"
-                    sx={{ px: 2.2, py: 0.65, fontSize: 12 }}
+                    className="apple-button-copy rounded-full!"
+                    sx={{ px: 2.2, py: 0.65 }}
                   >
                     เข้าสู่ระบบ
                   </Button>
@@ -185,11 +254,10 @@ export default function Navbar() {
                     component={Link}
                     href="/register"
                     variant="contained"
-                    className="rounded-full! font-semibold!"
+                    className="apple-button-copy rounded-full! font-semibold!"
                     sx={{
                       px: 2.4,
                       py: 0.65,
-                      fontSize: 12,
                     }}
                   >
                     สมัครสมาชิก
@@ -202,7 +270,7 @@ export default function Navbar() {
                     href="/profile"
                     disableRipple
                     disableTouchRipple
-                    className="rounded-full! px-0! py-0!"
+                    className="h-10! w-[228px]! rounded-full! px-0! py-0!"
                     sx={{
                       backgroundColor: "transparent",
                       border: "0",
@@ -219,7 +287,7 @@ export default function Navbar() {
                         "opacity .32s ease, transform .86s cubic-bezier(0.18,0.9,0.22,1)",
                     }}
                   >
-                    <Box className="flex items-center gap-2.5">
+                    <Box className="flex w-full items-center justify-end gap-2.5">
                       <Avatar
                         src={user.avatarUrl || undefined}
                         className="h-8! w-8! bg-[var(--rf-apple-ink)]! text-sm! text-white!"
@@ -227,11 +295,11 @@ export default function Navbar() {
                         {user.name[0].toUpperCase()}
                       </Avatar>
 
-                      <Box className="text-left">
-                        <Typography className="text-[12px]! font-semibold! leading-tight! text-[var(--rf-apple-ink)]!">
+                      <Box className="min-w-0 flex-1 text-left">
+                        <Typography className="apple-nav-link truncate font-semibold! leading-tight! text-[var(--rf-apple-ink)]!">
                           {user.name}
                         </Typography>
-                        <Typography className="mt-0.5! text-[10px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
+                        <Typography className="apple-nav-caption mt-0.5! truncate font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                           {user.username || "บัญชีผู้ใช้"}
                         </Typography>
                       </Box>
@@ -239,24 +307,56 @@ export default function Navbar() {
                   </Button>
                 </>
               )}
-            </Box>
-          )}
+          </Box>
 
-          {isCompact && (
-            <IconButton
-              onClick={toggleDrawer(true)}
-              aria-label="เปิดเมนู"
-              className="rounded-full! border border-black/10 text-[var(--rf-apple-ink)]!"
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
+          <Button
+            onClick={toggleDrawer(true)}
+            aria-label={open ? "ปิดเมนู" : "เปิดเมนู"}
+            disableElevation
+            className="min-w-0! rounded-[12px]! px-2.5! py-2!"
+            sx={{
+              display: "inline-flex",
+              border: "0",
+              color: "var(--rf-apple-ink)",
+              backgroundColor: "transparent",
+              "@media (min-width: 801px)": {
+                display: "none",
+              },
+              "&:hover": {
+                backgroundColor: "rgba(0,0,0,0.04)",
+              },
+            }}
+          >
+            <MobileMenuGlyph open={open} />
+          </Button>
         </Toolbar>
       </Container>
 
-      <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>
-        <Box className="flex h-full w-80 flex-col bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-ink)]">
-          <Box className="flex items-center justify-between border-b border-black/10 px-4 py-4">
+      <Drawer
+        anchor="top"
+        open={open}
+        onClose={toggleDrawer(false)}
+        transitionDuration={{ enter: 420, exit: 320 }}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          "@media (min-width: 801px)": {
+            display: "none",
+          },
+        }}
+        PaperProps={{
+          sx: {
+            width: "100vw",
+            maxWidth: "100vw",
+            height: "100dvh",
+            maxHeight: "100dvh",
+            backgroundColor: "var(--rf-apple-surface-soft)",
+            borderBottomLeftRadius: "28px",
+            borderBottomRightRadius: "28px",
+          },
+        }}
+      >
+        <Box className="flex h-full min-h-dvh w-full flex-col bg-[var(--rf-apple-surface-soft)] text-[var(--rf-apple-ink)]">
+          <Box className="flex items-center justify-between border-b border-black/10 px-4 py-4 md:px-5">
             <Box className="flex items-center gap-3">
               <Box className="relative flex h-8 w-8 shrink-0 items-center justify-center">
                 <Box className="relative h-6 w-6">
@@ -270,21 +370,34 @@ export default function Navbar() {
               </Box>
 
               <Box>
-                <Typography className="font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
+                <Typography className="apple-nav-brand font-semibold! tracking-[-0.01em] text-[var(--rf-apple-ink)]! leading-none!">
                   RentFlow
                 </Typography>
-                <Typography className="mt-1! text-[11px]! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
+                <Typography className="apple-nav-caption mt-1! font-medium! leading-none! text-[var(--rf-apple-muted)]!">
                   Smart Car Rental
                 </Typography>
               </Box>
             </Box>
 
-            <IconButton onClick={toggleDrawer(false)} className="rounded-full! p-1!">
-              <CloseIcon className="text-[var(--rf-apple-muted)]!" />
-            </IconButton>
+            <Button
+              onClick={toggleDrawer(false)}
+              aria-label="ปิดเมนู"
+              disableElevation
+              className="min-w-0! rounded-[12px]! px-2.5! py-2!"
+              sx={{
+                border: "0",
+                color: "var(--rf-apple-ink)",
+                backgroundColor: "transparent",
+                "&:hover": {
+                  backgroundColor: "rgba(0,0,0,0.04)",
+                },
+              }}
+            >
+              <MobileMenuGlyph open />
+            </Button>
           </Box>
 
-          <List className="flex-1 px-4! py-4!">
+          <List className="flex-1 px-4! py-4! md:px-5! md:py-5!">
             {navItems.map((n) => {
               const active = isActive(n.href);
 
@@ -294,10 +407,10 @@ export default function Navbar() {
                   component={Link}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className="mb-1.5! rounded-2xl!"
+                  className="mb-2! rounded-[24px]!"
                   sx={{
-                    px: 2,
-                    py: 1.2,
+                    px: 2.2,
+                    py: 1.5,
                     backgroundColor: active
                       ? "rgba(0,0,0,0.055)"
                       : "transparent",
@@ -312,7 +425,9 @@ export default function Navbar() {
                   <ListItemText
                     primary={n.label}
                     primaryTypographyProps={{
+                      fontSize: "1.02rem",
                       fontWeight: active ? 700 : 500,
+                      letterSpacing: "-0.02em",
                       color: active ? "rgb(15 23 42)" : "rgb(51 65 85)",
                     }}
                   />
@@ -321,7 +436,7 @@ export default function Navbar() {
             })}
           </List>
 
-          <Box className="flex flex-col gap-3 border-t border-black/10 p-4">
+          <Box className="flex flex-col gap-3 border-t border-black/10 p-4 md:px-5 md:pb-6">
             {!user ? (
               <>
                 <Button
@@ -329,7 +444,7 @@ export default function Navbar() {
                   href="/login"
                   variant="outlined"
                   fullWidth
-                  className="rounded-full!"
+                  className="rounded-full! py-2.5!"
                   onClick={() => setOpen(false)}
                 >
                   เข้าสู่ระบบ
@@ -340,7 +455,7 @@ export default function Navbar() {
                   href="/register"
                   variant="contained"
                   fullWidth
-                  className="rounded-full! font-semibold!"
+                  className="rounded-full! py-2.5! font-semibold!"
                   onClick={() => setOpen(false)}
                 >
                   สมัครสมาชิก
@@ -371,10 +486,10 @@ export default function Navbar() {
                         {user.name[0].toUpperCase()}
                       </Avatar>
                       <Box className="min-w-0">
-                        <Typography className="truncate font-semibold! text-[var(--rf-apple-ink)]!">
+                        <Typography className="apple-nav-link truncate font-semibold! text-[var(--rf-apple-ink)]!">
                           {user.name}
                         </Typography>
-                        <Typography className="break-all text-xs! text-[var(--rf-apple-muted)]!">
+                        <Typography className="apple-body-sm break-all text-[var(--rf-apple-muted)]!">
                           {user.email}
                         </Typography>
                       </Box>
@@ -387,7 +502,7 @@ export default function Navbar() {
                   href="/profile"
                   variant="outlined"
                   fullWidth
-                  className="rounded-full!"
+                  className="rounded-full! py-2.5!"
                   onClick={() => setOpen(false)}
                 >
                   จัดการบัญชี

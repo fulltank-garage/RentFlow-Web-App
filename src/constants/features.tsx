@@ -1,13 +1,4 @@
 // src/constants/features.tsx
-import React from "react";
-import type { ReactNode } from "react";
-
-import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
-import DirectionsCarRoundedIcon from "@mui/icons-material/DirectionsCarRounded";
-import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
-import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
-import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
-import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 
 export const HERO_BADGES = [
   "รถใหม่",
@@ -19,7 +10,6 @@ export const HERO_BADGES = [
 export type HeroBadge = (typeof HERO_BADGES)[number];
 
 export type FeatureItem = {
-  icon: ReactNode;
   title: string;
   desc: string;
 };
@@ -37,32 +27,26 @@ export type TrustPoint = {
 
 export const FEATURES: FeatureItem[] = [
   {
-    icon: <DirectionsCarRoundedIcon fontSize="small" />,
     title: "รถหลากหลาย รุ่นยอดนิยม",
     desc: "มีรถหลายประเภทให้เลือก เช่น Eco / Sedan / SUV พร้อมข้อมูลสเปคชัดเจนก่อนตัดสินใจ",
   },
   {
-    icon: <PaymentsRoundedIcon fontSize="small" />,
     title: "ราคาชัดเจน โปร่งใส",
     desc: "แสดงราคาเริ่มต้นและยอดรวมตามวันรับ-คืนรถ ลดความสับสน ไม่มีบวกเพิ่มแบบไม่แจ้ง",
   },
   {
-    icon: <ScheduleRoundedIcon fontSize="small" />,
     title: "จองง่ายในไม่กี่ขั้นตอน",
     desc: "เลือกวัน-เวลา → เลือกรถ → ยืนยันการจอง → ชำระเงิน ใช้งานได้ลื่นไหลทั้งมือถือและเดสก์ท็อป",
   },
   {
-    icon: <VerifiedUserRoundedIcon fontSize="small" />,
     title: "มาตรฐานความปลอดภัย",
     desc: "รถได้รับการตรวจเช็คก่อนส่งมอบ และมีแนวทางการใช้งาน/เงื่อนไขที่อ่านง่าย",
   },
   {
-    icon: <SupportAgentRoundedIcon fontSize="small" />,
     title: "ซัพพอร์ตไว",
     desc: "มีช่องทางช่วยเหลือ และคำแนะนำการแก้ปัญหาพื้นฐาน พร้อมรหัสการจองเพื่อให้ตรวจสอบได้เร็ว",
   },
   {
-    icon: <LocalOfferRoundedIcon fontSize="small" />,
     title: "โปรโมชัน/แบดจ์บอกรถเด่น",
     desc: "มีป้ายกำกับ เช่น Popular / New ช่วยให้เลือกคันที่เหมาะกับคุณได้เร็วขึ้น",
   },

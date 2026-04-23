@@ -16,10 +16,10 @@ type Props = {
 export default function CarDetailOverview({ detail }: Props) {
   return (
     <Box className="apple-card p-5!">
-      <Typography className="text-base font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+      <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
         รายละเอียดรถ
       </Typography>
-      <Typography className="mt-2 text-sm leading-relaxed text-[var(--rf-apple-muted)]">
+      <Typography className="apple-body-sm mt-2 leading-relaxed text-[var(--rf-apple-muted)]">
         รถรุ่น{" "}
         <span className="font-semibold text-[var(--rf-apple-ink)]">{detail.name}</span>{" "}
         เหมาะสำหรับการใช้งานประเภท{" "}

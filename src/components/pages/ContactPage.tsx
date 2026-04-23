@@ -7,9 +7,6 @@ import {
   Typography,
   Chip,
 } from "@mui/material";
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import SupportAgentRoundedIcon from "@mui/icons-material/SupportAgentRounded";
-import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import ContactInfoCard from "@/src/components/contact/ContactInfoCard";
 import ContactFormCard from "@/src/components/contact/ContactFormCard";
 import ContactPageSkeleton from "@/src/components/contact/ContactPageSkeleton";
@@ -26,11 +23,10 @@ export default function ContactPage() {
   return (
     <Box className="apple-page">
     <Container maxWidth="lg" className="apple-section">
-      <Box className="mx-auto max-w-3xl text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             ติดต่อเรา
           </Typography>
@@ -42,34 +38,16 @@ export default function ContactPage() {
 
       <Box className="mt-8 flex flex-wrap justify-center gap-3">
         <Chip
-          icon={
-            <SupportAgentRoundedIcon
-              fontSize="small"
-              className="text-emerald-500! ml-2!"
-            />
-          }
           label={`${branches.length} สาขาในระบบ`}
           variant="outlined"
           className="apple-pill text-[var(--rf-apple-muted)]!"
         />
         <Chip
-          icon={
-            <AccessTimeRoundedIcon
-              fontSize="small"
-              className="text-emerald-500! ml-2!"
-            />
-          }
           label={`${phoneReadyCount} เบอร์โทรพร้อมติดต่อ`}
           variant="outlined"
           className="apple-pill text-[var(--rf-apple-muted)]!"
         />
         <Chip
-          icon={
-            <LocalOfferRoundedIcon
-              fontSize="small"
-              className="text-emerald-500! ml-2!"
-            />
-          }
           label="แนบรหัสการจองจะช่วยให้ตรวจสอบได้เร็วขึ้น"
           variant="outlined"
           className="apple-pill text-[var(--rf-apple-muted)]!"

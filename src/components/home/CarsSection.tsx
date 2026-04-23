@@ -25,11 +25,10 @@ type Props = {
 export default function CarsSection({ cars, formatTHB }: Props) {
   return (
     <Container maxWidth="lg" className="apple-section">
-      <Box className="flex flex-col gap-4 text-center sm:items-center">
+      <Box className="apple-section-intro">
         <Box>
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 38, md: 56 } }}
+            className="apple-heading apple-section-title"
           >
             รถแนะนำ
           </Typography>
@@ -44,7 +43,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
         />
       </Box>
 
-      <Box className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <Box className="apple-shelf apple-shelf-wide mt-10 md:grid md:grid-cols-2 lg:grid-cols-3">
         {cars.length ? (
           cars.map((c) => (
             <Card
@@ -53,7 +52,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
               sx={{ boxShadow: "none" }}
               className="apple-card group"
             >
-              <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
+              <Box className="relative h-52 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)] sm:h-56">
                 <Image
                   src={c.image || "/RentFlow.png"}
                   alt={c.name}
@@ -62,10 +61,10 @@ export default function CarsSection({ cars, formatTHB }: Props) {
                 />
               </Box>
 
-              <CardContent className="p-6">
+              <CardContent className="p-5 sm:p-6">
                 <Box className="flex items-start justify-between gap-3">
                   <Box>
-                    <Typography className="text-xl font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+                    <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
                       {c.name}
                     </Typography>
                     <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
@@ -80,7 +79,7 @@ export default function CarsSection({ cars, formatTHB }: Props) {
                       ราคาเริ่มต้น
                     </Typography>
 
-                    <Typography className="text-2xl font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+                    <Typography className="apple-price-text font-extrabold tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                       {formatTHB(c.pricePerDay)}
                     </Typography>
 
@@ -91,7 +90,10 @@ export default function CarsSection({ cars, formatTHB }: Props) {
                 </Box>
               </CardContent>
 
-              <CardActions sx={{ p: "0px 16px 16px" }} className="gap-2">
+              <CardActions
+                sx={{ p: { xs: "0px 20px 20px", sm: "0px 16px 16px" } }}
+                className="flex-col gap-2 sm:flex-row"
+              >
                 <Button
                   component={Link}
                   href={`/cars/${c.id}`}

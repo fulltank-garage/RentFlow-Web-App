@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { formatTHB } from "@/src/constants/money";
+import { formatBookingDateTime } from "@/src/lib/booking-datetime";
 import {
   Box,
   Container,
@@ -41,8 +42,7 @@ export default function MyBookingDetailPage() {
           <Box className="mx-auto max-w-3xl text-center">
             <Box className="flex flex-col gap-4">
               <Typography
-                className="apple-heading"
-                sx={{ fontSize: { xs: 38, md: 56 } }}
+                className="apple-heading apple-section-title"
               >
                 ไม่พบรายการจอง
               </Typography>
@@ -87,30 +87,16 @@ export default function MyBookingDetailPage() {
   return (
     <Box className="apple-page">
       <Container maxWidth="lg" className="apple-section">
-        <Box className="mx-auto max-w-3xl text-center">
+        <Box className="apple-section-intro max-w-3xl">
           <Box className="flex flex-col gap-4">
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 38, md: 56 } }}
+              className="apple-heading apple-section-title"
             >
               รายละเอียดการจอง
             </Typography>
             <Typography className="apple-subtitle text-lg">
               ตรวจสอบข้อมูลการรับ-คืนรถ สถานะรายการ และสรุปราคาได้ในหน้าเดียว
             </Typography>
-          </Box>
-
-          <Box className="mt-6 flex flex-wrap justify-center gap-3">
-            <Chip
-              size="small"
-              label={`รหัสการจอง: ${local.id}`}
-              className="apple-pill text-[var(--rf-apple-muted)]!"
-            />
-            <Chip
-              size="small"
-              label={`รถที่จอง: ${local.carName}`}
-              className="apple-pill text-[var(--rf-apple-muted)]!"
-            />
           </Box>
         </Box>
 
@@ -122,16 +108,33 @@ export default function MyBookingDetailPage() {
                   <Typography className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--rf-apple-muted)]">
                     ภาพรวมรายการ
                   </Typography>
-                  <Typography className="mt-2 text-2xl font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
+                  <Typography className="apple-card-title-lg mt-2 font-black tracking-[-0.04em] text-[var(--rf-apple-ink)]">
                     {local.carName}
+                  </Typography>
+                  <Typography className="mt-2 text-sm text-[var(--rf-apple-muted)]">
+                    รหัสการจอง:{" "}
+                    <span className="font-semibold text-[var(--rf-apple-ink)]">
+                      {local.id}
+                    </span>
                   </Typography>
                 </Box>
 
                 <Box className="flex flex-wrap items-center gap-2">
                   <StatusChip s={local.status} />
-                  <Typography className="text-sm text-[var(--rf-apple-muted)]">
-                    รับรถ {local.pickupDate} และคืนรถ {local.returnDate}
-                  </Typography>
+                  <Box className="flex flex-col gap-1 text-left">
+                    <Typography className="text-sm text-[var(--rf-apple-muted)]">
+                      วันรับรถ:{" "}
+                      <span className="font-semibold text-[var(--rf-apple-ink)]">
+                        {formatBookingDateTime(local.pickupDate)}
+                      </span>
+                    </Typography>
+                    <Typography className="text-sm text-[var(--rf-apple-muted)]">
+                      วันคืนรถ:{" "}
+                      <span className="font-semibold text-[var(--rf-apple-ink)]">
+                        {formatBookingDateTime(local.returnDate)}
+                      </span>
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
 
@@ -163,39 +166,18 @@ export default function MyBookingDetailPage() {
                 </Button>
               </Box>
             </Box>
-
-            <Box className="rounded-[26px] bg-[var(--rf-apple-surface-soft)] p-4 md:p-5">
-              <Box className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-                <Box className="grid gap-2 sm:grid-cols-2">
-                  <Box className="rounded-[20px] bg-white px-4 py-3">
-                    <Typography className="text-xs font-semibold text-[var(--rf-apple-muted)]">
-                      รหัสการจอง
-                    </Typography>
-                    <Typography className="mt-1 text-sm font-bold text-[var(--rf-apple-ink)]">
-                      {local.id}
-                    </Typography>
-                  </Box>
-                  <Box className="rounded-[20px] bg-white px-4 py-3">
-                    <Typography className="text-xs font-semibold text-[var(--rf-apple-muted)]">
-                      ช่วงวันใช้งาน
-                    </Typography>
-                    <Typography className="mt-1 text-sm font-bold text-[var(--rf-apple-ink)]">
-                      {local.pickupDate} - {local.returnDate}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box className="rounded-[20px] bg-white px-4 py-3">
-                  <StatusTimeline status={local.status} />
-                </Box>
-              </Box>
-            </Box>
           </Box>
         </Box>
 
         <Box className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
           <Box className="space-y-5 md:col-span-2">
             <Paper elevation={0} className="apple-card p-5">
+              <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
+                <StatusTimeline status={local.status} />
+              </Box>
+
+              <Divider className="my-4! border-black/10!" />
+
               <Typography className="text-sm font-semibold tracking-[-0.03em] text-slate-900">
                 ข้อมูลรับ-คืนรถ
               </Typography>
@@ -213,7 +195,7 @@ export default function MyBookingDetailPage() {
                     {local.pickupLocation ?? "-"}
                   </Typography>
                   <Typography className="mt-2 text-xs text-slate-600">
-                    วันที่รับรถ: {local.pickupDate}
+                    วันที่รับรถ: {formatBookingDateTime(local.pickupDate)}
                   </Typography>
                 </Box>
 
@@ -225,7 +207,7 @@ export default function MyBookingDetailPage() {
                     {local.returnLocation ?? "-"}
                   </Typography>
                   <Typography className="mt-2 text-xs text-slate-600">
-                    วันที่คืนรถ: {local.returnDate}
+                    วันที่คืนรถ: {formatBookingDateTime(local.returnDate)}
                   </Typography>
                 </Box>
               </Box>

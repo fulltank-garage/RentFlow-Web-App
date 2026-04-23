@@ -23,6 +23,11 @@ export type RegisterPayload = {
   lastName: string;
 };
 
+export type ForgotPasswordPayload = {
+  username: string;
+  newPassword: string;
+};
+
 export type AuthResult = {
   user: Customer;
 };

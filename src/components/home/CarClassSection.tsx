@@ -25,11 +25,10 @@ export default function CarClassSection({
   return (
     <Box>
       <Container maxWidth="lg" className="apple-section pt-0!">
-        <Box className="mx-auto max-w-3xl text-center">
+        <Box className="apple-section-intro max-w-3xl">
           <Box>
             <Typography
-              className="apple-heading"
-              sx={{ fontSize: { xs: 38, md: 56 } }}
+              className="apple-heading apple-section-title"
             >
               เลือกตามคลาสรถ
             </Typography>
@@ -39,7 +38,8 @@ export default function CarClassSection({
           </Box>
         </Box>
 
-        <Box className="apple-card mt-10 grid gap-5 p-5 sm:grid-cols-2 md:p-7 lg:grid-cols-4">
+        <Box className="apple-card mt-10 p-4 sm:p-5 md:p-7">
+          <Box className="apple-shelf apple-shelf-compact sm:grid sm:grid-cols-2 lg:grid-cols-4">
           {loading && !classes.length ? (
             Array.from({ length: 4 }).map((_, index) => (
               <Box
@@ -98,6 +98,7 @@ export default function CarClassSection({
               </Typography>
             </Box>
           )}
+          </Box>
         </Box>
         <Divider className="mt-14! border-black/10!" />
       </Container>

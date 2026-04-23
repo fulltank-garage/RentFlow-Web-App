@@ -25,11 +25,10 @@ export default function HelpPage() {
   return (
     <Box className="apple-page">
     <Container maxWidth="lg" className="apple-section">
-      <Box className="mx-auto max-w-3xl text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             ศูนย์ช่วยเหลือ
           </Typography>
@@ -58,7 +57,7 @@ export default function HelpPage() {
         </Alert>
       ) : null}
 
-      <Box className="mt-6 grid gap-4 md:grid-cols-3">
+      <Box className="apple-shelf mt-6 md:grid md:grid-cols-3">
         <Box className="apple-card p-5">
           <Typography className="text-sm font-semibold text-[var(--rf-apple-ink)]">
             1. ตรวจสอบสถานะการจอง

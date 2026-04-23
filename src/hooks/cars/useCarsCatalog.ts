@@ -45,7 +45,7 @@ export function useCarsCatalog(params: Params) {
                     tenantSlug: tenantSlug || undefined,
                 });
                 const elapsed = Date.now() - start;
-                const delay = Math.max(2000 - elapsed, 0);
+                const delay = Math.max(500 - elapsed, 0);
 
                 await new Promise((r) => setTimeout(r, delay));
 

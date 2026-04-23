@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import { Box, Typography } from "@mui/material";
-import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded";
-import DoNotDisturbAltRoundedIcon from "@mui/icons-material/DoNotDisturbAltRounded";
 
 function IncludedCard({
   positive,
@@ -14,27 +12,22 @@ function IncludedCard({
   title: string;
   desc: string;
 }) {
-  const Icon = positive ? TaskAltRoundedIcon : DoNotDisturbAltRoundedIcon;
-  const iconClass = positive ? "text-emerald-600" : "text-rose-600";
   const bgClass = positive
     ? "bg-[var(--rf-apple-surface-soft)]"
     : "bg-white";
 
   return (
     <Box className={`rounded-[22px] p-4 ${bgClass}`}>
-      <Box className="flex items-start gap-2">
-        <Icon fontSize="small" className={`mt-0.5 ${iconClass}`} />
-        <Box>
-          <Typography
-            className="text-sm font-semibold text-slate-900"
-            component="div"
-          >
-            {title}
-          </Typography>
-          <Typography className="mt-1 text-xs text-slate-600" component="div">
-            {desc}
-          </Typography>
-        </Box>
+      <Box>
+        <Typography
+          className="apple-card-title font-semibold text-slate-900"
+          component="div"
+        >
+          {title}
+        </Typography>
+        <Typography className="apple-label-text mt-1 text-slate-600" component="div">
+          {desc}
+        </Typography>
       </Box>
     </Box>
   );
@@ -43,7 +36,7 @@ function IncludedCard({
 export default function CarDetailIncludedSection() {
   return (
     <Box className="apple-card p-5!">
-      <Typography className="text-sm font-semibold text-slate-900">
+      <Typography className="apple-card-title font-semibold text-slate-900">
         สิ่งที่รวมในราคา
       </Typography>
 

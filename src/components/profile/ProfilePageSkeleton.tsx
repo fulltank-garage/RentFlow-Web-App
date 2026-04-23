@@ -70,19 +70,18 @@ function SectionSkeleton({
   titleWidth,
   columns = "md:grid-cols-2",
   fields = 4,
+  showDescription = false,
+  showAction = false,
 }: {
   titleWidth: number;
   columns?: string;
   fields?: number;
+  showDescription?: boolean;
+  showAction?: boolean;
 }) {
   return (
     <Box className="apple-card p-5! md:p-6!">
-      <Box className="mb-5 flex items-center gap-3">
-        <Skeleton
-          variant="rounded"
-          animation="wave"
-          sx={{ width: 36, height: 36, borderRadius: "999px" }}
-        />
+      <Box className="mb-5">
         <Skeleton
           variant="text"
           animation="wave"
@@ -93,6 +92,20 @@ function SectionSkeleton({
             transform: "none",
           }}
         />
+        {showDescription ? (
+          <Skeleton
+            variant="text"
+            animation="wave"
+            sx={{
+              mt: 1,
+              width: 260,
+              maxWidth: "100%",
+              height: 18,
+              borderRadius: "8px",
+              transform: "none",
+            }}
+          />
+        ) : null}
       </Box>
 
       <Box className={`grid gap-3 ${columns}`}>
@@ -100,6 +113,16 @@ function SectionSkeleton({
           <FieldSkeleton key={`profile-field-skeleton-${titleWidth}-${index}`} />
         ))}
       </Box>
+
+      {showAction ? (
+        <Box className="mt-4 flex justify-end">
+          <Skeleton
+            variant="rounded"
+            animation="wave"
+            sx={{ width: 170, height: 44, borderRadius: "999px" }}
+          />
+        </Box>
+      ) : null}
     </Box>
   );
 }
@@ -185,7 +208,13 @@ export default function ProfilePageSkeleton() {
         <Box className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-6">
           <Box className="grid gap-5">
             <SectionSkeleton titleWidth={118} fields={5} />
-            <SectionSkeleton titleWidth={102} columns="grid-cols-1" fields={3} />
+            <SectionSkeleton
+              titleWidth={102}
+              columns="grid-cols-1"
+              fields={3}
+              showDescription
+              showAction
+            />
           </Box>
 
           <Box className="space-y-5">

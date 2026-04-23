@@ -18,6 +18,24 @@ export type CatalogCarClass = {
 
 const PRESENTATION_ORDER = ["Economy", "Sedan", "SUV", "Van"] as const;
 const CLASS_GRADES: Grade[] = [1, 2, 3, 4];
+const LOCATION_LABEL_MAP: Record<string, string> = {
+  bangkok: "กรุงเทพฯ",
+  pattaya: "พัทยา",
+  phuket: "ภูเก็ต",
+  chiangmai: "เชียงใหม่",
+  "chiang-mai": "เชียงใหม่",
+  khonkaen: "ขอนแก่น",
+  "khon-kaen": "ขอนแก่น",
+  korat: "นครราชสีมา",
+  nakhonratchasima: "นครราชสีมา",
+  "nakhon-ratchasima": "นครราชสีมา",
+  udonthani: "อุดรธานี",
+  "udon-thani": "อุดรธานี",
+  suratthani: "สุราษฎร์ธานี",
+  "surat-thani": "สุราษฎร์ธานี",
+  huahin: "หัวหิน",
+  "hua-hin": "หัวหิน",
+};
 
 const CLASS_META: Record<
   Grade,
@@ -74,10 +92,16 @@ export function buildCarTypes(cars: Car[]): Car["type"][] {
 }
 
 export function formatLocationLabel(value: string) {
+  const normalized = value.trim().toLowerCase();
+
+  if (LOCATION_LABEL_MAP[normalized]) {
+    return LOCATION_LABEL_MAP[normalized];
+  }
+
   return value
     .split("-")
     .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .map((part) => LOCATION_LABEL_MAP[part.toLowerCase()] || (part.charAt(0).toUpperCase() + part.slice(1)))
     .join(" ");
 }
 

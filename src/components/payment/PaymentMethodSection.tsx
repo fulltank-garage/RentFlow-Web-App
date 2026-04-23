@@ -3,7 +3,6 @@
 import * as React from "react";
 import Image from "next/image";
 import { Box, Typography, TextField, MenuItem, Button } from "@mui/material";
-import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
 import type { Method } from "@/src/utils/payment/payment.helpers";
 import { formatTHB } from "@/src/constants/money";
 
@@ -26,10 +25,10 @@ export default function PaymentMethodSection({
 }: Props) {
   return (
     <>
-      <Typography className="text-sm font-semibold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+      <Typography className="apple-card-title font-semibold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
         วิธีชำระเงิน
       </Typography>
-      <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
+      <Typography className="apple-body-sm mt-1 text-[var(--rf-apple-muted)]">
         เลือกช่องทางที่สะดวกที่สุดสำหรับการชำระรายการนี้
       </Typography>
 
@@ -52,10 +51,10 @@ export default function PaymentMethodSection({
         {method === "promptpay" ? (
           <Box className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Box className="flex flex-col gap-1.5">
-              <Typography className="text-sm font-semibold text-slate-900">
+              <Typography className="apple-card-title font-semibold text-slate-900">
                 สแกนเพื่อชำระเงิน
               </Typography>
-              <Typography className="text-sm text-slate-600">
+              <Typography className="apple-body-sm text-slate-600">
                 จำนวนเงิน:{" "}
                 <span className="font-semibold text-slate-900">
                   {formatTHB(amount)}
@@ -100,7 +99,7 @@ export default function PaymentMethodSection({
               fullWidth
               sx={roundedFieldSX}
             />
-            <Typography className="text-xs leading-6 text-slate-500 sm:col-span-2">
+            <Typography className="apple-label-text leading-6 text-slate-500 sm:col-span-2">
               * ข้อมูลบัตรจะถูกดูแลผ่านผู้ให้บริการชำระเงินที่ปลอดภัย
             </Typography>
           </Box>
@@ -110,14 +109,14 @@ export default function PaymentMethodSection({
           <Box className="grid gap-4">
             <Box className="rounded-[18px] bg-white p-4">
               <Box className="flex flex-col gap-1.5">
-                <Typography className="text-sm font-semibold text-slate-900">
+                <Typography className="apple-card-title font-semibold text-slate-900">
                   โอนเข้าบัญชี
                 </Typography>
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-body-sm text-slate-600">
                   ธนาคาร: กสิกรไทย • เลขบัญชี: 123-4-56789-0 • ชื่อบัญชี:
                   RentFlow Co.,Ltd.
                 </Typography>
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-body-sm text-slate-600">
                   จำนวนเงิน:{" "}
                   <span className="font-semibold text-slate-900">
                     {formatTHB(amount)}
@@ -130,7 +129,6 @@ export default function PaymentMethodSection({
               component="label"
               variant="outlined"
               className="rounded-full! sm:w-fit"
-              startIcon={<UploadFileRoundedIcon />}
             >
               {slipFile ? "เปลี่ยนไฟล์สลิป" : "แนบสลิปโอนเงิน"}
               <input
@@ -142,14 +140,14 @@ export default function PaymentMethodSection({
             </Button>
 
             {slipFile ? (
-              <Typography className="text-xs text-slate-600">
+              <Typography className="apple-label-text text-slate-600">
                 ไฟล์:{" "}
                 <span className="font-semibold text-slate-900">
                   {slipFile.name}
                 </span>
               </Typography>
             ) : (
-              <Typography className="text-xs text-slate-500">
+              <Typography className="apple-label-text text-slate-500">
                 * จำเป็นต้องแนบสลิปเพื่อยืนยัน
               </Typography>
             )}
@@ -158,7 +156,7 @@ export default function PaymentMethodSection({
       </Box>
 
       <Box className="mt-4 rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-3">
-        <Typography className="text-xs leading-6 text-[var(--rf-apple-muted)]">
+        <Typography className="apple-label-text leading-6 text-[var(--rf-apple-muted)]">
           เมื่อชำระเงินแล้ว กรุณาตรวจสอบความถูกต้องของยอดและหลักฐานให้ครบถ้วน
           เพื่อช่วยให้การตรวจสอบสถานะเป็นไปได้รวดเร็วขึ้น
         </Typography>

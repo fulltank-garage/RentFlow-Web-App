@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   Box,
   Typography,
@@ -14,6 +13,7 @@ import {
 import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
 import { ADDONS, type AddonKey } from "@/src/utils/payment/payment.helpers";
+import StableImage from "@/src/components/common/StableImage";
 
 type Props = {
   bookingId: string;
@@ -61,11 +61,11 @@ export default function PaymentBookingSummaryCard({
       elevation={0}
       className="apple-card order-2 lg:order-1 lg:col-span-5"
     >
-      <CardContent className="p-5! md:p-6!">
-        <Typography className="text-sm font-semibold tracking-[-0.03em] text-slate-900">
+      <CardContent className="p-4! sm:p-5! md:p-6!">
+        <Typography className="apple-card-title font-semibold tracking-[-0.03em] text-slate-900">
           สรุปการจอง
         </Typography>
-        <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
+        <Typography className="apple-body-sm mt-1 text-[var(--rf-apple-muted)]">
           ตรวจสอบรายละเอียดรถ ช่วงเวลา และยอดรวมก่อนยืนยันการชำระเงิน
         </Typography>
 
@@ -74,7 +74,7 @@ export default function PaymentBookingSummaryCard({
             <Typography className="text-sm text-slate-600">
               รหัสการจอง
             </Typography>
-            <Typography className="text-sm font-semibold text-slate-900">
+            <Typography className="apple-body-sm font-semibold text-slate-900">
               {bookingId}
             </Typography>
           </Box>
@@ -83,19 +83,19 @@ export default function PaymentBookingSummaryCard({
             <Box className="mt-3 rounded-[18px] bg-white p-3">
               <Box className="grid gap-2">
                 <Box className="flex items-start justify-between gap-3">
-                  <Typography className="text-xs font-semibold text-slate-600">
+                  <Typography className="apple-label-text font-semibold text-slate-600">
                     จุดรับรถ
                   </Typography>
                   <Box className="text-right">
                     <Typography
                       component="div"
-                      className="text-sm font-bold text-slate-900"
+                      className="apple-body-sm font-bold text-slate-900"
                     >
                       {pickupPoint || "-"}
                     </Typography>
                     <Typography
                       component="div"
-                      className="text-xs text-slate-500"
+                      className="apple-label-text text-slate-500"
                     >
                       {pickupDate
                         ? `${pickupDate}${pickupTime ? ` ${pickupTime}` : ""}`
@@ -107,19 +107,19 @@ export default function PaymentBookingSummaryCard({
                 <Divider className="border-black/10!" />
 
                 <Box className="flex items-start justify-between gap-3">
-                  <Typography className="text-xs font-semibold text-slate-600">
+                  <Typography className="apple-label-text font-semibold text-slate-600">
                     จุดคืนรถ
                   </Typography>
                   <Box className="text-right">
                     <Typography
                       component="div"
-                      className="text-sm font-bold text-slate-900"
+                      className="apple-body-sm font-bold text-slate-900"
                     >
                       {returnPoint || "-"}
                     </Typography>
                     <Typography
                       component="div"
-                      className="text-xs text-slate-500"
+                      className="apple-label-text text-slate-500"
                     >
                       {returnDate
                         ? `${returnDate}${returnTime ? ` ${returnTime}` : ""}`
@@ -129,10 +129,10 @@ export default function PaymentBookingSummaryCard({
                 </Box>
 
                 <Box className="flex items-center justify-between pt-1">
-                  <Typography className="text-xs text-slate-600">
+                  <Typography className="apple-label-text text-slate-600">
                     จำนวนวัน
                   </Typography>
-                  <Typography className="text-xs font-bold text-slate-900">
+                  <Typography className="apple-label-text font-bold text-slate-900">
                     {days ? `${days} วัน` : "-"}
                   </Typography>
                 </Box>
@@ -143,22 +143,22 @@ export default function PaymentBookingSummaryCard({
           {carSubTotal > 0 ? (
             <>
               <Box className="mt-3 flex items-center justify-between">
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-body-sm text-slate-600">
                   ราคาเต็ม (รถ)
                 </Typography>
                 <Typography
                   component="div"
-                  className="text-sm font-semibold text-slate-500 line-through"
+                  className="apple-body-sm font-semibold text-slate-500 line-through"
                 >
                   {formatTHB(carSubTotal)}
                 </Typography>
               </Box>
 
               <Box className="mt-2 flex items-center justify-between">
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-body-sm text-slate-600">
                   ยอดรถสุทธิ
                 </Typography>
-                <Typography className="text-sm font-bold text-slate-900">
+                <Typography className="apple-body-sm font-bold text-slate-900">
                   {formatTHB(carNet)}
                 </Typography>
               </Box>
@@ -166,10 +166,10 @@ export default function PaymentBookingSummaryCard({
               {carDiscount > 0 ? (
                 <Box className="mt-3 rounded-[18px] bg-emerald-50 px-4 py-3">
                   <Box className="flex items-center justify-between">
-                    <Typography className="text-sm font-bold text-emerald-900">
+                    <Typography className="apple-body-sm font-bold text-emerald-900">
                       คุณประหยัดไป
                     </Typography>
-                    <Typography className="text-lg font-black text-emerald-800">
+                    <Typography className="apple-card-title font-black text-emerald-800">
                       -{formatTHB(carDiscount)} ({discountPct}%)
                     </Typography>
                   </Box>
@@ -181,15 +181,15 @@ export default function PaymentBookingSummaryCard({
                   <Divider className="mb-2! border-black/10!" />
 
                   <Box className="flex items-center justify-between">
-                    <Typography className="text-sm font-semibold text-slate-800">
+                    <Typography className="apple-body-sm font-semibold text-slate-800">
                       บริการเสริมที่เลือก
                     </Typography>
-                    <Typography className="text-sm font-bold text-slate-900">
+                    <Typography className="apple-body-sm font-bold text-slate-900">
                       {formatTHB(addonsTotal)}
                     </Typography>
                   </Box>
 
-                  <Typography className="text-xs text-slate-500">
+                  <Typography className="apple-label-text text-slate-500">
                     ราคาส่วนนี้ยังไม่ถูกรวมในยอดชำระออนไลน์อัตโนมัติ
                   </Typography>
 
@@ -208,10 +208,10 @@ export default function PaymentBookingSummaryCard({
                           key={key}
                           className="flex items-start justify-between gap-3"
                         >
-                          <Typography className="text-xs text-slate-600">
+                          <Typography className="apple-label-text text-slate-600">
                             • {addon.title}
                           </Typography>
-                          <Typography className="whitespace-nowrap text-xs font-semibold text-slate-700">
+                          <Typography className="apple-label-text whitespace-nowrap font-semibold text-slate-700">
                             {priceText}
                           </Typography>
                         </Box>
@@ -223,30 +223,30 @@ export default function PaymentBookingSummaryCard({
 
               {extraCharge > 0 ? (
                 <Box className="mt-3 flex items-center justify-between">
-                  <Typography className="text-sm text-slate-600">
+                  <Typography className="apple-body-sm text-slate-600">
                     ค่าบริการเพิ่ม
                   </Typography>
-                  <Typography className="text-sm font-semibold text-slate-900">
+                  <Typography className="apple-body-sm font-semibold text-slate-900">
                     {formatTHB(extraCharge)}
                   </Typography>
                 </Box>
               ) : null}
 
               <Box className="mt-3 flex items-center justify-between">
-                <Typography className="text-sm text-slate-600">
+                <Typography className="apple-body-sm text-slate-600">
                   ยอดชำระ
                 </Typography>
-                <Typography className="text-lg font-bold text-slate-900">
+                <Typography className="apple-card-title font-bold text-slate-900">
                   {formatTHB(amount)}
                 </Typography>
               </Box>
             </>
           ) : (
             <Box className="mt-2 flex items-center justify-between">
-              <Typography className="text-sm text-slate-600">
+              <Typography className="apple-body-sm text-slate-600">
                 ยอดชำระ
               </Typography>
-              <Typography className="text-lg font-bold text-slate-900">
+              <Typography className="apple-card-title font-bold text-slate-900">
                 {formatTHB(amount)}
               </Typography>
             </Box>
@@ -257,21 +257,20 @@ export default function PaymentBookingSummaryCard({
 
         {car ? (
           <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
-            <Box className="relative aspect-4/3 overflow-hidden rounded-[18px] bg-white">
-              <Image
-                src={car.image || "/RentFlow.png"}
-                alt={car.name}
-                fill
-                className="object-cover"
-              />
-            </Box>
+            <StableImage
+              className="aspect-4/3 rounded-[18px]"
+              src={car.image || "/RentFlow.png"}
+              alt={car.name}
+              sizes="(min-width: 1200px) 34vw, (min-width: 640px) 50vw, 100vw"
+              imageClassName="object-cover"
+            />
 
             <Box className="mt-3 flex items-start justify-between gap-3">
               <Box className="min-w-0">
-                <Typography className="truncate text-sm font-semibold text-slate-900">
+                <Typography className="apple-card-title truncate font-semibold text-slate-900">
                   {car.name}
                 </Typography>
-                <Typography className="mt-1 text-xs text-slate-600">
+                <Typography className="apple-label-text mt-1 text-slate-600">
                   {car.type} • {car.seats} ที่นั่ง • {car.transmission} •{" "}
                   {car.fuel}
                 </Typography>
@@ -281,10 +280,10 @@ export default function PaymentBookingSummaryCard({
             <Divider className="my-4! border-black/10!" />
 
             <Box className="flex items-center justify-between">
-              <Typography className="text-sm text-slate-600">
+              <Typography className="apple-body-sm text-slate-600">
                 ราคา/วัน
               </Typography>
-              <Typography className="text-sm font-semibold text-slate-900">
+              <Typography className="apple-body-sm font-semibold text-slate-900">
                 {formatTHB(car.pricePerDay)}
               </Typography>
             </Box>
@@ -305,7 +304,7 @@ export default function PaymentBookingSummaryCard({
           </Box>
         ) : (
           <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] p-4">
-            <Typography className="text-sm text-slate-600">
+            <Typography className="apple-body-sm text-slate-600">
               ไม่พบข้อมูลรถ (carId:{" "}
               <span className="font-semibold">{carId || "-"}</span>)
             </Typography>
@@ -325,7 +324,7 @@ export default function PaymentBookingSummaryCard({
         <Divider className="my-5! border-black/10!" />
 
         <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-3">
-          <Typography className="text-xs leading-6 text-slate-500">
+          <Typography className="apple-label-text leading-6 text-slate-500">
             แนะนำ: หากชำระแล้วไม่ขึ้นสถานะ ให้ติดต่อทีมงานพร้อมรหัสการจอง
           </Typography>
         </Box>

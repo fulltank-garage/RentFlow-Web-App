@@ -1,4 +1,7 @@
+"use client";
+
 import { Box, Typography } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export type BookingFlowStepKey =
   | "car"
@@ -25,9 +28,10 @@ export default function BookingFlowSteps({
   currentStep: BookingFlowStepKey;
   className?: string;
 }) {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const currentIndex = FLOW_STEPS.findIndex((step) => step.key === currentStep);
-  const CIRCLE_SIZE = 50;
-  const CONNECTOR_WIDTH = 92;
+  const CIRCLE_SIZE = isMobile ? 42 : 50;
+  const CONNECTOR_WIDTH = isMobile ? 44 : 92;
   const TRACK_COLUMNS = FLOW_STEPS.map((_, index) =>
     index === FLOW_STEPS.length - 1
       ? `${CIRCLE_SIZE}px`
@@ -40,16 +44,16 @@ export default function BookingFlowSteps({
       className={`relative left-1/2 w-screen -translate-x-1/2 ${className}`.trim()}
     >
       <Box className="overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <Box className="mx-auto w-fit px-3">
+        <Box className="mx-auto w-fit px-4">
           <Box
             sx={{
               display: "grid",
               gridTemplateColumns: TRACK_COLUMNS,
-              gridTemplateRows: "50px auto",
+              gridTemplateRows: `${CIRCLE_SIZE}px auto`,
               alignItems: "center",
               justifyItems: "center",
               justifyContent: "center",
-              rowGap: "12px",
+              rowGap: isMobile ? "10px" : "12px",
             }}
           >
           {FLOW_STEPS.map((step, index) => {
@@ -94,9 +98,12 @@ export default function BookingFlowSteps({
             return (
               <Box key={step.key} sx={{ display: "contents" }}>
                 <Box
-                  className="relative z-[1] flex h-[50px] w-[50px] items-center justify-center rounded-full border text-[1.55rem] font-semibold leading-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  className="relative z-[1] flex items-center justify-center rounded-full border font-semibold leading-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   sx={{
                     ...circleStyle,
+                    width: CIRCLE_SIZE,
+                    height: CIRCLE_SIZE,
+                    fontSize: isMobile ? "1.3rem" : "1.55rem",
                     gridColumn: circleColumn,
                     gridRow: 1,
                   }}
@@ -106,11 +113,12 @@ export default function BookingFlowSteps({
 
                 {index !== FLOW_STEPS.length - 1 ? (
                   <Box
-                    className="h-[10px] self-center transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="self-center transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     sx={{
                       gridColumn: connectorColumn,
                       gridRow: 1,
                       justifySelf: "stretch",
+                      height: isMobile ? "8px" : "10px",
                       width: "calc(100% + 8px)",
                       ml: "-4px",
                       ...connectorStyle,
@@ -119,13 +127,15 @@ export default function BookingFlowSteps({
                 ) : null}
 
                 <Typography
-                  className="whitespace-nowrap text-center text-[15px] font-semibold tracking-[-0.03em] text-[var(--rf-apple-ink)] md:text-[17px]"
+                  className="text-center font-semibold tracking-[-0.03em] text-[var(--rf-apple-ink)]"
                   sx={{
                     gridColumn: circleColumn,
                     gridRow: 2,
                     justifySelf: "center",
-                    width: "max-content",
-                    maxWidth: 180,
+                    width: isMobile ? CIRCLE_SIZE + 36 : "max-content",
+                    maxWidth: isMobile ? CIRCLE_SIZE + 36 : 180,
+                    fontSize: isMobile ? 13 : 17,
+                    lineHeight: 1.2,
                   }}
                 >
                   {step.label}

@@ -32,7 +32,7 @@ export function useBranchDirectory() {
       } finally {
         if (!cancelled) {
           const elapsed = Date.now() - start;
-          const delay = Math.max(2000 - elapsed, 0);
+          const delay = Math.max(500 - elapsed, 0);
           await new Promise((resolve) => window.setTimeout(resolve, delay));
         }
 

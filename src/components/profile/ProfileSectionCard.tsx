@@ -20,7 +20,7 @@ export default function ProfileSectionCard({
             {icon}
           </Box>
         ) : null}
-        <Typography className="text-lg font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
+        <Typography className="apple-card-title font-bold tracking-[-0.03em] text-[var(--rf-apple-ink)]">
           {title}
         </Typography>
       </Box>

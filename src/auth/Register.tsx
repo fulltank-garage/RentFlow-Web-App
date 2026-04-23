@@ -17,14 +17,24 @@ export default function RegisterPage() {
           เมื่อดำเนินการต่อ ถือว่าคุณยอมรับ{" "}
           <Link
             href="/terms"
-            className="font-semibold text-slate-900 underline-offset-2 hover:underline"
+            className="font-semibold text-slate-900"
+            style={{
+              textDecorationLine: "underline",
+              textDecorationThickness: "1.5px",
+              textUnderlineOffset: "2px",
+            }}
           >
             เงื่อนไขการใช้งาน
           </Link>{" "}
           และ{" "}
           <Link
             href="/privacy"
-            className="font-semibold text-slate-900 underline-offset-2 hover:underline"
+            className="font-semibold text-slate-900"
+            style={{
+              textDecorationLine: "underline",
+              textDecorationThickness: "1.5px",
+              textUnderlineOffset: "2px",
+            }}
           >
             นโยบายความเป็นส่วนตัว
           </Link>

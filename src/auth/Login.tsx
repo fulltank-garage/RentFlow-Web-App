@@ -12,19 +12,30 @@ export default function LoginPage() {
       subtitle="กรอกชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ"
       successMessage="เข้าสู่ระบบสำเร็จ กำลังพาไปหน้าหลัก..."
       submitErrorMessage="เข้าสู่ระบบไม่สำเร็จ"
+      forgotPasswordHref="/forgot-password"
       agreementText={
         <>
           การดำเนินการต่อถือว่าคุณยอมรับ{" "}
           <Link
             href="/terms"
-            className="font-semibold text-slate-900 underline-offset-2 hover:underline"
+            className="font-semibold text-slate-900"
+            style={{
+              textDecorationLine: "underline",
+              textDecorationThickness: "1.5px",
+              textUnderlineOffset: "2px",
+            }}
           >
             เงื่อนไขการใช้งาน
           </Link>{" "}
           และ{" "}
           <Link
             href="/privacy"
-            className="font-semibold text-slate-900 underline-offset-2 hover:underline"
+            className="font-semibold text-slate-900"
+            style={{
+              textDecorationLine: "underline",
+              textDecorationThickness: "1.5px",
+              textUnderlineOffset: "2px",
+            }}
           >
             นโยบายความเป็นส่วนตัว
           </Link>

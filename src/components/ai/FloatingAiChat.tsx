@@ -8,16 +8,11 @@ import {
   Button,
   Chip,
   CircularProgress,
-  IconButton,
   Paper,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import AutoAwesomeRoundedIcon from "@mui/icons-material/AutoAwesomeRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import DirectionsCarRoundedIcon from "@mui/icons-material/DirectionsCarRounded";
 
 import { formatTHB } from "@/src/constants/money";
 import { getErrorMessage } from "@/src/lib/api-error";
@@ -50,8 +45,8 @@ function RecommendationItem({
           {car.image ? (
             <Image src={car.image} alt={car.name} fill className="object-cover" />
           ) : (
-            <Box className="grid h-full place-items-center text-[var(--rf-apple-muted)]">
-              <DirectionsCarRoundedIcon fontSize="small" />
+            <Box className="grid h-full place-items-center px-2 text-center text-xs font-semibold text-[var(--rf-apple-muted)]">
+              ไม่มีรูป
             </Box>
           )}
         </Box>
@@ -72,7 +67,7 @@ function RecommendationItem({
             key={reason}
             size="small"
             label={reason}
-            className="h-6! bg-white! text-[11px]! text-[var(--rf-apple-muted)]!"
+            className="apple-label-text h-6! bg-white! text-[var(--rf-apple-muted)]!"
           />
         ))}
       </Box>
@@ -144,9 +139,6 @@ export default function FloatingAiChat() {
       >
           <Box className="bg-[var(--rf-apple-ink)] px-5 py-4 text-white">
             <Stack direction="row" alignItems="center" spacing={1.5}>
-              <Box className="grid h-10 w-10 place-items-center rounded-full bg-white/10">
-                <AutoAwesomeRoundedIcon />
-              </Box>
               <Box className="min-w-0 flex-1">
                 <Typography className="text-sm font-bold">
                   ผู้ช่วยเลือก RentFlow
@@ -157,14 +149,15 @@ export default function FloatingAiChat() {
                     : "ช่วยเลือกรถจากร้านนี้"}
                 </Typography>
               </Box>
-              <IconButton
+              <Button
                 aria-label="ปิดผู้ช่วย AI"
                 onClick={() => setOpen(false)}
-                className="text-white! transition-transform duration-300 ease-out hover:scale-105"
+                variant="text"
+                className="rounded-full! px-3! py-1.5! text-white! transition-transform duration-300 ease-out hover:scale-105"
                 size="small"
               >
-                <CloseRoundedIcon fontSize="small" />
-              </IconButton>
+                ปิด
+              </Button>
             </Stack>
           </Box>
 
@@ -182,7 +175,7 @@ export default function FloatingAiChat() {
                   size="small"
                   label={suggestion}
                   onClick={() => setQuery(suggestion)}
-                  className={`h-auto! min-h-11! w-full! cursor-pointer justify-start! rounded-[18px]! border px-2! py-2! text-left! text-[12px]! font-bold! leading-5! transition-transform duration-1000 ease-[cubic-bezier(0.18,0.9,0.22,1)] hover:scale-[1.006] ${
+                  className={`apple-body-sm h-auto! min-h-11! w-full! cursor-pointer justify-start! rounded-[18px]! border px-2! py-2! text-left! font-bold! leading-5! transition-transform duration-1000 ease-[cubic-bezier(0.18,0.9,0.22,1)] hover:scale-[1.006] ${
                     query === suggestion
                       ? "border-[var(--rf-apple-blue)]! bg-[var(--rf-apple-blue)]! text-white!"
                       : "border-black/10! bg-[var(--rf-apple-surface-soft)]! text-[var(--rf-apple-ink)]! hover:bg-white!"
@@ -246,18 +239,19 @@ export default function FloatingAiChat() {
                 maxRows={3}
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: "18px" } }}
               />
-              <IconButton
+              <Button
                 aria-label="ส่งคำถามให้ AI"
                 onClick={() => void ask()}
                 disabled={loading || !query.trim()}
-                className="h-10 w-10 rounded-full! bg-[var(--rf-apple-blue)]! text-white! transition-transform duration-300 ease-out hover:scale-105 disabled:bg-black/10!"
+                variant="contained"
+                className="min-w-[72px]! rounded-full! px-4! text-white! transition-transform duration-300 ease-out hover:scale-105 disabled:bg-black/10!"
               >
                 {loading ? (
                   <CircularProgress size={18} color="inherit" />
                 ) : (
-                  <SendRoundedIcon fontSize="small" />
+                  "ส่ง"
                 )}
-              </IconButton>
+              </Button>
             </Stack>
           </Box>
       </Paper>
@@ -286,37 +280,48 @@ export default function FloatingAiChat() {
               แนะนำรถให้เหมาะกับทริป
             </Typography>
           </Box>
-          <IconButton
+          <Button
             aria-label="เปิดผู้ช่วย AI"
             onClick={() => setOpen(true)}
-            className="h-16 w-16 rounded-full! bg-[var(--rf-apple-ink)]! text-white! shadow-[0_18px_48px_rgba(0,0,0,0.28)] transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] hover:bg-black!"
+            className="h-16! min-w-[64px]! rounded-full! bg-[var(--rf-apple-ink)]! px-4! text-white! shadow-[0_18px_48px_rgba(0,0,0,0.28)] transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02] hover:bg-black!"
+            sx={{
+              boxShadow:
+                "0 20px 54px rgba(15, 23, 42, 0.34), 0 8px 22px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(255,255,255,0.04) inset",
+              "&:hover": {
+                boxShadow:
+                  "0 26px 64px rgba(15, 23, 42, 0.4), 0 12px 28px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255,255,255,0.06) inset",
+              },
+            }}
           >
-            <svg width="0" height="0" aria-hidden="true" focusable="false">
-              <defs>
-                <linearGradient id="ai-floating-icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#38bdf8" />
-                  <stop offset="28%" stopColor="#a78bfa" />
-                  <stop offset="52%" stopColor="#fb7185" />
-                  <stop offset="76%" stopColor="#facc15" />
-                  <stop offset="100%" stopColor="#34d399" />
-                  <animateTransform
-                    attributeName="gradientTransform"
-                    type="rotate"
-                    from="0 0.5 0.5"
-                    to="360 0.5 0.5"
-                    dur="4s"
-                    repeatCount="indefinite"
-                  />
-                </linearGradient>
-              </defs>
-            </svg>
-            <AutoAwesomeRoundedIcon
-              sx={{
-                fontSize: 40,
-                "& path": { fill: "url(#ai-floating-icon-gradient)" },
-              }}
-            />
-          </IconButton>
+            <Box
+              component="span"
+              aria-hidden="true"
+              className="flex h-8 w-8 items-center justify-center"
+            >
+              <Box
+                component="svg"
+                viewBox="0 0 24 24"
+                className="h-8 w-8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 2.8L13.7 8.3L19.2 10L13.7 11.7L12 17.2L10.3 11.7L4.8 10L10.3 8.3L12 2.8Z"
+                  fill="white"
+                />
+                <path
+                  d="M18.3 4.4L18.9 6.1L20.6 6.7L18.9 7.3L18.3 9L17.7 7.3L16 6.7L17.7 6.1L18.3 4.4Z"
+                  fill="white"
+                  fillOpacity="0.72"
+                />
+                <path
+                  d="M6 15.8L6.5 17.1L7.8 17.6L6.5 18.1L6 19.4L5.5 18.1L4.2 17.6L5.5 17.1L6 15.8Z"
+                  fill="white"
+                  fillOpacity="0.72"
+                />
+              </Box>
+            </Box>
+          </Button>
       </Stack>
     </Box>
   );

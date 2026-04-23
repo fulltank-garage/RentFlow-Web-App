@@ -1,18 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material";
 
 function FieldShell({
   label,
   children,
+  className,
 }: {
   label: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <Box className="rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-4 md:px-5 md:py-4.5">
-      <Typography className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--rf-apple-muted)]">
+    <Box
+      className={`rounded-[22px] bg-[var(--rf-apple-surface-soft)] px-4 py-4 md:px-5 md:py-4.5 ${className || ""}`}
+    >
+      <Typography className="apple-label-text mb-1.5 font-medium uppercase text-[var(--rf-apple-muted)]">
         {label}
       </Typography>
       {children}
@@ -28,6 +32,7 @@ type ProfileFieldProps = {
   type?: React.InputHTMLAttributes<unknown>["type"];
   disabled?: boolean;
   placeholder?: string;
+  shellClassName?: string;
 };
 
 export function ProfileField({
@@ -38,21 +43,40 @@ export function ProfileField({
   type = "text",
   disabled = false,
   placeholder,
+  shellClassName,
 }: ProfileFieldProps) {
+  const isPasswordField = type === "password";
+  const [showPassword, setShowPassword] = React.useState(false);
+  const resolvedType =
+    isPasswordField && showPassword ? "text" : type;
+
   return (
-    <FieldShell label={label}>
+    <FieldShell label={label} className={shellClassName}>
       {mode === "edit" ? (
         <TextField
           fullWidth
           variant="standard"
           value={value}
-          type={type}
+          type={resolvedType}
           disabled={disabled}
           placeholder={placeholder}
           onChange={(e) => onChange?.(e.target.value)}
           InputLabelProps={type === "date" ? { shrink: true } : undefined}
           InputProps={{
             disableUnderline: true,
+            endAdornment: isPasswordField ? (
+              <InputAdornment position="end">
+                <Button
+                  size="small"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  onMouseDown={(event) => event.preventDefault()}
+                  aria-label={showPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
+                  className="min-w-0! rounded-full! px-2! py-1! text-[var(--rf-apple-muted)]!"
+                >
+                  {showPassword ? "ซ่อน" : "แสดง"}
+                </Button>
+              </InputAdornment>
+            ) : undefined,
           }}
           sx={{
             "& .MuiInputBase-root": {
@@ -65,6 +89,12 @@ export function ProfileField({
             },
             "& .MuiInputBase-input": {
               padding: 0,
+            },
+            "& .MuiInputAdornment-root": {
+              marginLeft: "8px",
+            },
+            "& .MuiButton-root": {
+              color: "var(--rf-apple-muted)",
             },
             "& .MuiInputBase-input::placeholder": {
               color: "var(--rf-apple-muted)",

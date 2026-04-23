@@ -15,8 +15,8 @@ type Props = {
 function SpecRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <Box className="flex items-center justify-between">
-      <Typography className="text-slate-600">{label}</Typography>
-      <Typography className="font-semibold text-slate-900">{value}</Typography>
+      <Typography className="apple-body-sm text-slate-600">{label}</Typography>
+      <Typography className="apple-body-sm font-semibold text-slate-900">{value}</Typography>
     </Box>
   );
 }
@@ -24,11 +24,11 @@ function SpecRow({ label, value }: { label: string; value: React.ReactNode }) {
 export default function CarDetailSpecsCard({ detail }: Props) {
   return (
     <Box className="apple-card p-5!">
-      <Typography className="text-sm font-semibold text-slate-900">
+      <Typography className="apple-card-title font-semibold text-slate-900">
         สรุปสเปค
       </Typography>
 
-      <Box className="mt-3 grid gap-2 text-sm text-slate-700">
+      <Box className="apple-body-sm mt-3 grid gap-2 text-slate-700">
         <SpecRow label="ประเภท" value={detail.type} />
         <SpecRow label="ที่นั่ง" value={detail.seats} />
         <SpecRow label="เกียร์" value={detail.transmission} />

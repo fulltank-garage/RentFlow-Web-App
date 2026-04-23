@@ -12,11 +12,6 @@ export default function BookingSuccessPageSkeleton() {
         <Box className="mx-auto max-w-3xl text-center">
           <Box className="flex flex-col items-center gap-4">
             <Skeleton
-              variant="circular"
-              animation="wave"
-              sx={{ width: 88, height: 88 }}
-            />
-            <Skeleton
               variant="text"
               animation="wave"
               sx={{
@@ -147,13 +142,7 @@ export default function BookingSuccessPageSkeleton() {
 
         <Box className="apple-card apple-card-no-hover mx-auto mt-8 max-w-3xl p-5 md:p-6">
           <Box className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <Box className="flex items-start gap-3">
-              <Skeleton
-                variant="circular"
-                animation="wave"
-                sx={{ width: 48, height: 48 }}
-              />
-              <Box>
+            <Box className="min-w-0">
                 <Skeleton
                   variant="text"
                   animation="wave"
@@ -176,7 +165,6 @@ export default function BookingSuccessPageSkeleton() {
                     transform: "none",
                   }}
                 />
-              </Box>
             </Box>
 
             <Skeleton

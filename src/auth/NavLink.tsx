@@ -27,7 +27,7 @@ export default function NavLink({
             fullWidth={mobile}
             sx={{ textTransform: "none" }}
             className={[
-                "rounded-xl! px-3! py-2! text-sm!",
+                "apple-nav-link rounded-xl! px-3! py-2!",
                 isActive
                     ? "text-slate-900! bg-slate-100!"
                     : "text-slate-600! hover:text-slate-900! hover:bg-slate-100!",

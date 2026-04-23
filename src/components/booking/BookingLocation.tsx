@@ -41,13 +41,13 @@ export default function BookingLocation({
 }: Props) {
   return (
     <Box>
-      <Typography className="text-sm font-semibold text-slate-900">
+      <Typography className="apple-card-title font-semibold text-slate-900">
         จุดรับ-คืนรถ
       </Typography>
 
       {!merchantBranchesEnabled ? (
         <>
-          <Typography className="mt-1 text-xs text-slate-500">
+          <Typography className="apple-label-text mt-1 text-slate-500">
             ค่าบริการส่งรถคิดตามระยะทางจริง สามารถประเมินและต่อรองได้ในแชท
           </Typography>
 
@@ -88,7 +88,7 @@ export default function BookingLocation({
         </>
       ) : (
         <>
-          <Typography className="mt-1 text-xs text-slate-500">
+          <Typography className="apple-label-text mt-1 text-slate-500">
             เลือกสาขารับรถ/คืนรถ หรือเลือก “อื่นๆ”
             เพื่อระบุสถานที่สำหรับประเมินค่าส่ง
           </Typography>

@@ -17,11 +17,10 @@ export default function MyBookingsPage() {
   return (
     <Box className="apple-page">
     <Container maxWidth="lg" className="apple-section">
-      <Box className="mx-auto max-w-3xl text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: 42, md: 64 } }}
+            className="apple-heading apple-page-title"
           >
             การจองของฉัน
           </Typography>

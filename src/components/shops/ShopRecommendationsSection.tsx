@@ -13,7 +13,6 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import StorefrontRoundedIcon from "@mui/icons-material/StorefrontRounded";
 
 import { formatTHB } from "@/src/constants/money";
 import type { ShopSummary } from "@/src/lib/shop-directory";
@@ -56,11 +55,10 @@ export default function ShopRecommendationsSection({
 
   return (
     <Container maxWidth="lg" className={isPageLayout ? "apple-section" : "apple-section"}>
-      <Box className="mx-auto flex max-w-3xl flex-col items-center gap-4 text-center">
+      <Box className="apple-section-intro max-w-3xl">
         <Box className="flex flex-col gap-3">
           <Typography
-            className="apple-heading"
-            sx={{ fontSize: { xs: isPageLayout ? 42 : 38, md: isPageLayout ? 64 : 56 } }}
+            className={`apple-heading ${isPageLayout ? "apple-page-title" : "apple-section-title"}`}
           >
             {title}
           </Typography>
@@ -77,7 +75,7 @@ export default function ShopRecommendationsSection({
         />
       </Box>
 
-      <Box className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <Box className="apple-shelf apple-shelf-wide mt-10 sm:grid sm:grid-cols-2 lg:grid-cols-3">
         {visibleShops.length ? (
           visibleShops.map((shop) => (
             <Card
@@ -86,7 +84,7 @@ export default function ShopRecommendationsSection({
               sx={{ boxShadow: "none" }}
               className="apple-card group"
             >
-              <Box className="relative h-56 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)]">
+              <Box className="relative h-52 w-full overflow-hidden bg-[var(--rf-apple-surface-soft)] sm:h-56">
                 {shop.heroImage ? (
                   <Image
                     src={shop.heroImage}
@@ -95,13 +93,13 @@ export default function ShopRecommendationsSection({
                     className="object-cover transition-transform duration-1000 ease-[cubic-bezier(0.18,0.9,0.22,1)] group-hover:scale-[1.012]"
                   />
                 ) : (
-                  <Box className="grid h-full place-items-center text-[var(--rf-apple-muted)]">
-                    <StorefrontRoundedIcon sx={{ fontSize: 48 }} />
+                  <Box className="grid h-full place-items-center px-6 text-center text-sm font-semibold text-[var(--rf-apple-muted)]">
+                    ยังไม่มีภาพหน้าร้าน
                   </Box>
                 )}
                 <Box className="absolute inset-0 bg-linear-to-t from-black/55 via-black/15 to-transparent" />
                 <Box className="absolute bottom-4 left-4 right-4">
-                  <Typography className="truncate text-2xl font-black tracking-[-0.04em] text-white">
+                  <Typography className="apple-card-title-lg truncate font-black tracking-[-0.04em] text-white">
                     {shop.name}
                   </Typography>
                   {shop.domainSlug ? (
@@ -112,7 +110,7 @@ export default function ShopRecommendationsSection({
                 </Box>
               </Box>
 
-              <CardContent className="p-4!">
+              <CardContent className="p-4! sm:p-5!">
                 <Box className="flex flex-wrap gap-2">
                   {shop.carTypes.slice(0, 3).map((type) => (
                     <Chip
@@ -130,7 +128,7 @@ export default function ShopRecommendationsSection({
                       <Typography className="text-xs text-[var(--rf-apple-muted)]">
                         รถพร้อมให้เลือก
                       </Typography>
-                      <Typography className="text-lg font-bold text-[var(--rf-apple-ink)]">
+                      <Typography className="apple-card-title font-bold text-[var(--rf-apple-ink)]">
                         {shop.carCount} คัน
                       </Typography>
                     </Box>
@@ -138,7 +136,7 @@ export default function ShopRecommendationsSection({
                       <Typography className="text-xs text-[var(--rf-apple-muted)]">
                         เริ่มต้น
                       </Typography>
-                      <Typography className="text-lg font-bold text-[var(--rf-apple-ink)]">
+                      <Typography className="apple-card-title font-bold text-[var(--rf-apple-ink)]">
                         {formatTHB(shop.startingPrice)}
                       </Typography>
                     </Box>
