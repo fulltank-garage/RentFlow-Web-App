@@ -4,6 +4,7 @@ import * as React from "react";
 import { Box, Button, Chip, Typography } from "@mui/material";
 import { formatTHB } from "@/src/constants/money";
 import { formatBookingDateTime } from "@/src/lib/booking-datetime";
+import { readClientCookie, writeClientCookie } from "@/src/lib/client-cookie";
 
 type Props = {
   bookingId: string;
@@ -626,7 +627,7 @@ export default function BookingReceiptCard({
 
     autoDownloadStartedRef.current = true;
 
-    const downloaded = window.sessionStorage.getItem(autoDownloadKey);
+    const downloaded = readClientCookie(autoDownloadKey);
     if (downloaded) {
       setDownloadStatus("auto");
       return;
@@ -635,7 +636,10 @@ export default function BookingReceiptCard({
     const timer = window.setTimeout(async () => {
       const success = await handleDownload("auto");
       if (success) {
-        window.sessionStorage.setItem(autoDownloadKey, new Date().toISOString());
+        writeClientCookie(autoDownloadKey, new Date().toISOString(), {
+          maxAge: 60 * 60 * 24,
+          sameSite: "Strict",
+        });
       }
     }, 520);
 

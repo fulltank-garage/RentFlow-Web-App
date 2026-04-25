@@ -22,6 +22,7 @@ export default function BookingSuccessPage({
   pickupPoint,
   returnPoint,
   shopName,
+  bookingMode = "payment",
 }: {
   bookingId: string;
   amount: number;
@@ -34,8 +35,10 @@ export default function BookingSuccessPage({
   pickupPoint?: string;
   returnPoint?: string;
   shopName?: string;
+  bookingMode?: string;
 }) {
   const ready = usePageReady({ disableDuringFlowTransition: true });
+  const isChatBooking = bookingMode === "chat";
 
   if (!ready) {
     return <BookingSuccessPageSkeleton />;
@@ -49,18 +52,23 @@ export default function BookingSuccessPage({
     <Box className="apple-page">
       <BookingFlowScreen>
         <Container maxWidth="lg" className="apple-section">
-          <BookingFlowSteps currentStep="success" className="mb-8" />
+          <BookingFlowSteps
+            currentStep="success"
+            mode={isChatBooking ? "chat" : "payment"}
+            className="mb-8"
+          />
 
           <Box className="mx-auto max-w-3xl text-center">
             <Box className="flex flex-col items-center gap-4">
               <Typography
                 className="apple-heading apple-section-title"
               >
-                จองสำเร็จ
+                {isChatBooking ? "ส่งคำขอจองแล้ว" : "จองสำเร็จ"}
               </Typography>
               <Typography className="apple-subtitle text-lg">
-                ระบบบันทึกรายการของคุณเรียบร้อยแล้ว
-                สามารถตรวจสอบสถานะและรายละเอียดเพิ่มเติมได้จากหน้าการจองของฉัน
+                {isChatBooking
+                  ? "ร้านจะติดต่อกลับเพื่อยืนยันรายละเอียดก่อนดำเนินการขั้นถัดไป"
+                  : "ระบบบันทึกรายการของคุณเรียบร้อยแล้ว สามารถตรวจสอบสถานะและรายละเอียดเพิ่มเติมได้จากหน้าการจองของฉัน"}
               </Typography>
 
               <Box className="mt-2 flex flex-wrap justify-center gap-3">
@@ -71,7 +79,7 @@ export default function BookingSuccessPage({
                 />
                 <Chip
                   size="small"
-                  label={`ยอดชำระ: ${formatTHB(amount || 0)}`}
+                  label={`${isChatBooking ? "ยอดประมาณการ" : "ยอดชำระ"}: ${formatTHB(amount || 0)}`}
                   className="apple-pill text-[var(--rf-apple-muted)]!"
                 />
               </Box>
@@ -84,9 +92,9 @@ export default function BookingSuccessPage({
                 ขั้นตอนถัดไป
               </Typography>
               <Typography className="mt-3 text-sm leading-6 text-[var(--rf-apple-muted)]">
-                การจองของคุณถูกส่งเข้าระบบเรียบร้อยแล้ว
-                เก็บรหัสการจองไว้สำหรับอ้างอิง ตรวจสอบสถานะจากหน้าการจองของฉัน
-                และเตรียมเอกสารที่จำเป็นก่อนวันรับรถได้เลย
+                {isChatBooking
+                  ? "คำขอจองถูกส่งให้ร้านเรียบร้อยแล้ว เก็บรหัสการจองไว้สำหรับอ้างอิง และรอร้านติดต่อกลับเพื่อยืนยันเงื่อนไขก่อนชำระเงิน"
+                  : "การจองของคุณถูกส่งเข้าระบบเรียบร้อยแล้ว เก็บรหัสการจองไว้สำหรับอ้างอิง ตรวจสอบสถานะจากหน้าการจองของฉัน และเตรียมเอกสารที่จำเป็นก่อนวันรับรถได้เลย"}
               </Typography>
             </Box>
 
@@ -132,18 +140,20 @@ export default function BookingSuccessPage({
             </Box>
           </Box>
 
-          <BookingReceiptCard
-            bookingId={bookingId}
-            amount={amount}
-            carName={carName}
-            customerName={customerName}
-            customerPhone={customerPhone}
-            pickupDate={pickupDate}
-            returnDate={returnDate}
-            pickupPoint={pickupPoint}
-            returnPoint={returnPoint}
-            shopName={shopName}
-          />
+          {!isChatBooking ? (
+            <BookingReceiptCard
+              bookingId={bookingId}
+              amount={amount}
+              carName={carName}
+              customerName={customerName}
+              customerPhone={customerPhone}
+              pickupDate={pickupDate}
+              returnDate={returnDate}
+              pickupPoint={pickupPoint}
+              returnPoint={returnPoint}
+              shopName={shopName}
+            />
+          ) : null}
         </Container>
       </BookingFlowScreen>
     </Box>

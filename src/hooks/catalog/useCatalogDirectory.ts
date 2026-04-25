@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { getErrorMessage } from "@/src/lib/api-error";
+import { useRentFlowRealtimeRefresh } from "@/src/hooks/realtime/useRentFlowRealtimeRefresh";
 import { useRentFlowSiteMode } from "@/src/hooks/useRentFlowSiteMode";
 import {
   buildCarClasses,
@@ -19,6 +20,26 @@ export function useCatalogDirectory(tenantSlug?: string, initialHost?: string) {
   const [branches, setBranches] = React.useState<Branch[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [reloadTick, setReloadTick] = React.useState(0);
+
+  const refreshFromRealtime = React.useCallback(() => {
+    setReloadTick((current) => current + 1);
+  }, []);
+
+  useRentFlowRealtimeRefresh({
+    events: [
+      "booking.created",
+      "booking.updated",
+      "booking.cancelled",
+      "car.changed",
+      "branch.changed",
+      "availability.changed",
+      "tenant.updated",
+    ],
+    onRefresh: refreshFromRealtime,
+    tenantSlug: tenantSlug || undefined,
+    marketplace: siteMode === "marketplace" && !tenantSlug,
+  });
 
   React.useEffect(() => {
     let cancelled = false;
@@ -72,7 +93,7 @@ export function useCatalogDirectory(tenantSlug?: string, initialHost?: string) {
     return () => {
       cancelled = true;
     };
-  }, [siteMode, tenantSlug]);
+  }, [reloadTick, siteMode, tenantSlug]);
 
   return {
     siteMode,

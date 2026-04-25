@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { getErrorMessage } from "@/src/lib/api-error";
+import { useRentFlowRealtimeRefresh } from "@/src/hooks/realtime/useRentFlowRealtimeRefresh";
 import { useRentFlowSiteMode } from "@/src/hooks/useRentFlowSiteMode";
 import { getCars } from "@/src/services/cars/cars.service";
 import type { Car } from "@/src/services/cars/cars.types";
@@ -22,6 +23,25 @@ export function useCarsCatalog(params: Params) {
   const [cars, setCars] = React.useState<Car[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
+    const [reloadTick, setReloadTick] = React.useState(0);
+
+    const refreshFromRealtime = React.useCallback(() => {
+        setReloadTick((current) => current + 1);
+    }, []);
+
+    useRentFlowRealtimeRefresh({
+        events: [
+            "booking.created",
+            "booking.updated",
+            "booking.cancelled",
+            "car.changed",
+            "availability.changed",
+            "tenant.updated",
+        ],
+        onRefresh: refreshFromRealtime,
+        tenantSlug,
+        marketplace: siteMode === "marketplace" && !tenantSlug,
+    });
 
     React.useEffect(() => {
         let cancelled = false;
@@ -72,6 +92,7 @@ export function useCarsCatalog(params: Params) {
         location,
         pickupDate,
         q,
+        reloadTick,
         returnDate,
         siteMode,
         sort,

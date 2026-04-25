@@ -25,7 +25,11 @@ export type Car = TenantSummary & {
   images?: string[];
   description?: string;
   locationId?: string;
+  status?: string;
   isAvailable: boolean;
+  unitCount?: number;
+  reservedUnits?: number;
+  availableUnits?: number;
   createdAt: string;
   updatedAt: string;
   lineOfficialAccount?: LineOfficialAccountSummary;

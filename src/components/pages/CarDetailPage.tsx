@@ -64,6 +64,7 @@ export default function CarDetailPage({ carId }: { carId: string }) {
             image={detail.images?.[0] || detail.imageUrl || detail.image}
             name={detail.name}
             isAvailable={detail.isAvailable}
+            status={detail.status}
           />
           <CarDetailSummaryCard detail={detail} />
         </Box>

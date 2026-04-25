@@ -24,12 +24,24 @@ type Props = {
     fuel: string;
     pricePerDay: number;
     isAvailable: boolean;
+    status?: string;
+    unitCount?: number;
+    availableUnits?: number;
     domainSlug?: string;
   };
 };
 
 export default function CarDetailSummaryCard({ detail }: Props) {
   const router = useRouter();
+  const availableUnits =
+    typeof detail.availableUnits === "number"
+      ? detail.availableUnits
+      : detail.isAvailable
+        ? Math.max(detail.unitCount || 1, 1)
+        : 0;
+  const isUnavailable = !detail.isAvailable || availableUnits <= 0;
+  const unavailableLabel =
+    detail.status === "rented" ? "ถูกเช่าแล้ว" : "ถูกจองแล้ว";
 
   return (
     <Card
@@ -53,7 +65,7 @@ export default function CarDetailSummaryCard({ detail }: Props) {
         <Box className="mt-3 flex items-center gap-2">
           <Chip
             size="small"
-            label="ตรวจเช็คก่อนส่งมอบ"
+            label={isUnavailable ? unavailableLabel : "ตรวจเช็คก่อนส่งมอบ"}
             variant="outlined"
             className="apple-pill text-[var(--rf-apple-muted)]!"
           />
@@ -73,6 +85,11 @@ export default function CarDetailSummaryCard({ detail }: Props) {
               / วัน
             </Typography>
           </Box>
+          {!isUnavailable && (detail.unitCount || 0) > 1 ? (
+            <Typography className="mt-3 text-sm font-semibold text-[var(--rf-apple-muted)]">
+              เหลือให้จอง {availableUnits} จาก {detail.unitCount} คัน
+            </Typography>
+          ) : null}
         </Box>
 
         <Box className="mt-5 grid gap-2">
@@ -80,9 +97,9 @@ export default function CarDetailSummaryCard({ detail }: Props) {
             fullWidth
             variant="contained"
             className="rounded-full! py-2.5! font-semibold!"
-            disabled={!detail.isAvailable}
+            disabled={isUnavailable}
             onClick={() =>
-              detail.isAvailable
+              !isUnavailable
                 ? router.push(
                     `/booking?carId=${encodeURIComponent(detail.id)}${
                       detail.domainSlug
@@ -93,7 +110,7 @@ export default function CarDetailSummaryCard({ detail }: Props) {
                 : undefined
             }
           >
-            {detail.isAvailable ? "จองคันนี้" : "มีการจองแล้ว"}
+            {isUnavailable ? unavailableLabel : "จองคันนี้"}
           </Button>
 
           <Button
@@ -106,9 +123,9 @@ export default function CarDetailSummaryCard({ detail }: Props) {
           </Button>
         </Box>
 
-        {!detail.isAvailable ? (
+        {isUnavailable ? (
           <Typography className="mt-3 text-sm font-medium text-[var(--rf-apple-muted)]">
-            รถคันนี้มีการจองแล้ว กรุณาเลือกรถคันอื่นหรือกลับมาตรวจสอบอีกครั้งภายหลัง
+            รถคันนี้{unavailableLabel} กรุณาเลือกรถคันอื่นหรือกลับมาตรวจสอบอีกครั้งภายหลัง
           </Typography>
         ) : null}
       </CardContent>

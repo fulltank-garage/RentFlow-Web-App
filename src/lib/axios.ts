@@ -8,6 +8,7 @@ const api = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
+    "X-RentFlow-App": "storefront",
   },
 });
 
@@ -18,6 +19,8 @@ api.interceptors.request.use((config) => {
   if (typeof FormData !== "undefined" && config.data instanceof FormData) {
     headers.delete("Content-Type");
   }
+
+  headers.set("X-RentFlow-App", "storefront");
 
   for (const [key, value] of Object.entries(getRentFlowTenantHeaders())) {
     if (!headers.has(key)) {

@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  deleteClientCookie,
+  readClientCookie,
+  writeClientCookie,
+} from "@/src/lib/client-cookie";
+
 const BOOKING_FLOW_TRANSITION_KEY = "rentflow-booking-flow-transition";
 const BOOKING_FLOW_TRANSITION_MAX_AGE = 4000;
 const BOOKING_FLOW_TRANSITION_CLASS = "rf-booking-flow-transition";
@@ -26,7 +32,7 @@ type ViewTransitionDocument = Document & {
 function readTransitionPayload(): BookingFlowTransitionPayload | null {
   if (typeof window === "undefined") return null;
 
-  const raw = window.sessionStorage.getItem(BOOKING_FLOW_TRANSITION_KEY);
+  const raw = readClientCookie(BOOKING_FLOW_TRANSITION_KEY);
   if (!raw) return null;
 
   try {
@@ -45,9 +51,10 @@ export function markBookingFlowTransition() {
     at: Date.now(),
   };
 
-  window.sessionStorage.setItem(
+  writeClientCookie(
     BOOKING_FLOW_TRANSITION_KEY,
-    JSON.stringify(payload)
+    JSON.stringify(payload),
+    { maxAge: 8, sameSite: "Strict" }
   );
 }
 
@@ -60,7 +67,7 @@ export function hasRecentBookingFlowTransition() {
 
 export function clearBookingFlowTransition() {
   if (typeof window === "undefined") return;
-  window.sessionStorage.removeItem(BOOKING_FLOW_TRANSITION_KEY);
+  deleteClientCookie(BOOKING_FLOW_TRANSITION_KEY);
 }
 
 export function supportsBookingFlowViewTransition() {

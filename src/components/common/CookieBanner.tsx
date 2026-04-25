@@ -9,6 +9,10 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import {
+  readClientCookie,
+  writeClientCookie,
+} from "@/src/lib/client-cookie";
 
 const KEY = "rf_cookie_consent_v1";
 
@@ -17,17 +21,23 @@ export default function CookieBanner() {
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    const saved = window.localStorage.getItem(KEY);
+    const saved = readClientCookie(KEY);
     if (!saved) setOpen(true);
   }, []);
 
   const accept = () => {
-    window.localStorage.setItem(KEY, "accepted");
+    writeClientCookie(KEY, "accepted", {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "Strict",
+    });
     setOpen(false);
   };
 
   const reject = () => {
-    window.localStorage.setItem(KEY, "rejected");
+    writeClientCookie(KEY, "rejected", {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "Strict",
+    });
     setOpen(false);
   };
 

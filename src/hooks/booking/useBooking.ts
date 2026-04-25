@@ -283,6 +283,8 @@ export default function useBooking() {
     if (isDateAvailable === false) return false;
     return true;
   }, [car?.isAvailable, isDateAvailable]);
+  const bookingMode = car?.bookingMode === "chat" ? "chat" : "payment";
+  const forceChatBooking = bookingMode === "chat";
 
   const availabilityMessage = React.useMemo(() => {
     if (car && car.isAvailable === false) {
@@ -537,7 +539,8 @@ export default function useBooking() {
     timeInvalid,
   ]);
 
-  const showChatBooking = amount >= CHAT_THRESHOLD_THB && isCarAvailable;
+  const showChatBooking =
+    (forceChatBooking || amount >= CHAT_THRESHOLD_THB) && isCarAvailable;
   const selectedAddonTitles = React.useMemo(
     () => getSelectedAddonTitles(addons),
     [addons]
@@ -665,38 +668,46 @@ export default function useBooking() {
         });
 
         const booking = res.data;
+        const commonQuery =
+          `bookingId=${encodeURIComponent(booking.bookingCode)}` +
+          `&bookingRef=${encodeURIComponent(booking.id)}` +
+          `&amount=${encodeURIComponent(String(booking.totalAmount))}` +
+          `&carId=${encodeURIComponent(booking.carId)}` +
+          `&carName=${encodeURIComponent(car.name)}` +
+          `&days=${encodeURIComponent(String(booking.totalDays))}` +
+          `&pickupDate=${encodeURIComponent(pickupDate)}` +
+          `&returnDate=${encodeURIComponent(returnDate)}` +
+          `&pickupTime=${encodeURIComponent(pickupTime)}` +
+          `&returnTime=${encodeURIComponent(returnTime)}` +
+          `&pickupPoint=${encodeURIComponent(finalPickupPoint)}` +
+          `&returnPoint=${encodeURIComponent(finalReturnPoint)}` +
+          `&customerName=${encodeURIComponent(fullName.trim())}` +
+          `&customerPhone=${encodeURIComponent(phone.trim())}` +
+          `&subtotal=${encodeURIComponent(String(booking.subtotal))}` +
+          `&discount=${encodeURIComponent(String(booking.discount))}` +
+          `&extraCharge=${encodeURIComponent(String(booking.extraCharge))}` +
+          (car.shopName ? `&shopName=${encodeURIComponent(car.shopName)}` : "") +
+          (effectiveTenantSlug ? `&tenant=${encodeURIComponent(effectiveTenantSlug)}` : "") +
+          `&addons=${encodeURIComponent(
+            JSON.stringify(
+              Object.entries(addons)
+                .filter(([, v]) => v)
+                .map(([key]) => key)
+            )
+          )}`;
+
+        if (forceChatBooking) {
+          navigateBookingFlow(
+            router,
+            `/booking/success?${commonQuery}&bookingMode=chat`,
+            "replace"
+          );
+          return;
+        }
+
         navigateBookingFlow(
           router,
-          `/payment?bookingId=${encodeURIComponent(booking.bookingCode)}` +
-            `&bookingRef=${encodeURIComponent(booking.id)}` +
-            `&amount=${encodeURIComponent(String(booking.totalAmount))}` +
-            `&carId=${encodeURIComponent(booking.carId)}` +
-            `&carName=${encodeURIComponent(car.name)}` +
-            `&days=${encodeURIComponent(String(booking.totalDays))}` +
-            `&pickupDate=${encodeURIComponent(pickupDate)}` +
-            `&returnDate=${encodeURIComponent(returnDate)}` +
-            `&pickupTime=${encodeURIComponent(pickupTime)}` +
-            `&returnTime=${encodeURIComponent(returnTime)}` +
-            `&pickupPoint=${encodeURIComponent(finalPickupPoint)}` +
-            `&returnPoint=${encodeURIComponent(finalReturnPoint)}` +
-            `&customerName=${encodeURIComponent(fullName.trim())}` +
-            `&customerPhone=${encodeURIComponent(phone.trim())}` +
-            `&subtotal=${encodeURIComponent(String(booking.subtotal))}` +
-            `&discount=${encodeURIComponent(String(booking.discount))}` +
-            `&extraCharge=${encodeURIComponent(String(booking.extraCharge))}` +
-            (car.shopName
-              ? `&shopName=${encodeURIComponent(car.shopName)}`
-              : "") +
-            (effectiveTenantSlug
-              ? `&tenant=${encodeURIComponent(effectiveTenantSlug)}`
-              : "") +
-            `&addons=${encodeURIComponent(
-              JSON.stringify(
-                Object.entries(addons)
-                  .filter(([, v]) => v)
-                  .map(([key]) => key)
-              )
-            )}`,
+          `/payment?${commonQuery}`,
           "replace"
         );
       } catch (err: unknown) {
@@ -725,6 +736,7 @@ export default function useBooking() {
       returnBranch,
       selectedAddonTitles,
       effectiveTenantSlug,
+      forceChatBooking,
       router,
     ]
   );
@@ -789,6 +801,7 @@ export default function useBooking() {
     checkingAvailability: isCheckingAvailability,
     availabilityMessage,
     showChatBooking,
+    forceChatBooking,
     chatHref,
     onSubmit,
   };

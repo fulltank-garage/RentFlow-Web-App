@@ -1,5 +1,10 @@
 import api from "@/src/lib/axios";
 import { getErrorMessage } from "@/src/lib/api-error";
+import {
+  deleteClientCookie,
+  readClientCookie,
+  writeClientCookie,
+} from "@/src/lib/client-cookie";
 import { normalizeAuthResponse, normalizeCustomer } from "./auth.mapper";
 import type {
   AuthResponse,
@@ -34,7 +39,7 @@ export function getCachedSessionUser(): Customer | null {
   if (!canUseStorage()) return null;
 
   try {
-    const raw = window.localStorage.getItem(AUTH_USER_STORAGE_KEY);
+    const raw = readClientCookie(AUTH_USER_STORAGE_KEY);
     if (!raw) return null;
 
     const parsed = JSON.parse(raw) as Customer | null;
@@ -49,13 +54,14 @@ export function setCachedSessionUser(user: Customer | null) {
 
   try {
     if (!user) {
-      window.localStorage.removeItem(AUTH_USER_STORAGE_KEY);
+      deleteClientCookie(AUTH_USER_STORAGE_KEY);
       return;
     }
 
-    window.localStorage.setItem(
+    writeClientCookie(
       AUTH_USER_STORAGE_KEY,
-      JSON.stringify(sanitizeCustomer(user))
+      JSON.stringify(sanitizeCustomer(user)),
+      { maxAge: 60 * 60 * 24 * 7, sameSite: "Strict" }
     );
   } catch {
     // no-op
@@ -116,8 +122,10 @@ export async function logout(
 ): Promise<{ success?: boolean; message?: string }> {
   try {
     const res = await api.post("/auth/logout");
+    clearCachedSessionUser();
     return res.data;
   } catch (error: unknown) {
+    clearCachedSessionUser();
     throw new Error(getErrorMessage(error, fallbackMessage));
   }
 }

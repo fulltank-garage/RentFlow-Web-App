@@ -30,7 +30,11 @@ export function normalizeCar(
     images: images?.length ? images : primaryImageUrl ? [primaryImageUrl] : undefined,
     description: raw.description,
     locationId: raw.locationId,
+    status: raw.status,
     isAvailable: raw.isAvailable ?? true,
+    unitCount: raw.unitCount,
+    reservedUnits: raw.reservedUnits,
+    availableUnits: raw.availableUnits,
     createdAt: raw.createdAt || "",
     updatedAt: raw.updatedAt || "",
     tenantId: raw.tenantId,
@@ -39,6 +43,7 @@ export function normalizeCar(
     publicDomain: raw.publicDomain,
     logoUrl: resolveRentFlowAssetUrl(raw.logoUrl),
     promoImageUrl: resolveRentFlowAssetUrl(raw.promoImageUrl),
+    bookingMode: raw.bookingMode,
     lineOfficialAccount: raw.lineOfficialAccount,
   };
 }

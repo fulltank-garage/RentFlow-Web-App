@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useRentFlowRealtimeRefresh } from "@/src/hooks/realtime/useRentFlowRealtimeRefresh";
 import usePageReady from "@/src/hooks/usePageReady";
 import { getErrorStatus } from "@/src/lib/api-error";
 import { bookingApi } from "@/src/services/booking/booking.service";
@@ -133,6 +134,24 @@ export default function useMyBookingsPage() {
   const [q, setQ] = React.useState("");
   const [status, setStatus] = React.useState<BookingStatus | "all">("all");
   const [rows, setRows] = React.useState<Booking[]>([]);
+  const [reloadTick, setReloadTick] = React.useState(0);
+
+  const refreshFromRealtime = React.useCallback(() => {
+    setReloadTick((current) => current + 1);
+  }, []);
+
+  useRentFlowRealtimeRefresh({
+    events: [
+      "booking.created",
+      "booking.updated",
+      "booking.cancelled",
+      "payment.created",
+      "payment.updated",
+      "notification.new",
+    ],
+    onRefresh: refreshFromRealtime,
+    tenantSlug,
+  });
 
   React.useEffect(() => {
     let cancelled = false;
@@ -222,7 +241,7 @@ export default function useMyBookingsPage() {
     return () => {
       cancelled = true;
     };
-  }, [router, tenantSlug]);
+  }, [reloadTick, router, tenantSlug]);
 
   const data = React.useMemo(() => {
     return rows.filter((b) => {

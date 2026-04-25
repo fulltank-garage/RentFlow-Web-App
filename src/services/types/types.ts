@@ -26,6 +26,7 @@ export type TenantSummary = {
   logoUrl?: string;
   promoImageUrl?: string;
   promoImageUrls?: string[];
+  bookingMode?: "payment" | "chat" | string;
 };
 
 export type LineOfficialAccountSummary = {

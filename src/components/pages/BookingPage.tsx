@@ -26,7 +26,11 @@ export default function BookingPage() {
     <Box className="apple-page">
       <BookingFlowScreen>
         <Container maxWidth="lg" className="apple-section">
-          <BookingFlowSteps currentStep="booking" className="mb-8" />
+          <BookingFlowSteps
+            currentStep="booking"
+            mode={booking.forceChatBooking ? "chat" : "payment"}
+            className="mb-8"
+          />
 
           <Box className="apple-section-intro max-w-3xl">
             <Typography
@@ -108,6 +112,7 @@ export default function BookingPage() {
                   endDT={booking.endDT}
                   timeInvalid={booking.timeInvalid}
                 showChatBooking={booking.showChatBooking}
+                forceChatBooking={booking.forceChatBooking}
                 chatHref={booking.chatHref}
                 carAvailable={booking.carAvailable}
                 checkingAvailability={booking.checkingAvailability}

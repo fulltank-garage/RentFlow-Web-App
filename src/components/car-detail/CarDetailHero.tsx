@@ -8,10 +8,12 @@ type Props = {
   image?: string;
   name: string;
   isAvailable?: boolean;
+  status?: string;
 };
 
-export default function CarDetailHero({ image, name, isAvailable = true }: Props) {
+export default function CarDetailHero({ image, name, isAvailable = true, status }: Props) {
   const [imageLoaded, setImageLoaded] = React.useState(false);
+  const unavailableLabel = status === "rented" ? "ถูกเช่าแล้ว" : "ถูกจองแล้ว";
 
   return (
     <Box className="lg:col-span-7">
@@ -35,13 +37,13 @@ export default function CarDetailHero({ image, name, isAvailable = true }: Props
           <>
             <Box className="absolute left-5 top-5 z-[1]">
               <Chip
-                label="มีการจองแล้ว"
+                label={unavailableLabel}
                 className="apple-pill bg-white/94! font-bold! text-[var(--rf-apple-ink)]!"
               />
             </Box>
             <Box className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-6 py-5">
               <Typography className="text-base font-semibold text-white">
-                รถคันนี้มีการจองแล้ว ยังไม่สามารถกดจองได้ในตอนนี้
+                รถคันนี้{unavailableLabel} ยังไม่สามารถกดจองได้ในตอนนี้
               </Typography>
             </Box>
           </>

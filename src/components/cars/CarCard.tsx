@@ -32,7 +32,14 @@ export default function CarCard({ car, showShop = false }: Props) {
   const shopHref = car.domainSlug
     ? getRentFlowStorefrontHref(car.domainSlug)
     : "";
-  const isBooked = car.isAvailable === false;
+  const availableUnits =
+    typeof car.availableUnits === "number"
+      ? car.availableUnits
+      : car.isAvailable
+        ? Math.max(car.unitCount || 1, 1)
+        : 0;
+  const isBooked = car.isAvailable === false || availableUnits <= 0;
+  const unavailableLabel = car.status === "rented" ? "ถูกเช่าแล้ว" : "ถูกจองแล้ว";
 
   return (
     <Card
@@ -50,7 +57,7 @@ export default function CarCard({ car, showShop = false }: Props) {
         {isBooked ? (
           <Box className="absolute left-4 top-4 z-[1]">
             <Chip
-              label="มีการจองแล้ว"
+              label={unavailableLabel}
               className="apple-pill bg-white/92! font-bold! text-[var(--rf-apple-ink)]!"
             />
           </Box>
@@ -58,7 +65,7 @@ export default function CarCard({ car, showShop = false }: Props) {
         {isBooked ? (
           <Box className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-5 py-4">
             <Typography className="text-sm font-semibold text-white">
-              รถคันนี้มีการจองแล้ว ยังไม่สามารถกดจองได้ในตอนนี้
+              รถคันนี้{unavailableLabel} ยังไม่สามารถกดจองได้ในตอนนี้
             </Typography>
           </Box>
         ) : null}
@@ -107,6 +114,11 @@ export default function CarCard({ car, showShop = false }: Props) {
               /วัน
             </Typography>
           </Box>
+          {!isBooked && (car.unitCount || 0) > 1 ? (
+            <Typography className="mt-2 text-sm font-semibold text-[var(--rf-apple-muted)]">
+              เหลือให้จอง {availableUnits} จาก {car.unitCount} คัน
+            </Typography>
+          ) : null}
         </Box>
       </CardContent>
 
@@ -132,7 +144,7 @@ export default function CarCard({ car, showShop = false }: Props) {
           disabled={isBooked}
           className="rounded-full! font-semibold!"
         >
-          {isBooked ? "มีการจองแล้ว" : "จองเลย"}
+          {isBooked ? unavailableLabel : "จองเลย"}
         </Button>
       </CardActions>
     </Card>

@@ -50,6 +50,7 @@ type Props = {
   timeInvalid: boolean;
 
   showChatBooking: boolean;
+  forceChatBooking: boolean;
   chatHref: string;
   carAvailable: boolean;
   checkingAvailability: boolean;
@@ -97,6 +98,7 @@ export default function BookingForm({
   endDT,
   timeInvalid,
   showChatBooking,
+  forceChatBooking,
   chatHref,
   carAvailable,
   checkingAvailability,
@@ -193,10 +195,14 @@ export default function BookingForm({
             <Box className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Box className="min-w-0">
                 <Typography className="text-sm font-bold text-amber-900">
-                  ยอดรวมค่อนข้างสูง — แนะนำจองผ่านแชท
+                  {forceChatBooking
+                    ? "ร้านนี้รับจองผ่านแชทก่อน"
+                    : "ยอดรวมค่อนข้างสูง — แนะนำจองผ่านแชท"}
                 </Typography>
                 <Typography className="mt-1 text-xs text-amber-800">
-                  ต่อรองราคา/ขอเงื่อนไขพิเศษ หรือประเมินค่าส่งเพิ่มเติมได้
+                  {forceChatBooking
+                    ? "ระบบจะบันทึกคำขอจองไว้ก่อน แล้วให้ร้านติดต่อยืนยันรายละเอียดกับคุณ"
+                    : "ต่อรองราคา/ขอเงื่อนไขพิเศษ หรือประเมินค่าส่งเพิ่มเติมได้"}
                 </Typography>
                 <Typography className="apple-label-text mt-2 text-amber-700">
                   * ระบบจะส่งรายละเอียดการจองแบบย่อให้แอดมินอัตโนมัติ
@@ -222,7 +228,7 @@ export default function BookingForm({
                   py: 1.25,
                 }}
               >
-                จองผ่านแชท (แนะนำ)
+                {forceChatBooking ? "จองผ่านแชท" : "จองผ่านแชท (แนะนำ)"}
               </Button>
             </Box>
           </Box>
@@ -256,8 +262,12 @@ export default function BookingForm({
             {checkingAvailability
               ? "กำลังตรวจสอบสถานะรถ..."
               : loading
-                ? "กำลังไปหน้าชำระเงิน..."
-                : "จองและไปชำระเงินทันที"}
+                ? forceChatBooking
+                  ? "กำลังส่งคำขอจอง..."
+                  : "กำลังไปหน้าชำระเงิน..."
+                : forceChatBooking
+                  ? "จองผ่านแชท"
+                  : "จองและไปชำระเงินทันที"}
           </Button>
 
           <Typography className="text-xs text-slate-500 sm:pl-1">

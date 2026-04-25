@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRentFlowRealtimeRefresh } from "@/src/hooks/realtime/useRentFlowRealtimeRefresh";
 import usePageReady from "@/src/hooks/usePageReady";
 import { getErrorStatus } from "@/src/lib/api-error";
 import { bookingApi } from "@/src/services/booking/booking.service";
@@ -46,6 +47,31 @@ export default function useMyBookingDetailPage() {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [openCancel, setOpenCancel] = React.useState(false);
   const [local, setLocal] = React.useState<Booking | null>(null);
+  const [reloadTick, setReloadTick] = React.useState(0);
+
+  const refreshFromRealtime = React.useCallback(
+    (event: { entityId?: string; data?: Record<string, unknown> }) => {
+      const bookingId = String(event.data?.id || event.entityId || "");
+      const bookingCode = String(event.data?.bookingCode || "");
+      if (!bookingId || bookingId === id || bookingCode === id) {
+        setReloadTick((current) => current + 1);
+      }
+    },
+    [id]
+  );
+
+  useRentFlowRealtimeRefresh({
+    events: [
+      "booking.created",
+      "booking.updated",
+      "booking.cancelled",
+      "payment.created",
+      "payment.updated",
+      "notification.new",
+    ],
+    onRefresh: refreshFromRealtime,
+    tenantSlug,
+  });
 
   React.useEffect(() => {
     let cancelled = false;
@@ -113,7 +139,7 @@ export default function useMyBookingDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id, router, tenantSlug]);
+  }, [id, reloadTick, router, tenantSlug]);
 
   const canCancel =
     local?.status === "pending" ||
