@@ -43,7 +43,9 @@ export function normalizeCar(
     publicDomain: raw.publicDomain,
     logoUrl: resolveRentFlowAssetUrl(raw.logoUrl),
     promoImageUrl: resolveRentFlowAssetUrl(raw.promoImageUrl),
+    promoImageUrls: raw.promoImageUrls?.map(resolveRentFlowAssetUrl).filter(Boolean),
     bookingMode: raw.bookingMode,
+    chatThresholdTHB: raw.chatThresholdTHB,
     lineOfficialAccount: raw.lineOfficialAccount,
   };
 }

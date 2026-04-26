@@ -111,15 +111,16 @@ export default function BookingPage() {
                   startDT={booking.startDT}
                   endDT={booking.endDT}
                   timeInvalid={booking.timeInvalid}
-                showChatBooking={booking.showChatBooking}
-                forceChatBooking={booking.forceChatBooking}
-                chatHref={booking.chatHref}
-                carAvailable={booking.carAvailable}
-                checkingAvailability={booking.checkingAvailability}
-                availabilityMessage={booking.availabilityMessage}
-                canSubmit={booking.canSubmit}
-                loading={booking.loading}
-                carExists={!!booking.car}
+                  showChatBooking={booking.showChatBooking}
+                  forceChatBooking={booking.forceChatBooking}
+                  hasChatChannel={booking.hasChatChannel}
+                  chatHref={booking.chatHref}
+                  carAvailable={booking.carAvailable}
+                  checkingAvailability={booking.checkingAvailability}
+                  availabilityMessage={booking.availabilityMessage}
+                  canSubmit={booking.canSubmit}
+                  loading={booking.loading}
+                  carExists={!!booking.car}
                 />
               </CardContent>
             </Card>

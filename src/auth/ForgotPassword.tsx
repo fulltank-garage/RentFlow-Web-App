@@ -38,6 +38,7 @@ export default function ForgotPasswordPage() {
   const router = useRouter();
   const ready = usePageReady();
   const [username, setUsername] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -49,6 +50,7 @@ export default function ForgotPasswordPage() {
 
   const canSubmit =
     username.trim().length >= 3 &&
+    phone.trim().length >= 9 &&
     newPassword.length >= 8 &&
     newPassword === confirmPassword;
 
@@ -79,6 +81,7 @@ export default function ForgotPasswordPage() {
         await resetPasswordWithUsername(
           {
             username: username.trim(),
+            phone: phone.trim(),
             newPassword,
           },
           "ไม่สามารถเปลี่ยนรหัสผ่านได้"
@@ -97,7 +100,7 @@ export default function ForgotPasswordPage() {
         setLoading(false);
       }
     },
-    [canSubmit, loading, newPassword, router, showSnackbar, username]
+    [canSubmit, loading, newPassword, phone, router, showSnackbar, username]
   );
 
   if (!ready) {
@@ -142,7 +145,7 @@ export default function ForgotPasswordPage() {
               </Typography>
 
               <Typography className="apple-subtitle text-sm">
-                กรอกชื่อผู้ใช้และตั้งรหัสผ่านใหม่พร้อมยืนยันรหัสผ่าน
+                กรอกชื่อผู้ใช้ เบอร์โทรศัพท์ และตั้งรหัสผ่านใหม่พร้อมยืนยันรหัสผ่าน
               </Typography>
             </Stack>
 
@@ -156,6 +159,17 @@ export default function ForgotPasswordPage() {
                 autoComplete="username"
                 fullWidth
                 sx={fieldSX}
+              />
+
+              <TextField
+                label="เบอร์โทรศัพท์"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                autoComplete="tel"
+                type="tel"
+                fullWidth
+                sx={fieldSX}
+                helperText="ใช้เบอร์ที่บันทึกไว้ในบัญชี"
               />
 
               <TextField

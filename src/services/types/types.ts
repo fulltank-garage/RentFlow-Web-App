@@ -27,6 +27,7 @@ export type TenantSummary = {
   promoImageUrl?: string;
   promoImageUrls?: string[];
   bookingMode?: "payment" | "chat" | string;
+  chatThresholdTHB?: number;
 };
 
 export type LineOfficialAccountSummary = {

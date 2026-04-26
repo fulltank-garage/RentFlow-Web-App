@@ -7,13 +7,7 @@ import { getErrorMessage, getErrorStatus } from "@/src/lib/api-error";
 import { navigateBookingFlow } from "@/src/lib/booking-flow-navigation";
 import { availabilityApi } from "@/src/services/availability/availability.service";
 import { branchesApi } from "@/src/services/branches/branches.service";
-import {
-  BRANCH_POINTS,
-  CHAT_CHANNEL_URL,
-  CHAT_THRESHOLD_THB,
-  OTHER_OPTION,
-  merchantBranchesEnabled,
-} from "@/src/constants/booking.constants";
+import { OTHER_OPTION } from "@/src/constants/booking.constants";
 import { ADDONS, DEFAULT_ADDONS, type AddonKey } from "@/src/constants/booking.addons";
 import { parseDateTime, diffDaysCeil } from "@/src/utils/booking/booking.date";
 import { buildChatHref, buildChatMessage } from "@/src/utils/booking/booking.format";
@@ -59,39 +53,27 @@ function clampDateToToday(value?: string | null) {
   return normalized < today ? today : normalized;
 }
 
-function resolveBranchPrefill(
-  method: string | null,
-  location: string,
-  fallbackBranch: string
-) {
+function resolveBranchPrefill(method: string | null, location: string) {
   if (!location) {
     return {
-      branchValue: fallbackBranch,
+      branchValue: "",
       otherValue: "",
       freeTextValue: "",
     };
   }
 
-  if (!merchantBranchesEnabled) {
-    return {
-      branchValue: fallbackBranch,
-      otherValue: "",
-      freeTextValue: location,
-    };
-  }
-
-  if (method === "branch" && BRANCH_POINTS.includes(location as (typeof BRANCH_POINTS)[number])) {
+  if (method === "branch") {
     return {
       branchValue: location,
       otherValue: "",
-      freeTextValue: "",
+      freeTextValue: location,
     };
   }
 
   return {
     branchValue: OTHER_OPTION,
     otherValue: location,
-    freeTextValue: "",
+    freeTextValue: location,
   };
 }
 
@@ -132,27 +114,16 @@ export default function useBooking() {
   }, [initialPickupDate, params]);
 
   const initialPickupPrefill = React.useMemo(
-    () =>
-      resolveBranchPrefill(
-        prefillPickupMethod,
-        prefillPickupLocation,
-        BRANCH_POINTS[0]
-      ),
+    () => resolveBranchPrefill(prefillPickupMethod, prefillPickupLocation),
     [prefillPickupLocation, prefillPickupMethod]
   );
   const initialReturnPrefill = React.useMemo(
-    () =>
-      resolveBranchPrefill(
-        prefillReturnMethod,
-        prefillReturnLocation,
-        BRANCH_POINTS[0]
-      ),
+    () => resolveBranchPrefill(prefillReturnMethod, prefillReturnLocation),
     [prefillReturnLocation, prefillReturnMethod]
   );
 
   const [car, setCar] = React.useState<Car | null>(null);
-  const [branchOptions, setBranchOptions] =
-    React.useState<string[]>(BRANCH_POINTS);
+  const [branchOptions, setBranchOptions] = React.useState<string[]>([]);
 
   const [fullName, setFullName] = React.useState(prefillFullName);
   const [phone, setPhone] = React.useState(prefillPhone);
@@ -177,6 +148,7 @@ export default function useBooking() {
   const [pickupTime, setPickupTime] = React.useState(params.get("pickupTime") || "10:00");
   const [returnDate, setReturnDate] = React.useState(initialReturnDate);
   const [returnTime, setReturnTime] = React.useState(params.get("returnTime") || "10:00");
+  const merchantBranchesEnabled = branchOptions.length > 0;
 
   const [addons, setAddons] = React.useState<Record<AddonKey, boolean>>(() => {
     const addonKeys = safeParseAddons(prefillAddonsRaw);
@@ -251,13 +223,13 @@ export default function useBooking() {
     if (!merchantBranchesEnabled) return pickupFreeText.trim();
     if (pickupBranch === OTHER_OPTION) return pickupOther.trim();
     return pickupBranch;
-  }, [pickupBranch, pickupOther, pickupFreeText]);
+  }, [merchantBranchesEnabled, pickupBranch, pickupOther, pickupFreeText]);
 
   const finalReturnPoint = React.useMemo(() => {
     if (!merchantBranchesEnabled) return returnFreeText.trim();
     if (returnBranch === OTHER_OPTION) return returnOther.trim();
     return returnBranch;
-  }, [returnBranch, returnOther, returnFreeText]);
+  }, [merchantBranchesEnabled, returnBranch, returnOther, returnFreeText]);
 
   const addonsTotal = React.useMemo(() => {
     return Object.entries(addons).reduce((total, [key, checked]) => {
@@ -294,7 +266,11 @@ export default function useBooking() {
     return true;
   }, [car?.isAvailable, isDateAvailable]);
   const bookingMode = car?.bookingMode === "chat" ? "chat" : "payment";
+  const chatThresholdTHB = Math.max(car?.chatThresholdTHB ?? 0, 0);
   const forceChatBooking = bookingMode === "chat";
+  const hasChatChannel = Boolean(
+    car?.lineOfficialAccount?.chatUrl || car?.lineOfficialAccount?.shareUrl
+  );
 
   const availabilityMessage = React.useMemo(() => {
     if (car && car.isAvailable === false) {
@@ -311,6 +287,7 @@ export default function useBooking() {
   const { locationOk, canSubmit } = useBookingValidation({
     carExists: !!car,
     carAvailable: isCarAvailable,
+    merchantBranchesEnabled,
     fullName,
     phone,
     pickupDate,
@@ -383,9 +360,8 @@ export default function useBooking() {
     let cancelled = false;
 
     async function loadBranches() {
-      if (!merchantBranchesEnabled) return;
       if (!effectiveTenantSlug) {
-        setBranchOptions(BRANCH_POINTS);
+        setBranchOptions([]);
         return;
       }
 
@@ -404,20 +380,14 @@ export default function useBooking() {
         );
 
         if (!options.length) {
-          setBranchOptions(BRANCH_POINTS);
+          setBranchOptions([]);
           return;
         }
 
         setBranchOptions(options);
-        setPickupBranch((prev) =>
-          prev === OTHER_OPTION || options.includes(prev) ? prev : options[0]
-        );
-        setReturnBranch((prev) =>
-          prev === OTHER_OPTION || options.includes(prev) ? prev : options[0]
-        );
       } catch {
         if (!cancelled) {
-          setBranchOptions(BRANCH_POINTS);
+          setBranchOptions([]);
         }
       }
     }
@@ -428,6 +398,44 @@ export default function useBooking() {
       cancelled = true;
     };
   }, [effectiveTenantSlug]);
+
+  React.useEffect(() => {
+    if (!merchantBranchesEnabled) {
+      if (!pickupFreeText.trim() && pickupBranch && pickupBranch !== OTHER_OPTION) {
+        setPickupFreeText(pickupBranch);
+      }
+      if (!returnFreeText.trim() && returnBranch && returnBranch !== OTHER_OPTION) {
+        setReturnFreeText(returnBranch);
+      }
+      return;
+    }
+
+    setPickupBranch((prev) => {
+      if (prev === OTHER_OPTION) return prev;
+      if (prev && branchOptions.includes(prev)) return prev;
+      if (prev && !branchOptions.includes(prev)) {
+        setPickupOther(prev);
+        return OTHER_OPTION;
+      }
+      return branchOptions[0] || "";
+    });
+    setReturnBranch((prev) => {
+      if (prev === OTHER_OPTION) return prev;
+      if (prev && branchOptions.includes(prev)) return prev;
+      if (prev && !branchOptions.includes(prev)) {
+        setReturnOther(prev);
+        return OTHER_OPTION;
+      }
+      return branchOptions[0] || "";
+    });
+  }, [
+    branchOptions,
+    merchantBranchesEnabled,
+    pickupBranch,
+    pickupFreeText,
+    returnBranch,
+    returnFreeText,
+  ]);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -553,7 +561,8 @@ export default function useBooking() {
   ]);
 
   const showChatBooking =
-    (forceChatBooking || amount >= CHAT_THRESHOLD_THB) && isCarAvailable;
+    (forceChatBooking || (chatThresholdTHB > 0 && amount >= chatThresholdTHB)) &&
+    isCarAvailable;
   const selectedAddonTitles = React.useMemo(
     () => getSelectedAddonTitles(addons),
     [addons]
@@ -592,10 +601,8 @@ export default function useBooking() {
   ]);
 
   const chatHref = React.useMemo(() => {
-    const channelUrl =
-      car?.lineOfficialAccount?.chatUrl ||
-      car?.lineOfficialAccount?.shareUrl ||
-      CHAT_CHANNEL_URL;
+    const channelUrl = car?.lineOfficialAccount?.chatUrl || car?.lineOfficialAccount?.shareUrl;
+    if (!channelUrl) return "";
     return buildChatHref(channelUrl, chatMessage);
   }, [car?.lineOfficialAccount?.chatUrl, car?.lineOfficialAccount?.shareUrl, chatMessage]);
 
@@ -631,6 +638,11 @@ export default function useBooking() {
         return;
       }
 
+      if (showChatBooking && !hasChatChannel) {
+        setError("ร้านนี้ยังไม่ได้ตั้งค่าช่องทางแชทสำหรับการจอง");
+        return;
+      }
+
       if (!car.isAvailable || isDateAvailable === false) {
         setError("รถคันนี้มีการจองแล้ว กรุณาเลือกรถหรือช่วงวันใหม่");
         return;
@@ -663,11 +675,11 @@ export default function useBooking() {
           pickupLocation: finalPickupPoint,
           returnLocation: finalReturnPoint,
           pickupMethod:
-            merchantBranchesEnabled && pickupBranch !== OTHER_OPTION
+            merchantBranchesEnabled && pickupBranch !== OTHER_OPTION && pickupBranch.trim()
               ? "branch"
               : "custom",
           returnMethod:
-            merchantBranchesEnabled && returnBranch !== OTHER_OPTION
+            merchantBranchesEnabled && returnBranch !== OTHER_OPTION && returnBranch.trim()
               ? "branch"
               : "custom",
           customerName: fullName.trim(),
@@ -736,20 +748,23 @@ export default function useBooking() {
       endDT,
       locationOk,
       canSubmit,
+      showChatBooking,
+      hasChatChannel,
       isDateAvailable,
+      merchantBranchesEnabled,
       pickupDate,
-      returnDate,
       pickupTime,
+      returnDate,
       returnTime,
-      finalPickupPoint,
-      finalReturnPoint,
       addons,
-    fullName,
-    phone,
+      fullName,
+      phone,
       pickupBranch,
       returnBranch,
       selectedAddonTitles,
       effectiveTenantSlug,
+      finalPickupPoint,
+      finalReturnPoint,
       forceChatBooking,
       router,
     ]
@@ -816,6 +831,7 @@ export default function useBooking() {
     availabilityMessage,
     showChatBooking,
     forceChatBooking,
+    hasChatChannel,
     chatHref,
     onSubmit,
   };

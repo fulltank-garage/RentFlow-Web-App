@@ -51,6 +51,7 @@ type Props = {
 
   showChatBooking: boolean;
   forceChatBooking: boolean;
+  hasChatChannel: boolean;
   chatHref: string;
   carAvailable: boolean;
   checkingAvailability: boolean;
@@ -99,6 +100,7 @@ export default function BookingForm({
   timeInvalid,
   showChatBooking,
   forceChatBooking,
+  hasChatChannel,
   chatHref,
   carAvailable,
   checkingAvailability,
@@ -215,6 +217,7 @@ export default function BookingForm({
                 target="_blank"
                 rel="noreferrer"
                 variant="contained"
+                disabled={!hasChatChannel}
                 className="rounded-xl! font-semibold!"
                 sx={{
                   textTransform: "none",
@@ -231,6 +234,11 @@ export default function BookingForm({
                 {forceChatBooking ? "จองผ่านแชท" : "จองผ่านแชท (แนะนำ)"}
               </Button>
             </Box>
+            {!hasChatChannel ? (
+              <Typography className="mt-3 text-xs text-amber-800">
+                ร้านนี้ยังไม่ได้ตั้งค่าช่องทางแชทสำหรับรับคำขอจอง
+              </Typography>
+            ) : null}
           </Box>
         ) : null}
 

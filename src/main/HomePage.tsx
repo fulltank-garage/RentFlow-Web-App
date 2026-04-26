@@ -151,7 +151,10 @@ export default function HomePage({
         </Box>
       ) : null}
 
-      <StorefrontBlocksSection blocks={storefrontPage?.blocks} />
+      <StorefrontBlocksSection
+        blocks={storefrontPage?.isPublished ? storefrontPage.blocks : []}
+        theme={storefrontPage?.theme}
+      />
 
       {siteMode === "marketplace" ? (
         <>

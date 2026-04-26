@@ -2,10 +2,7 @@
 
 import { Box, MenuItem, TextField, Typography } from "@mui/material";
 import { rentFlowSelectMenuProps } from "@/src/components/common/selectMenuProps";
-import {
-  BRANCH_POINTS,
-  OTHER_OPTION,
-} from "@/src/constants/booking.constants";
+import { OTHER_OPTION } from "@/src/constants/booking.constants";
 
 type Props = {
   merchantBranchesEnabled: boolean;
@@ -108,7 +105,7 @@ export default function BookingLocation({
                 SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
                 sx={fieldSX}
               >
-                {(branchOptions.length ? branchOptions : BRANCH_POINTS).map((p) => (
+                {branchOptions.map((p) => (
                   <MenuItem key={p} value={p}>
                     {p}
                   </MenuItem>
@@ -151,7 +148,7 @@ export default function BookingLocation({
                 SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
                 sx={fieldSX}
               >
-                {(branchOptions.length ? branchOptions : BRANCH_POINTS).map((p) => (
+                {branchOptions.map((p) => (
                   <MenuItem key={p} value={p}>
                     {p}
                   </MenuItem>

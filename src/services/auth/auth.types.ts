@@ -25,6 +25,7 @@ export type RegisterPayload = {
 
 export type ForgotPasswordPayload = {
   username: string;
+  phone: string;
   newPassword: string;
 };
 

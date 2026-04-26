@@ -6,11 +6,14 @@ export type StorefrontBlock = {
   description?: string;
   buttonLabel?: string;
   href?: string;
+  tone?: "default" | "highlight" | "dark" | "success";
+  align?: "left" | "center";
 };
 
 export type StorefrontTheme = {
   primaryColor?: string;
   accentColor?: string;
+  surfaceColor?: string;
 };
 
 export type StorefrontPage = {
