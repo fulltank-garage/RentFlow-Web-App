@@ -1,20 +1,24 @@
 "use client";
 
 import { Box, Checkbox, Divider, FormControlLabel, FormGroup, Typography } from "@mui/material";
-import { ADDONS, type AddonKey } from "@/src/constants/booking.addons";
 import { formatTHB } from "@/src/constants/money";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 
 type Props = {
-  addons: Record<AddonKey, boolean>;
+  addonOptions: StorefrontAddon[];
+  selectedAddonIds: string[];
   addonsTotal: number;
-  onChange: (key: AddonKey, checked: boolean) => void;
+  onChange: (addonId: string, checked: boolean) => void;
 };
 
 export default function BookingAddons({
-  addons,
+  addonOptions,
+  selectedAddonIds,
   addonsTotal,
   onChange,
 }: Props) {
+  const selectedIds = new Set(selectedAddonIds);
+
   return (
     <Box>
       <Typography className="apple-card-title font-semibold text-slate-900">
@@ -25,8 +29,13 @@ export default function BookingAddons({
       </Typography>
 
       <Box className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-        <FormGroup>
-          {ADDONS.map((a) => {
+        {addonOptions.length === 0 ? (
+          <Typography className="apple-body-sm text-slate-500">
+            ร้านนี้ยังไม่ได้ตั้งค่าบริการเสริมเพิ่มเติม
+          </Typography>
+        ) : (
+          <FormGroup>
+            {addonOptions.map((a) => {
             const priceText =
               a.pricing === "perDay"
                 ? `${formatTHB(a.price)} / วัน`
@@ -34,21 +43,21 @@ export default function BookingAddons({
 
             return (
               <FormControlLabel
-                key={a.key}
+                key={a.id}
                 control={
                   <Checkbox
-                    checked={addons[a.key]}
-                    onChange={(e) => onChange(a.key, e.target.checked)}
+                    checked={selectedIds.has(a.id)}
+                    onChange={(e) => onChange(a.id, e.target.checked)}
                   />
                 }
                 label={
                   <Box className="flex w-full items-start justify-between">
                     <Box>
                       <Typography className="apple-body-sm font-semibold text-slate-900">
-                        {a.title}
+                        {a.name}
                       </Typography>
                       <Typography className="apple-label-text text-slate-500">
-                        {a.desc}
+                        {a.description || "-"}
                       </Typography>
                     </Box>
 
@@ -65,8 +74,9 @@ export default function BookingAddons({
                 }}
               />
             );
-          })}
-        </FormGroup>
+            })}
+          </FormGroup>
+        )}
 
         <Divider className="my-4! border-slate-200!" />
 

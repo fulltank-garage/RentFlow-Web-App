@@ -10,9 +10,9 @@ import {
   Divider,
   Button,
 } from "@mui/material";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 import type { Car } from "@/src/services/cars/cars.types";
 import { formatTHB } from "@/src/constants/money";
-import { ADDONS, type AddonKey } from "@/src/utils/payment/payment.helpers";
 import StableImage from "@/src/components/common/StableImage";
 import { getCarTypeLabel } from "@/src/lib/rentflow-catalog";
 
@@ -28,7 +28,8 @@ type Props = {
   pickupTime: string;
   returnTime: string;
   amount: number;
-  addonKeys: AddonKey[];
+  addonIds: string[];
+  addonOptions: StorefrontAddon[];
   addonsTotal: number;
   carSubTotal: number;
   carNet: number;
@@ -49,7 +50,8 @@ export default function PaymentBookingSummaryCard({
   pickupTime,
   returnTime,
   amount,
-  addonKeys,
+  addonIds,
+  addonOptions,
   addonsTotal,
   carSubTotal,
   carNet,
@@ -177,7 +179,7 @@ export default function PaymentBookingSummaryCard({
                 </Box>
               ) : null}
 
-              {addonKeys.length > 0 ? (
+              {addonIds.length > 0 ? (
                 <Box className="mt-3 space-y-2">
                   <Divider className="mb-2! border-black/10!" />
 
@@ -195,8 +197,8 @@ export default function PaymentBookingSummaryCard({
                   </Typography>
 
                   <Box className="space-y-1">
-                    {addonKeys.map((key) => {
-                      const addon = ADDONS.find((x) => x.key === key);
+                    {addonIds.map((addonId) => {
+                      const addon = addonOptions.find((item) => item.id === addonId);
                       if (!addon) return null;
 
                       const priceText =
@@ -206,11 +208,11 @@ export default function PaymentBookingSummaryCard({
 
                       return (
                         <Box
-                          key={key}
+                          key={addon.id}
                           className="flex items-start justify-between gap-3"
                         >
                           <Typography className="apple-label-text text-slate-600">
-                            • {addon.title}
+                            • {addon.name}
                           </Typography>
                           <Typography className="apple-label-text whitespace-nowrap font-semibold text-slate-700">
                             {priceText}

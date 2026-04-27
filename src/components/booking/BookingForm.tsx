@@ -4,7 +4,7 @@ import { Alert, Box, Button, Divider, Stack, TextField, Typography } from "@mui/
 import BookingLocation from "./BookingLocation";
 import BookingDateTime from "./BookingDateTime";
 import BookingAddons from "./BookingAddons";
-import type { AddonKey } from "@/src/constants/booking.addons";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 
 type Props = {
   fieldSX: object;
@@ -41,9 +41,10 @@ type Props = {
   returnTime: string;
   setReturnTime: (value: string) => void;
 
-  addons: Record<AddonKey, boolean>;
+  addonOptions: StorefrontAddon[];
+  selectedAddonIds: string[];
   addonsTotal: number;
-  handleAddonChange: (key: AddonKey, checked: boolean) => void;
+  handleAddonChange: (addonId: string, checked: boolean) => void;
 
   startDT: Date | null;
   endDT: Date | null;
@@ -92,7 +93,8 @@ export default function BookingForm({
   setReturnDate,
   returnTime,
   setReturnTime,
-  addons,
+  addonOptions,
+  selectedAddonIds,
   addonsTotal,
   handleAddonChange,
   startDT,
@@ -164,7 +166,8 @@ export default function BookingForm({
       <Divider className="border-slate-200!" />
 
       <BookingAddons
-        addons={addons}
+        addonOptions={addonOptions}
+        selectedAddonIds={selectedAddonIds}
         addonsTotal={addonsTotal}
         onChange={handleAddonChange}
       />

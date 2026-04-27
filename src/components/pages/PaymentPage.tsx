@@ -74,7 +74,8 @@ export default function PaymentPage() {
               pickupTime={payment.pickupTime}
               returnTime={payment.returnTime}
               amount={payment.amount}
-              addonKeys={payment.addonKeys}
+              addonIds={payment.addonIds}
+              addonOptions={payment.addonOptions}
               addonsTotal={payment.addonsTotal}
               carSubTotal={payment.carSubTotal}
               carNet={payment.carNet}

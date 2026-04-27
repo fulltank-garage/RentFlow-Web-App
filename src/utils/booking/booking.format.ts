@@ -1,5 +1,3 @@
-import type { AddonKey } from "@/src/constants/booking.addons";
-import { getSelectedAddonTitles } from "./booking.pricing";
 import { formatTHB } from "@/src/constants/money";
 
 type BuildChatMessageParams = {
@@ -12,15 +10,14 @@ type BuildChatMessageParams = {
   returnDate: string;
   returnTime: string;
   days: number;
-  addons: Record<AddonKey, boolean>;
+  addonTitles: string[];
   amount: number;
   fullName: string;
   phone: string;
 };
 
 export function buildChatMessage(params: BuildChatMessageParams) {
-  const addonTitles = getSelectedAddonTitles(params.addons);
-  const addonsText = addonTitles.length ? addonTitles.join(", ") : "-";
+  const addonsText = params.addonTitles.length ? params.addonTitles.join(", ") : "-";
 
   return [
     "สวัสดีครับ ต้องการจองรถ (จองผ่านแชท)",

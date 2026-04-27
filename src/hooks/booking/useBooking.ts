@@ -5,19 +5,23 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useRentFlowSiteMode } from "@/src/hooks/useRentFlowSiteMode";
 import { getErrorMessage, getErrorStatus } from "@/src/lib/api-error";
 import { navigateBookingFlow } from "@/src/lib/booking-flow-navigation";
+import { addonsApi } from "@/src/services/addons/addons.service";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 import { availabilityApi } from "@/src/services/availability/availability.service";
 import { branchesApi } from "@/src/services/branches/branches.service";
 import { OTHER_OPTION } from "@/src/constants/booking.constants";
-import { ADDONS, DEFAULT_ADDONS, type AddonKey } from "@/src/constants/booking.addons";
 import { parseDateTime, diffDaysCeil } from "@/src/utils/booking/booking.date";
 import { buildChatHref, buildChatMessage } from "@/src/utils/booking/booking.format";
-import { getSelectedAddonTitles } from "@/src/utils/booking/booking.pricing";
+import {
+  calcAddonsTotal,
+  getSelectedAddonTitles,
+} from "@/src/utils/booking/booking.pricing";
 import { bookingApi } from "@/src/services/booking/booking.service";
 import { getCarById } from "@/src/services/cars/cars.service";
 import type { Car } from "@/src/services/cars/cars.types";
 import { usersApi } from "@/src/services/users/users.service";
 import useBookingValidation from "./useBookingValidation";
-import { safeParseAddons } from "@/src/utils/payment/payment.helpers";
+import { safeParseAddonIds } from "@/src/utils/payment/payment.helpers";
 
 function getTodayLocalDate() {
   const now = new Date();
@@ -77,14 +81,21 @@ function resolveBranchPrefill(method: string | null, location: string) {
   };
 }
 
-function buildAddonPayload(addons: Record<AddonKey, boolean>) {
-  return ADDONS.filter((addon) => addons[addon.key]).map((addon) => ({
-    key: addon.key,
-    name: addon.title,
-    title: addon.title,
-    price: addon.price,
-    pricing: addon.pricing,
-  }));
+function buildAddonPayload(
+  selectedAddonIds: string[],
+  addonOptions: StorefrontAddon[]
+) {
+  const selectedIds = new Set(selectedAddonIds);
+  return addonOptions
+    .filter((addon) => selectedIds.has(addon.id))
+    .map((addon) => ({
+      id: addon.id,
+      key: addon.id,
+      name: addon.name,
+      title: addon.name,
+      price: addon.price,
+      pricing: addon.pricing,
+    }));
 }
 
 export default function useBooking() {
@@ -124,6 +135,7 @@ export default function useBooking() {
 
   const [car, setCar] = React.useState<Car | null>(null);
   const [branchOptions, setBranchOptions] = React.useState<string[]>([]);
+  const [addonOptions, setAddonOptions] = React.useState<StorefrontAddon[]>([]);
 
   const [fullName, setFullName] = React.useState(prefillFullName);
   const [phone, setPhone] = React.useState(prefillPhone);
@@ -150,13 +162,9 @@ export default function useBooking() {
   const [returnTime, setReturnTime] = React.useState(params.get("returnTime") || "10:00");
   const merchantBranchesEnabled = branchOptions.length > 0;
 
-  const [addons, setAddons] = React.useState<Record<AddonKey, boolean>>(() => {
-    const addonKeys = safeParseAddons(prefillAddonsRaw);
-    return {
-      ...DEFAULT_ADDONS,
-      ...Object.fromEntries(addonKeys.map((key) => [key, true])),
-    } as Record<AddonKey, boolean>;
-  });
+  const [selectedAddonIds, setSelectedAddonIds] = React.useState<string[]>(
+    () => safeParseAddonIds(prefillAddonsRaw)
+  );
 
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -231,22 +239,10 @@ export default function useBooking() {
     return returnBranch;
   }, [merchantBranchesEnabled, returnBranch, returnOther, returnFreeText]);
 
-  const addonsTotal = React.useMemo(() => {
-    return Object.entries(addons).reduce((total, [key, checked]) => {
-      if (!checked) return total;
-
-      if (key === "carSeat") {
-        return total + 150 * Math.max(days, 1);
-      }
-      if (key === "mountainDrive") {
-        return total + 300;
-      }
-      if (key === "returnOtherBranch") {
-        return total + 500;
-      }
-      return total;
-    }, 0);
-  }, [addons, days]);
+  const addonsTotal = React.useMemo(
+    () => calcAddonsTotal(addonOptions, selectedAddonIds, days),
+    [addonOptions, selectedAddonIds, days]
+  );
 
   const amount = pricing?.total ?? 0;
   const effectiveTenantSlug = React.useMemo(
@@ -440,6 +436,43 @@ export default function useBooking() {
   React.useEffect(() => {
     let cancelled = false;
 
+    async function loadAddons() {
+      if (siteMode === "marketplace" && !effectiveTenantSlug) {
+        setAddonOptions([]);
+        return;
+      }
+
+      try {
+        const res = await addonsApi.getAddons(
+          effectiveTenantSlug ? { tenantSlug: effectiveTenantSlug } : undefined
+        );
+
+        if (cancelled) return;
+
+        const items = res.data?.items ?? [];
+        setAddonOptions(items);
+        setSelectedAddonIds((prev) => {
+          const validIds = new Set(items.map((item) => item.id));
+          return prev.filter((id) => validIds.has(id));
+        });
+      } catch {
+        if (!cancelled) {
+          setAddonOptions([]);
+          setSelectedAddonIds([]);
+        }
+      }
+    }
+
+    loadAddons();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [effectiveTenantSlug, siteMode]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+
     async function previewPrice() {
       if (!car || !pickupDate || !returnDate || timeInvalid) {
         setPricing(null);
@@ -447,7 +480,10 @@ export default function useBooking() {
       }
 
       try {
-        const selectedAddonPayload = buildAddonPayload(addons);
+        const selectedAddonPayload = buildAddonPayload(
+          selectedAddonIds,
+          addonOptions
+        );
         const res = await bookingApi.previewPrice({
           carId: car.id,
           pickupDate: combineDateAndTime(pickupDate, pickupTime),
@@ -494,7 +530,8 @@ export default function useBooking() {
     returnTime,
     finalPickupPoint,
     finalReturnPoint,
-    addons,
+    selectedAddonIds,
+    addonOptions,
     effectiveTenantSlug,
     timeInvalid,
   ]);
@@ -564,8 +601,8 @@ export default function useBooking() {
     (forceChatBooking || (chatThresholdTHB > 0 && amount >= chatThresholdTHB)) &&
     isCarAvailable;
   const selectedAddonTitles = React.useMemo(
-    () => getSelectedAddonTitles(addons),
-    [addons]
+    () => getSelectedAddonTitles(addonOptions, selectedAddonIds),
+    [addonOptions, selectedAddonIds]
   );
 
   const chatMessage = React.useMemo(() => {
@@ -579,7 +616,7 @@ export default function useBooking() {
       returnDate,
       returnTime,
       days,
-      addons,
+      addonTitles: selectedAddonTitles,
       amount,
       fullName,
       phone,
@@ -594,7 +631,7 @@ export default function useBooking() {
     returnDate,
     returnTime,
     days,
-    addons,
+    selectedAddonTitles,
     amount,
     fullName,
     phone,
@@ -606,12 +643,20 @@ export default function useBooking() {
     return buildChatHref(channelUrl, chatMessage);
   }, [car?.lineOfficialAccount?.chatUrl, car?.lineOfficialAccount?.shareUrl, chatMessage]);
 
-  const handleAddonChange = React.useCallback((key: AddonKey, checked: boolean) => {
-    setAddons((prev) => ({
-      ...prev,
-      [key]: checked,
-    }));
-  }, []);
+  const handleAddonChange = React.useCallback(
+    (addonId: string, checked: boolean) => {
+      setSelectedAddonIds((prev) => {
+        const next = new Set(prev);
+        if (checked) {
+          next.add(addonId);
+        } else {
+          next.delete(addonId);
+        }
+        return Array.from(next);
+      });
+    },
+    []
+  );
 
   const onSubmit = React.useCallback(
     async (e: React.FormEvent) => {
@@ -688,7 +733,7 @@ export default function useBooking() {
           note: selectedAddonTitles.length
             ? `บริการเสริมที่เลือก: ${selectedAddonTitles.join(", ")}`
             : undefined,
-          addons: buildAddonPayload(addons),
+          addons: buildAddonPayload(selectedAddonIds, addonOptions),
         }, {
           tenantSlug: effectiveTenantSlug,
         });
@@ -714,13 +759,7 @@ export default function useBooking() {
           `&extraCharge=${encodeURIComponent(String(booking.extraCharge))}` +
           (car.shopName ? `&shopName=${encodeURIComponent(car.shopName)}` : "") +
           (effectiveTenantSlug ? `&tenant=${encodeURIComponent(effectiveTenantSlug)}` : "") +
-          `&addons=${encodeURIComponent(
-            JSON.stringify(
-              Object.entries(addons)
-                .filter(([, v]) => v)
-                .map(([key]) => key)
-            )
-          )}`;
+          `&addons=${encodeURIComponent(JSON.stringify(selectedAddonIds))}`;
 
         if (forceChatBooking) {
           navigateBookingFlow(
@@ -756,7 +795,8 @@ export default function useBooking() {
       pickupTime,
       returnDate,
       returnTime,
-      addons,
+      selectedAddonIds,
+      addonOptions,
       fullName,
       phone,
       pickupBranch,
@@ -807,8 +847,8 @@ export default function useBooking() {
     setReturnDate,
     returnTime,
     setReturnTime,
-    addons,
-    setAddons,
+    addonOptions,
+    selectedAddonIds,
     handleAddonChange,
     error,
     setError,

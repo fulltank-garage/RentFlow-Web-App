@@ -1,57 +1,34 @@
 export type Method = "promptpay" | "card" | "transfer";
 
-export type AddonKey = "carSeat" | "mountainDrive" | "returnOtherBranch";
-
-export type Addon = {
-  key: AddonKey;
-  title: string;
-  pricing: "perDay" | "perTrip";
+type AddonLike = {
+  id: string;
   price: number;
+  pricing: "perDay" | "perTrip";
 };
 
-export const ADDONS: Addon[] = [
-  { key: "carSeat", title: "เพิ่มคาร์ซีท", pricing: "perDay", price: 150 },
-  {
-    key: "mountainDrive",
-    title: "อนุญาตขับขึ้นเขา/ขึ้นดอย",
-    pricing: "perTrip",
-    price: 300,
-  },
-  {
-    key: "returnOtherBranch",
-    title: "คืนรถต่างสาขา",
-    pricing: "perTrip",
-    price: 500,
-  },
-];
-
-export function safeParseAddons(raw: string | null): AddonKey[] {
+export function safeParseAddonIds(raw: string | null): string[] {
   if (!raw) return [];
 
   try {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
 
-    const allowed = new Set<AddonKey>([
-      "carSeat",
-      "mountainDrive",
-      "returnOtherBranch",
-    ]);
-
-    return parsed.filter(
-      (x) => typeof x === "string" && allowed.has(x as AddonKey)
-    ) as AddonKey[];
+    return parsed.filter((x) => typeof x === "string" && x.trim().length > 0);
   } catch {
     return [];
   }
 }
 
-export function calcAddonsTotal(keys: AddonKey[], days: number) {
+export function calcAddonsTotal(
+  addons: AddonLike[],
+  addonIds: string[],
+  days: number
+) {
   let total = 0;
+  const selectedIds = new Set(addonIds);
 
-  for (const key of keys) {
-    const addon = ADDONS.find((x) => x.key === key);
-    if (!addon) continue;
+  for (const addon of addons) {
+    if (!selectedIds.has(addon.id)) continue;
 
     total +=
       addon.pricing === "perDay"

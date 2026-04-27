@@ -6,8 +6,8 @@ import { useRentFlowRealtimeRefresh } from "@/src/hooks/realtime/useRentFlowReal
 import usePageReady from "@/src/hooks/usePageReady";
 import { getErrorStatus } from "@/src/lib/api-error";
 import { bookingApi } from "@/src/services/booking/booking.service";
+import type { BookingAddon as BookingAddonItem } from "@/src/services/booking/booking.types";
 import { getCars } from "@/src/services/cars/cars.service";
-import { ADDONS, type AddonKey } from "@/src/constants/booking.addons";
 
 export type BookingStatus =
   | "pending"
@@ -37,16 +37,9 @@ export type Booking = {
   customerName?: string;
   customerPhone?: string;
   note?: string;
+  addons?: BookingAddonItem[];
   resumeHref?: string;
 };
-
-function extractAddonKeysFromNote(note?: string): AddonKey[] {
-  if (!note) return [];
-
-  return ADDONS.filter((addon) => note.includes(addon.title)).map(
-    (addon) => addon.key
-  );
-}
 
 function normalizeDateForInput(value?: string) {
   if (!value) return "";
@@ -75,7 +68,7 @@ function buildResumeBookingHref(booking: {
   returnMethod?: "branch" | "custom";
   customerName?: string;
   customerPhone?: string;
-  note?: string;
+  addons?: BookingAddonItem[];
 }) {
   const params = new URLSearchParams();
 
@@ -116,9 +109,12 @@ function buildResumeBookingHref(booking: {
     params.set("phone", booking.customerPhone);
   }
 
-  const addonKeys = extractAddonKeysFromNote(booking.note);
-  if (addonKeys.length) {
-    params.set("addons", JSON.stringify(addonKeys));
+  const addonIds =
+    booking.addons
+      ?.map((addon) => addon.id || addon.key)
+      .filter((value): value is string => Boolean(value)) ?? [];
+  if (addonIds.length) {
+    params.set("addons", JSON.stringify(addonIds));
   }
 
   return `/booking?${params.toString()}`;
@@ -193,6 +189,7 @@ export default function useMyBookingsPage() {
             customerName: booking.customerName,
             customerPhone: booking.customerPhone,
             note: booking.note,
+            addons: booking.addons,
             resumeHref:
               booking.status === "pending"
                 ? buildResumeBookingHref({
@@ -211,7 +208,7 @@ export default function useMyBookingsPage() {
                     returnMethod: booking.returnMethod,
                     customerName: booking.customerName,
                     customerPhone: booking.customerPhone,
-                    note: booking.note,
+                    addons: booking.addons,
                   })
                 : undefined,
           }))

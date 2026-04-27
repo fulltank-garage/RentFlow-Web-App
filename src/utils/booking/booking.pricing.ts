@@ -1,20 +1,27 @@
-import type { AddonKey } from "@/src/constants/booking.addons";
-import { ADDONS } from "@/src/constants/booking.addons";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 
 export function calcAddonsTotal(
-  selected: Record<AddonKey, boolean>,
+  addons: StorefrontAddon[],
+  selectedAddonIds: string[],
   days: number
 ) {
   let total = 0;
+  const selectedIds = new Set(selectedAddonIds);
 
-  for (const addon of ADDONS) {
-    if (!selected[addon.key]) continue;
+  for (const addon of addons) {
+    if (!selectedIds.has(addon.id)) continue;
     total += addon.pricing === "perDay" ? addon.price * Math.max(1, days) : addon.price;
   }
 
   return total;
 }
 
-export function getSelectedAddonTitles(selected: Record<AddonKey, boolean>) {
-  return ADDONS.filter((addon) => selected[addon.key]).map((addon) => addon.title);
+export function getSelectedAddonTitles(
+  addons: StorefrontAddon[],
+  selectedAddonIds: string[]
+) {
+  const selectedIds = new Set(selectedAddonIds);
+  return addons
+    .filter((addon) => selectedIds.has(addon.id))
+    .map((addon) => addon.name);
 }

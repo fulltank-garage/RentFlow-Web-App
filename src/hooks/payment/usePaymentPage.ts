@@ -3,15 +3,18 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import usePageReady from "@/src/hooks/usePageReady";
+import { useRentFlowSiteMode } from "@/src/hooks/useRentFlowSiteMode";
 import { getErrorMessage } from "@/src/lib/api-error";
 import { navigateBookingFlow } from "@/src/lib/booking-flow-navigation";
+import { addonsApi } from "@/src/services/addons/addons.service";
+import type { StorefrontAddon } from "@/src/services/addons/addons.types";
 import { getCarById } from "@/src/services/cars/cars.service";
 import type { Car } from "@/src/services/cars/cars.types";
 import { paymentsApi } from "@/src/services/payments/payments.service";
 import { usersApi } from "@/src/services/users/users.service";
 import {
   type Method,
-  safeParseAddons,
+  safeParseAddonIds,
   calcAddonsTotal,
   getCarSubTotal,
 } from "@/src/utils/payment/payment.helpers";
@@ -35,6 +38,7 @@ export default function usePaymentPage() {
   const params = useSearchParams();
   const router = useRouter();
   const ready = usePageReady({ disableDuringFlowTransition: true });
+  const siteMode = useRentFlowSiteMode();
 
   const bookingId = params.get("bookingId") || "BK-XXXX";
   const bookingRef = params.get("bookingRef") || "";
@@ -59,16 +63,18 @@ export default function usePaymentPage() {
 
   const addonsRaw = params.get("addons");
 
-  const addonKeys = React.useMemo(
-    () => safeParseAddons(addonsRaw),
+  const addonIds = React.useMemo(
+    () => safeParseAddonIds(addonsRaw),
     [addonsRaw]
-  );
-  const addonsTotal = React.useMemo(
-    () => calcAddonsTotal(addonKeys, days),
-    [addonKeys, days]
   );
 
   const [car, setCar] = React.useState<Car | undefined>(undefined);
+  const [addonOptions, setAddonOptions] = React.useState<StorefrontAddon[]>([]);
+
+  const addonsTotal = React.useMemo(
+    () => calcAddonsTotal(addonOptions, addonIds, days),
+    [addonOptions, addonIds, days]
+  );
 
   const carSubTotal = React.useMemo(
     () => subtotal || getCarSubTotal(car, days),
@@ -127,14 +133,18 @@ export default function usePaymentPage() {
     let cancelled = false;
 
     async function loadData() {
+      const shouldLoadAddons = siteMode === "storefront" || Boolean(tenantSlug);
       const tasks = await Promise.allSettled([
         carId ? getCarById(carId, { tenantSlug }) : Promise.resolve(null),
         usersApi.getMe(),
+        shouldLoadAddons
+          ? addonsApi.getAddons(tenantSlug ? { tenantSlug } : undefined)
+          : Promise.resolve(null),
       ]);
 
       if (cancelled) return;
 
-      const [carResult, profileResult] = tasks;
+      const [carResult, profileResult, addonsResult] = tasks;
 
       if (carResult.status === "fulfilled" && carResult.value) {
         setCar(carResult.value);
@@ -145,6 +155,10 @@ export default function usePaymentPage() {
         setFullName((prev) => prev || user.name || "");
         setPhone((prev) => prev || user.phone || "");
       }
+
+      if (addonsResult.status === "fulfilled" && addonsResult.value) {
+        setAddonOptions(addonsResult.value.data?.items ?? []);
+      }
     }
 
     loadData();
@@ -152,7 +166,7 @@ export default function usePaymentPage() {
     return () => {
       cancelled = true;
     };
-  }, [carId, tenantSlug]);
+  }, [carId, siteMode, tenantSlug]);
 
   const handleConfirm = React.useCallback(async () => {
     if (!canPay) return;
@@ -258,7 +272,8 @@ export default function usePaymentPage() {
     carName,
     shopName,
     amount,
-    addonKeys,
+    addonIds,
+    addonOptions,
     addonsTotal,
     car,
     carSubTotal,
