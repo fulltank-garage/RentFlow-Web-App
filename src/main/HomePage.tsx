@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Alert, Box } from "@mui/material";
+import { useSearchParams } from "next/navigation";
 
 import HeroSection from "@/src/components/home/HeroSection";
 import CarsSection from "@/src/components/home/CarsSection";
@@ -9,6 +10,7 @@ import CarClassSection from "@/src/components/home/CarClassSection";
 import BenefitsCTASection from "@/src/components/home/BenefitsCTASection";
 import ReviewsSection from "@/src/components/home/ReviewsSection";
 import StorefrontBlocksSection from "@/src/components/home/StorefrontBlocksSection";
+import type { BuilderImagePayload } from "@/src/components/home/StorefrontBlocksSection";
 import ShopRecommendationsSection from "@/src/components/shops/ShopRecommendationsSection";
 import { formatTHB } from "@/src/constants/money";
 import { useCatalogDirectory } from "@/src/hooks/catalog/useCatalogDirectory";
@@ -19,7 +21,11 @@ import type { PlatformPublicSettings } from "@/src/services/platform/platform.ty
 import { tenantApi } from "@/src/services/tenant/tenant.service";
 import type { TenantProfile } from "@/src/services/tenant/tenant.types";
 import { storefrontApi } from "@/src/services/storefront/storefront.service";
-import type { StorefrontPage } from "@/src/services/storefront/storefront.types";
+import type {
+  StorefrontBlock,
+  StorefrontPage,
+  StorefrontTheme,
+} from "@/src/services/storefront/storefront.types";
 
 type HomePageProps = {
   initialHost?: string;
@@ -30,6 +36,8 @@ export default function HomePage({
   initialHost,
   initialTenantProfile = null,
 }: HomePageProps) {
+  const searchParams = useSearchParams();
+  const builderMode = searchParams.get("rfBuilder") === "1";
   const [location, setLocation] = React.useState("");
   const [type, setType] = React.useState<CarType | "All">("All");
   const [pickupDate, setPickupDate] = React.useState("");
@@ -43,6 +51,11 @@ export default function HomePage({
     React.useState<PlatformPublicSettings | null>(null);
   const [storefrontPage, setStorefrontPage] =
     React.useState<StorefrontPage | null>(null);
+  const [builderDraft, setBuilderDraft] = React.useState<{
+    blocks: StorefrontBlock[];
+    theme?: StorefrontTheme;
+    isPublished?: boolean;
+  } | null>(null);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -89,6 +102,63 @@ export default function HomePage({
   }, [siteMode]);
 
   React.useEffect(() => {
+    if (!builderMode) return;
+
+    const notifyReady = () => {
+      window.parent?.postMessage({ type: "rentflow:builder:ready" }, "*");
+    };
+    const sendHeight = () => {
+      const bodyHeight = document.body.scrollHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      window.parent?.postMessage(
+        {
+          type: "rentflow:builder:height",
+          height: Math.max(bodyHeight, documentHeight),
+        },
+        "*"
+      );
+    };
+
+    function handleBuilderMessage(event: MessageEvent) {
+      const data = event.data as
+        | {
+            type?: string;
+            blocks?: StorefrontBlock[];
+            theme?: StorefrontTheme;
+            isPublished?: boolean;
+          }
+        | undefined;
+
+      if (data?.type !== "rentflow:builder:draft") return;
+
+      setBuilderDraft({
+        blocks: Array.isArray(data.blocks) ? data.blocks : [],
+        theme: data.theme,
+        isPublished: data.isPublished,
+      });
+      window.requestAnimationFrame(sendHeight);
+    }
+
+    window.addEventListener("message", handleBuilderMessage);
+    window.addEventListener("resize", sendHeight);
+    notifyReady();
+    sendHeight();
+    const readyTimer = window.setTimeout(notifyReady, 250);
+    const heightTimer = window.setTimeout(sendHeight, 350);
+    const observer = new ResizeObserver(sendHeight);
+    observer.observe(document.documentElement);
+    observer.observe(document.body);
+
+    return () => {
+      window.removeEventListener("message", handleBuilderMessage);
+      window.removeEventListener("resize", sendHeight);
+      window.clearTimeout(readyTimer);
+      window.clearTimeout(heightTimer);
+      observer.disconnect();
+    };
+  }, [builderMode]);
+
+  React.useEffect(() => {
     let cancelled = false;
 
     storefrontApi
@@ -125,6 +195,89 @@ export default function HomePage({
     return platformSettings?.promoImageUrl ? [platformSettings.promoImageUrl] : [];
   }, [platformSettings, siteMode, tenantProfile]);
 
+  const storefrontBlocks = React.useMemo(() => {
+    if (builderMode && builderDraft) return builderDraft.blocks;
+    if (storefrontPage?.isPublished === false) return [];
+    if (storefrontPage?.id) return storefrontPage.blocks || [];
+    return [];
+  }, [builderDraft, builderMode, storefrontPage]);
+
+  const storefrontTheme =
+    builderMode && builderDraft
+      ? builderDraft.theme
+      : storefrontPage?.id
+        ? storefrontPage.theme
+        : undefined;
+
+  const sendBuilderMessage = React.useCallback((message: Record<string, unknown>) => {
+    if (!builderMode) return;
+    window.parent?.postMessage(message, "*");
+  }, [builderMode]);
+
+  const updateBuilderBlock = React.useCallback(
+    (index: number, patch: Partial<StorefrontBlock>) => {
+      setBuilderDraft((current) =>
+        current
+          ? {
+              ...current,
+              blocks: current.blocks.map((block, blockIndex) =>
+                blockIndex === index ? { ...block, ...patch } : block
+              ),
+            }
+          : current
+      );
+      sendBuilderMessage({
+        type: "rentflow:builder:update-block",
+        index,
+        patch,
+      });
+    },
+    [sendBuilderMessage]
+  );
+
+  const handleBuilderAction = React.useCallback(
+    (action: "add" | "delete" | "move-up" | "move-down", index?: number) => {
+      setBuilderDraft((current) => {
+        if (!current) return current;
+        if (action === "delete" && typeof index === "number") {
+          return {
+            ...current,
+            blocks: current.blocks.filter((_, blockIndex) => blockIndex !== index),
+          };
+        }
+        if (
+          (action === "move-up" || action === "move-down") &&
+          typeof index === "number"
+        ) {
+          const targetIndex = action === "move-up" ? index - 1 : index + 1;
+          if (targetIndex < 0 || targetIndex >= current.blocks.length) return current;
+          const nextBlocks = [...current.blocks];
+          const [moved] = nextBlocks.splice(index, 1);
+          nextBlocks.splice(targetIndex, 0, moved);
+          return { ...current, blocks: nextBlocks };
+        }
+        return current;
+      });
+
+      sendBuilderMessage({
+        type: `rentflow:builder:${action}`,
+        index,
+      });
+    },
+    [sendBuilderMessage]
+  );
+
+  const handleBuilderImageUpload = React.useCallback(
+    (index: number, image: BuilderImagePayload) => {
+      sendBuilderMessage({
+        type: "rentflow:builder:upload-image",
+        index,
+        image,
+      });
+    },
+    [sendBuilderMessage]
+  );
+
   return (
     <Box className="apple-page">
       <HeroSection
@@ -152,8 +305,12 @@ export default function HomePage({
       ) : null}
 
       <StorefrontBlocksSection
-        blocks={storefrontPage?.isPublished ? storefrontPage.blocks : []}
-        theme={storefrontPage?.theme}
+        blocks={storefrontBlocks}
+        theme={storefrontTheme}
+        builderMode={builderMode}
+        onBuilderPatch={updateBuilderBlock}
+        onBuilderAction={handleBuilderAction}
+        onBuilderImageUpload={handleBuilderImageUpload}
       />
 
       {siteMode === "marketplace" ? (

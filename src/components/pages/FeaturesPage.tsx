@@ -11,11 +11,79 @@ import {
   TRUST_POINTS,
 } from "@/src/constants/features";
 import usePageReady from "@/src/hooks/usePageReady";
+import { useRentFlowSiteModeStatus } from "@/src/hooks/useRentFlowSiteMode";
+import { tenantApi } from "@/src/services/tenant/tenant.service";
+import type { TenantProfile } from "@/src/services/tenant/tenant.types";
 
-export default function FeaturesPage() {
+type FeaturesPageProps = {
+  initialHost?: string;
+  initialTenantProfile?: TenantProfile | null;
+};
+
+export default function FeaturesPage({
+  initialHost,
+  initialTenantProfile = null,
+}: FeaturesPageProps) {
   const ready = usePageReady();
+  const { siteMode, ready: siteReady } = useRentFlowSiteModeStatus(initialHost);
+  const [tenantProfile, setTenantProfile] =
+    React.useState<TenantProfile | null>(initialTenantProfile);
+  const isStorefront = siteMode === "storefront";
+  const shopName = tenantProfile?.shopName?.trim() || "ร้านนี้";
 
-  if (!ready) {
+  React.useEffect(() => {
+    if (siteMode !== "storefront") {
+      setTenantProfile(null);
+      return;
+    }
+
+    let cancelled = false;
+    tenantApi
+      .resolveTenant()
+      .then((res) => {
+        if (!cancelled) setTenantProfile(res.data);
+      })
+      .catch(() => {
+        if (!cancelled) setTenantProfile(initialTenantProfile);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialTenantProfile, siteMode]);
+
+  const pageCopy = React.useMemo(() => {
+    if (isStorefront) {
+      return {
+        title: `ทำไมต้องเลือก ${shopName}`,
+        subtitle: `บริการเช่ารถของ ${shopName} ที่รวมข้อมูลรถ สาขา ราคา และขั้นตอนจองไว้ให้ตรวจสอบง่ายในที่เดียว`,
+        featuresTitle: `จุดเด่นของ ${shopName}`,
+        featuresDesc: "ดูข้อมูลสำคัญของร้านและรถก่อนตัดสินใจจองได้อย่างชัดเจน",
+        stepsDesc:
+          "ตั้งแต่เลือกรถของร้านจนถึงติดตามสถานะการจอง เราจัดขั้นตอนให้เข้าใจง่าย",
+        trustDesc:
+          `สิ่งที่ลูกค้าอยากรู้ก่อนจองกับ ${shopName} เรารวมไว้ให้ตรวจสอบได้สะดวก`,
+        ctaTitle: `พร้อมจองรถกับ ${shopName}?`,
+        ctaDesc:
+          "ไปที่หน้า “รถทั้งหมด” เพื่อเลือกรถของร้านนี้ แล้วดำเนินการจองต่อได้ทันที",
+      };
+    }
+
+    return {
+      title: "ทำไมต้อง RentFlow",
+      subtitle:
+        "แพลตฟอร์มเช่ารถที่เน้นความชัดเจน โปร่งใส และประสบการณ์ใช้งานที่ลื่นไหล",
+      featuresTitle: "จุดเด่นของระบบ",
+      featuresDesc: "ออกแบบให้ผู้ใช้เข้าใจง่าย เห็นข้อมูลสำคัญก่อนตัดสินใจ",
+      stepsDesc:
+        "ตั้งแต่ค้นหารถจนถึงชำระเงิน — เราทำให้ทุกขั้นตอนชัดเจนและง่ายดาย",
+      trustDesc: "สิ่งที่ผู้ใช้มักอยากรู้ก่อนจอง — เราใส่ไว้ให้ครบ",
+      ctaTitle: "พร้อมเริ่มจอง?",
+      ctaDesc: "ไปที่หน้า “รถทั้งหมด” เพื่อเลือกคันที่ใช่ แล้วกด “จองเลย”",
+    };
+  }, [isStorefront, shopName]);
+
+  if (!ready || !siteReady) {
     return <FeaturesPageSkeleton />;
   }
 
@@ -27,10 +95,10 @@ export default function FeaturesPage() {
           <Typography
             className="apple-heading apple-page-title"
           >
-            ทำไมต้อง RentFlow
+            {pageCopy.title}
           </Typography>
           <Typography className="apple-subtitle text-lg">
-            แพลตฟอร์มเช่ารถที่เน้นความชัดเจน โปร่งใส และประสบการณ์ใช้งานที่ลื่นไหล
+            {pageCopy.subtitle}
           </Typography>
         </Box>
       </Box>
@@ -50,10 +118,10 @@ export default function FeaturesPage() {
         <Box className="flex items-end justify-between gap-3">
           <Box>
             <Typography className="apple-card-title-lg font-black tracking-[-0.05em] text-[var(--rf-apple-ink)]">
-              จุดเด่นของระบบ
+              {pageCopy.featuresTitle}
             </Typography>
             <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-              ออกแบบให้ผู้ใช้เข้าใจง่าย เห็นข้อมูลสำคัญก่อนตัดสินใจ
+              {pageCopy.featuresDesc}
             </Typography>
           </Box>
         </Box>
@@ -82,7 +150,7 @@ export default function FeaturesPage() {
           ขั้นตอนการจอง
         </Typography>
         <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-          ตั้งแต่ค้นหารถจนถึงชำระเงิน — เราทำให้ทุกขั้นตอนชัดเจนและง่ายดาย
+          {pageCopy.stepsDesc}
         </Typography>
 
         <Box className="apple-shelf apple-shelf-wide mt-4 md:grid md:grid-cols-2">
@@ -114,7 +182,7 @@ export default function FeaturesPage() {
           ความน่าเชื่อถือ & ความปลอดภัย
         </Typography>
         <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-          สิ่งที่ผู้ใช้มักอยากรู้ก่อนจอง — เราใส่ไว้ให้ครบ
+          {pageCopy.trustDesc}
         </Typography>
 
         <Box className="apple-shelf apple-shelf-wide mt-4 md:grid md:grid-cols-2">
@@ -136,10 +204,10 @@ export default function FeaturesPage() {
 
       <Box className="apple-card mt-10 p-5">
         <Typography className="text-base font-bold text-[var(--rf-apple-ink)]">
-          พร้อมเริ่มจอง?
+          {pageCopy.ctaTitle}
         </Typography>
         <Typography className="mt-1 text-sm text-[var(--rf-apple-muted)]">
-          ไปที่หน้า “รถทั้งหมด” เพื่อเลือกคันที่ใช่ แล้วกด “จองเลย”
+          {pageCopy.ctaDesc}
         </Typography>
 
         <Box className="mt-4 flex flex-wrap gap-2">

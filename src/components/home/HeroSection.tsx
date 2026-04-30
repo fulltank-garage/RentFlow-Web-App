@@ -241,8 +241,8 @@ export default function HeroSection({
           </Stack>
         </Box>
 
-        <Box className="mt-10 grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-stretch">
-          <Box className="apple-card relative min-h-[320px] overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,1),rgba(248,249,251,0.98)_48%,rgba(229,232,238,0.94))] sm:min-h-[380px] md:min-h-[520px]">
+        <Box className="mt-10 grid gap-5">
+          <Box className="apple-card relative aspect-[16/9] min-h-0 overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,1),rgba(248,249,251,0.98)_48%,rgba(229,232,238,0.94))]">
             {heroImages.length ? (
               heroImages.map((src, i) => {
                 const active = i === heroIndex;
@@ -279,101 +279,108 @@ export default function HeroSection({
 
           <Box id="search" className="scroll-mt-28">
             <Card elevation={0} className="apple-card h-full">
-              <CardContent className="p-5! sm:p-6! md:p-7!">
-                <Typography
-                  className="apple-heading apple-auth-title"
-                >
-                  ค้นหารถเช่า
-                </Typography>
-                <Typography className="apple-subtitle mt-2 text-sm">
-                  เลือกช่วงเวลา สาขา และรุ่นที่ต้องการ
-                </Typography>
-
-                <Box className="mt-6 grid gap-4">
-                  <TextField
-                    select
-                    label="สาขารับรถ"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    fullWidth
-                    SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
-                    sx={Herotextfield}
-                  >
-                    <MenuItem value="">ทุกสาขา</MenuItem>
-                    {locations.map((loc) => (
-                      <MenuItem key={loc.value} value={loc.value}>
-                        {loc.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-                  <Box className="grid gap-4 sm:grid-cols-2">
-                    <TextField
-                      type="date"
-                      label="วันรับรถ"
-                      value={pickupDate}
-                      onChange={(e) => {
-                        const nextPickupDate = clampPickupDateToToday(e.target.value);
-                        const nextReturnDate = clampReturnDateToPickup(
-                          returnDate,
-                          nextPickupDate
-                        );
-                        setPickupDate(nextPickupDate);
-                        setReturnDate(nextReturnDate);
-                      }}
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                      inputProps={{ min: today }}
-                      sx={Herotextfield}
-                    />
-                    <TextField
-                      type="date"
-                      label="วันคืนรถ"
-                      value={returnDate}
-                      onChange={(e) =>
-                        setReturnDate(clampReturnDateToPickup(e.target.value, pickupDate))
-                      }
-                      fullWidth
-                      InputLabelProps={{ shrink: true }}
-                      inputProps={{ min: minReturnDate }}
-                      sx={Herotextfield}
-                    />
+              <CardContent className="p-5! sm:p-6! md:p-8! lg:p-10!">
+                <Box className="grid gap-7">
+                  <Box className="max-w-3xl">
+                    <Typography
+                      className="apple-heading apple-auth-title"
+                    >
+                      ค้นหารถเช่า
+                    </Typography>
+                    <Typography className="apple-subtitle mt-2 text-sm">
+                      เลือกช่วงเวลา สาขา และรุ่นที่ต้องการ
+                    </Typography>
                   </Box>
 
-                  <TextField
-                    select
-                    label="ประเภทรถ"
-                    value={type}
-                    onChange={(e) => setType(e.target.value as CarType | "All")}
-                    fullWidth
-                    SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
-                    sx={Herotextfield}
-                  >
-                    <MenuItem value="All">ทั้งหมด</MenuItem>
-                    {carTypes.map((t) => (
-                      <MenuItem key={t} value={t}>
-                        {getCarTypeLabel(t)}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                  <Box className="grid gap-4">
+                    <Box className="grid gap-4 md:grid-cols-2 xl:grid-cols-[1.08fr_1fr_1fr]">
+                      <TextField
+                        select
+                        label="สาขารับรถ"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        fullWidth
+                        SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
+                        sx={Herotextfield}
+                      >
+                        <MenuItem value="">ทุกสาขา</MenuItem>
+                        {locations.map((loc) => (
+                          <MenuItem key={loc.value} value={loc.value}>
+                            {loc.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
 
-                  <TextField
-                    label="ค้นหาชื่อรุ่น"
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    placeholder="เช่น Yaris, Cross..."
-                    fullWidth
-                    sx={Herotextfield}
-                  />
+                      <TextField
+                        type="date"
+                        label="วันรับรถ"
+                        value={pickupDate}
+                        onChange={(e) => {
+                          const nextPickupDate = clampPickupDateToToday(e.target.value);
+                          const nextReturnDate = clampReturnDateToPickup(
+                            returnDate,
+                            nextPickupDate
+                          );
+                          setPickupDate(nextPickupDate);
+                          setReturnDate(nextReturnDate);
+                        }}
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        inputProps={{ min: today }}
+                        sx={Herotextfield}
+                      />
 
-                  <Button
-                    size="large"
-                    variant="contained"
-                    className="min-h-12! rounded-full! text-base!"
-                    onClick={handleSearch}
-                  >
-                    ค้นหารถว่าง
-                  </Button>
+                      <TextField
+                        type="date"
+                        label="วันคืนรถ"
+                        value={returnDate}
+                        onChange={(e) =>
+                          setReturnDate(clampReturnDateToPickup(e.target.value, pickupDate))
+                        }
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        inputProps={{ min: minReturnDate }}
+                        sx={Herotextfield}
+                      />
+                    </Box>
+
+                    <Box className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr_auto] lg:items-stretch">
+                      <TextField
+                        select
+                        label="ประเภทรถ"
+                        value={type}
+                        onChange={(e) => setType(e.target.value as CarType | "All")}
+                        fullWidth
+                        SelectProps={{ MenuProps: rentFlowSelectMenuProps }}
+                        sx={Herotextfield}
+                      >
+                        <MenuItem value="All">ทั้งหมด</MenuItem>
+                        {carTypes.map((t) => (
+                          <MenuItem key={t} value={t}>
+                            {getCarTypeLabel(t)}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+
+                      <TextField
+                        label="ค้นหาชื่อรุ่น"
+                        value={q}
+                        onChange={(e) => setQ(e.target.value)}
+                        placeholder="เช่น Yaris, Cross..."
+                        fullWidth
+                        sx={Herotextfield}
+                      />
+
+                      <Button
+                        size="large"
+                        variant="contained"
+                        className="min-h-12! rounded-full! px-10! text-base! max-lg:w-full lg:min-w-[190px]"
+                        onClick={handleSearch}
+                      >
+                        ค้นหารถว่าง
+                      </Button>
+                    </Box>
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
